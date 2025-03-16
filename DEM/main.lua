@@ -8,6 +8,7 @@ local mod = RegisterMod("DataExtractorMod", 1)
 -- Variables globales
 local dataCollected = 0
 local myFont = nil -- Variable para guardar nuestra fuente personalizada
+local showEntityData = true -- Control para mostrar datos de entidades
 
 -- Función para obtener timestamp actual
 local function getTimestamp()
@@ -85,6 +86,59 @@ function mod:onRender()
   local roomWidth = (myFont:GetStringWidth(roomText) * scaleX)
   centerX = (screenWidth / 2) - (roomWidth / 2)
   myFont:DrawStringScaled(roomText, centerX, baseY + lineHeight * 3, scaleX, scaleY, greenColor, 0, true)
+  
+  -- Dibujar ID y HP debajo de cada entidad
+  if showEntityData then
+    -- Configuración para el texto de entidades
+    local entityScaleX = 0.4 -- Escala más pequeña para los textos de entidades
+    local entityScaleY = 0.4
+    
+    -- Obtener todas las entidades de la habitación actual
+    local room = Game():GetRoom()
+    local entities = Isaac.GetRoomEntities()
+    
+    for _, entity in ipairs(entities) do
+      -- Solo procesar jugadores y enemigos (NPCs)
+      if entity:ToPlayer() or entity:ToNPC() then
+        -- Obtener posición en la pantalla
+        local pos = Isaac.WorldToScreen(entity.Position)
+        local yOffset = 0 -- Ajusta este valor para posicionar el texto correctamente debajo de la entidad
+        
+        -- Obtener información
+        local entityId = entity.InitSeed -- Usamos InitSeed como ID único
+        local entityHP = 0
+        
+        -- Obtener HP según el tipo de entidad
+        if entity:ToPlayer() then
+          -- Para jugadores, calcular el HP total basado en todos los tipos de corazones
+          local player = entity:ToPlayer()
+          local redHearts = player:GetHearts() or 0
+          local soulHearts = player:GetSoulHearts() or 0
+          local boneHearts = player:GetBoneHearts() or 0
+          
+          -- Total de HP (cada unidad representa medio corazón)
+          entityHP = math.floor((redHearts + soulHearts) / 2)
+        else
+          -- Para enemigos, usar el HitPoints normal
+          entityHP = math.floor(entity.HitPoints or 0)
+        end
+        
+        -- Formatear texto
+        local entityText = string.format("ID:%d HP:%d", entityId % 10000, entityHP)
+        
+        -- Calcular ancho del texto para centrarlo
+        local textWidth = myFont:GetStringWidth(entityText) * entityScaleX
+        local textX = pos.X - (textWidth / 2)
+        local textY = pos.Y + yOffset
+        
+        -- Color según tipo (jugadores en verde, enemigos en rojo)
+        local textColor = entity:ToPlayer() and greenColor or redColor
+        
+        -- Renderizar texto centrado debajo de la entidad
+        myFont:DrawStringScaled(entityText, textX, textY, entityScaleX, entityScaleY, textColor, 0, true)
+      end
+    end
+  end
 end
 
 -- Función simple para recopilar datos al cambiar de habitación
@@ -102,10 +156,22 @@ function mod:onGameStart(isContinued)
   initializeFont()
 end
 
+-- Función para alternar la visualización de datos con una tecla
+function mod:onKeyPress(entity, inputHook, buttonAction)
+  -- Usar la tecla F2 para alternar la visualización (ButtonAction.ACTION_DEBUG)
+  if buttonAction == ButtonAction.ACTION_DEBUG then
+    showEntityData = not showEntityData
+    print("DataExtractorMod: Visualización de ID/HP " .. (showEntityData and "activada" or "desactivada"))
+    return true
+  end
+  return nil
+end
+
 -- Registrar callbacks
 mod:AddCallback(ModCallbacks.MC_POST_RENDER, mod.onRender)
 mod:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, mod.onNewRoom)
 mod:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, mod.onGameStart)
+mod:AddCallback(ModCallbacks.MC_INPUT_ACTION, mod.onKeyPress)
 
 -- Mensaje de inicialización
 print("DataExtractorMod: Versión con fuente personalizada cargada") 

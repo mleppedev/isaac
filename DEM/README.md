@@ -33,6 +33,17 @@ El mod recopila información durante el juego:
 
 Esta información se guarda en un archivo de texto (`extracted_data.txt`) y opcionalmente se envía a un servidor si está configurado.
 
+## Visualización HUD
+
+El mod incluye una interfaz HUD personalizada que muestra:
+- Información básica del jugador (salud, monedas, llaves, bombas)
+- Posición actual en el mapa
+- Estadísticas (daño, velocidad)
+- Contador de habitaciones visitadas
+- Timestamp actualizado
+
+La interfaz utiliza fuentes personalizadas y caracteres especiales para mejorar la legibilidad y apariencia visual.
+
 ## Personalización
 
 Puedes modificar `main.lua` para recopilar datos adicionales según tus necesidades específicas de entrenamiento de IA.
@@ -43,6 +54,15 @@ Si encuentras algún problema con el mod:
 1. Verifica que los archivos estén en la ubicación correcta
 2. Comprueba que `config.lua` esté correctamente configurado
 3. Revisa la consola del juego para mensajes de error (si está habilitada)
+4. Si la interfaz no es visible, presiona F2 para activar el HUD
+
+## Referencias y Recursos
+
+Este mod ha sido desarrollado utilizando las siguientes referencias y recursos:
+
+- [The Modding of Isaac](https://moddingofisaac.com/) - Comunidad y recursos para modding de Isaac
+- [Isaac API Documentation](https://wofsauge.github.io/IsaacDocs/rep/) - Documentación oficial de la API para Repentance
+- Documentación local (docs/referencias.md) - Guía de referencia rápida con ejemplos de código
 
 ## Nota Importante
 
