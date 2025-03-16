@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<metadata> 
+  <name>DataExtractorMod</name> 
+  <version>1.0</version> 
+  <author>Michael Leppe</author> 
+  <description>Mod para extraer datos relevantes del juego para entrenar una IA.</description> 
+</metadata> 

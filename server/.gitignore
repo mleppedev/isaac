@@ -1,0 +1,25 @@
+# Archivos de entorno
+.env
+
+# Datos recibidos
+received_data/
+
+# Logs
+*.log
+
+# Caché de Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Entornos virtuales
+venv/
+env/
+ENV/
+
+# Archivos de IDE
+.idea/
+.vscode/
+*.swp
+*.swo 

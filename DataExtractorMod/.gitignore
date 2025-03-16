@@ -1,0 +1,13 @@
+# Archivo de configuración con información sensible
+config.lua
+
+# Archivos de datos generados
+extracted_data.txt
+
+# Archivos temporales
+*.tmp
+*.log
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db 
