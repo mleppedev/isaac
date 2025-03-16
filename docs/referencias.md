@@ -210,6 +210,93 @@
   - Optimización de renderizado
   - Localización y texto multi-idioma
 
+## Nuevos Descubrimientos: Renderización de Texto
+
+### Fuentes del Juego Disponibles
+Las siguientes fuentes están incluidas en el juego y pueden ser utilizadas:
+
+- **upheaval.fnt**: Fuente de títulos y streaks (textos animados). Muy grande y en negrita.
+- **teammeatfont16.fnt**: Fuente de menús, tamaño grande. Buena legibilidad.
+- **teammeatfont12.fnt**: Versión más pequeña de la fuente de menús.
+- **pftempestasevencondensed.fnt**: Fuente usada en el HUD para contadores de items.
+- **terminus.fnt**: Fuente de consola, más compacta y técnica.
+- **droid.fnt**: Fuente usada para información de depuración.
+- **luamini.fnt**: (Repentance) Fuente para estadísticas del HUD.
+
+### Uso de la Clase Font
+
+```lua
+-- Inicialización y carga de fuente
+local myFont = Font() -- Crear objeto Font
+myFont:Load("font/upheaval.fnt") -- Cargar una fuente específica
+
+-- Verificación de carga
+if myFont:IsLoaded() then
+  -- La fuente se cargó correctamente
+end
+
+-- Renderizado de texto
+-- Método básico:
+myFont:DrawString("Texto de ejemplo", 100, 100, KColor(1, 1, 1, 1), 0, true)
+
+-- Renderizado con escalado (para texto más pequeño):
+local scaleX = 0.5 -- Factor de escala horizontal
+local scaleY = 0.5 -- Factor de escala vertical
+myFont:DrawStringScaled("Texto de ejemplo", 100, 100, scaleX, scaleY, KColor(1, 1, 1, 1), 0, true)
+```
+
+### Centrado de Texto
+
+Para centrar texto correctamente, especialmente cuando se usa escalado:
+
+```lua
+-- Obtener dimensiones de pantalla
+local screenWidth = Isaac.GetScreenWidth() or 960
+
+-- Calcular ancho del texto (considerando escalado)
+local text = "Texto a centrar"
+local scale = 0.5
+local textWidth = myFont:GetStringWidth(text) * scale
+
+-- Calcular posición centrada
+local centerX = (screenWidth / 2) - (textWidth / 2)
+
+-- Renderizar texto centrado
+myFont:DrawStringScaled(text, centerX, 100, scale, scale, KColor(1, 1, 1, 1), 0, true)
+```
+
+### Colores con KColor
+
+KColor es la clase recomendada para definir colores en el renderizado de texto:
+
+```lua
+-- Definición de colores usando KColor(R, G, B, A)
+local whiteColor = KColor(1, 1, 1, 1)
+local redColor = KColor(1, 0, 0, 1)
+local greenColor = KColor(0, 1, 0, 1)
+local blueColor = KColor(0, 0, 1, 1)
+local grayColor = KColor(0.7, 0.7, 0.7, 0.8) -- Semitransparente
+```
+
+### Notas Importantes
+
+- El método `IsLoaded()` debe usarse para verificar que la fuente se cargó correctamente.
+- Para alinear texto, usar el parámetro `BoxWidth` (0 para desactivar) y `Center` (true/false).
+- `GetStringWidth()` es esencial para cálculos de centrado precisos.
+- Los textos escalados con `DrawStringScaled()` conservan buena calidad visual.
+- El renderizado de texto debe realizarse en el callback `MC_POST_RENDER`.
+
+### Cargar Fuentes Personalizadas
+Para cargar fuentes personalizadas desde tu mod:
+
+```lua
+local MOD_FOLDER_NAME = "mymod" -- Nombre de tu carpeta del mod
+local CUSTOM_FONT_FILE_PATH = "font/mifuente.fnt" -- Ruta relativa a resources
+
+local myFont = Font()
+myFont:Load("mods/" .. MOD_FOLDER_NAME .. "/resources/" .. CUSTOM_FONT_FILE_PATH)
+```
+
 ## Herramientas
 - **DebugConsole**: Depuración del juego
   - Comandos disponibles: `luamod`, `spawn`, `goto`
