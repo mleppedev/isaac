@@ -1,0 +1,37 @@
+# Archivos de configuración local
+config.txt
+
+# Entorno virtual
+server/venv/
+venv/
+env/
+ENV/
+
+# Archivos de caché de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Archivos de log
+*.log
+
+# Archivos temporales
+*.tmp
+*.bak
+*.swp
+
+# Archivos de base de datos
+*.db
+*.sqlite
+*.sqlite3
+
+# Directorios de datos generados
+received_data/
+processed_data/
+
+# Archivos de configuración específicos del sistema
+.env
+.vscode/
+.idea/ 

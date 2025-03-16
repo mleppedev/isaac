@@ -1,8 +1,11 @@
-# Archivo de configuración con información sensible
+# Archivos de configuración con información sensible
 config.lua
+pending_data.json
 
 # Archivos de datos generados
 extracted_data.txt
+data/
+logs/
 
 # Archivos temporales
 *.tmp
