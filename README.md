@@ -14,6 +14,7 @@ El proyecto está dividido en dos componentes principales:
    - Recibe y almacena los datos enviados por el mod
    - Procesa los datos para su uso en entrenamiento de IA
    - Entrena modelos de IA con los datos procesados
+   - Proporciona una interfaz web para visualizar los datos
 
 ## Requisitos
 
@@ -49,12 +50,28 @@ El proyecto está dividido en dos componentes principales:
 
 ## Uso
 
+### Scripts de Automatización
+
+Para facilitar el uso del sistema, se incluyen los siguientes scripts batch:
+
+1. **go.cmd**: Inicia el servidor automáticamente
+   - Crea el entorno virtual si no existe
+   - Instala las dependencias necesarias
+   - Ejecuta el servidor en http://localhost:8000
+
+2. **send_data.cmd**: Envía los datos pendientes del mod al servidor
+   - Configura el entorno necesario automáticamente
+   - Ejecuta el script send_data.py del mod
+
+3. **train.cmd**: Procesa los datos y entrena el modelo de IA
+   - Configura el entorno necesario automáticamente
+   - Ejecuta los scripts process_data.py y train_model.py
+
 ### Flujo de Trabajo Completo
 
 1. **Iniciar el servidor**:
    ```
-   cd server
-   python app.py
+   go.cmd
    ```
 
 2. **Jugar al juego con el mod activado**:
@@ -64,17 +81,60 @@ El proyecto está dividido en dos componentes principales:
 
 3. **Enviar datos al servidor**:
    ```
+   send_data.cmd
+   ```
+
+4. **Procesar los datos y entrenar el modelo**:
+   ```
+   train.cmd
+   ```
+
+### Interfaz Web de Visualización
+
+El servidor incluye una interfaz web para visualizar los datos extraídos y procesados:
+
+1. **Página principal**: http://localhost:8000/
+   - Muestra información general sobre el servidor
+   - Proporciona enlaces a todas las secciones de visualización
+
+2. **Datos extraídos**: http://localhost:8000/view/raw
+   - Muestra todos los datos extraídos del juego en formato de tarjetas
+   - Organiza la información de manera clara y legible
+
+3. **Datos procesados**: http://localhost:8000/view/processed
+   - Muestra una tabla con los datos procesados
+   - Incluye visualizaciones gráficas como:
+     - Gráfico de salud a lo largo del tiempo
+     - Distribución de enemigos por habitación
+   - Permite procesar los datos directamente desde la interfaz
+
+4. **Estadísticas**: http://localhost:8000/view/stats
+   - Muestra estadísticas generales sobre los datos
+   - Incluye métricas como número de registros, habitaciones únicas, salud promedio, etc.
+
+### Uso Manual (Alternativa)
+
+Si prefieres ejecutar los comandos manualmente:
+
+1. **Iniciar el servidor**:
+   ```
+   cd server
+   python app.py
+   ```
+
+2. **Enviar datos al servidor**:
+   ```
    cd DataExtractorMod
    python send_data.py
    ```
 
-4. **Procesar los datos recibidos**:
+3. **Procesar los datos recibidos**:
    ```
    cd server
    python process_data.py
    ```
 
-5. **Entrenar un modelo de IA**:
+4. **Entrenar un modelo de IA**:
    ```
    cd server
    python train_model.py
@@ -89,6 +149,7 @@ El proyecto está dividido en dos componentes principales:
 ### Servidor
 - Modifica `process_data.py` para realizar diferentes transformaciones en los datos
 - Ajusta `train_model.py` para utilizar diferentes algoritmos de IA o hiperparámetros
+- Personaliza las visualizaciones en `app.py` para mostrar diferentes gráficos
 
 ## Solución de Problemas
 
@@ -101,6 +162,7 @@ El proyecto está dividido en dos componentes principales:
 - Verifica que el puerto 8000 no esté en uso por otra aplicación
 - Revisa los logs en `server.log` para más información sobre errores
 - Asegúrate de que el firewall permita conexiones al puerto configurado
+- Si aparece el error "No module named 'pandas'" u otro similar, ejecuta `pip install -r requirements.txt` para instalar las dependencias faltantes
 
 ## Contribuciones
 
