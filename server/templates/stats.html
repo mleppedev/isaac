@@ -1,212 +1,329 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DEM - Estadísticas</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <!-- Socket.IO client library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
-    <script src="{{ url_for('static', filename='app.js') }}" defer></script>
-</head>
-<body>
-    <header>
-        <h1>Data Event Manager</h1>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('index') }}">Inicio</a></li>
-                <li><a href="{{ url_for('data') }}">Ver Datos Procesados</a></li>
-                <li><a href="{{ url_for('stats') }}" class="active">Ver Estadísticas</a></li>
-            </ul>
-        </nav>
-    </header>
+{% extends "header.html" %}
 
-    <main>
-        <section class="hero">
-            <h2>Estadísticas del Juego</h2>
-            <div class="controls">
-                <button id="refresh-btn" onclick="refreshData()">Actualizar Datos</button>
-                <span id="last-updated">
+{% set page_title = "Estadísticas" %}
+{% set active_page = "stats" %}
+
+{% block extra_css %}
+<style>
+    .stats-container {
+        margin-top: 2rem;
+    }
+    .stat-card {
+        margin-bottom: 1.5rem;
+        transition: transform 0.2s;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .stat-card:hover {
+        transform: translateY(-5px);
+    }
+    .stat-value {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 0;
+    }
+    .stat-label {
+        color: #6c757d;
+        font-size: 0.9rem;
+    }
+    .chart-container {
+        position: relative;
+        height: 300px;
+        margin-bottom: 1.5rem;
+    }
+    .refresh-button {
+        margin-bottom: 1.5rem;
+    }
+    .data-timestamp {
+        font-size: 0.8rem;
+        color: #666;
+        margin-bottom: 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="mb-3">Estadísticas del Juego</h1>
+            <p class="lead">Análisis estadístico de los datos capturados por el mod DEM.</p>
+            
+            <div class="refresh-button">
+                <button id="refresh-btn" class="btn btn-primary" onclick="refreshData()">
+                    <i class="bi bi-arrow-clockwise me-2"></i>Actualizar Estadísticas
+                </button>
+                <span id="last-updated" class="ms-3 data-timestamp">
                     {% if stats.latest_update %}
-                    Última actualización: {{ stats.latest_update.split('T')[0] }} {{ stats.latest_update.split('T')[1][:8] }}
+                        Última actualización: {{ stats.latest_update }}
                     {% else %}
-                    Nunca actualizado
+                        No hay datos disponibles
                     {% endif %}
                 </span>
             </div>
-        </section>
-
-        {% if stats.total > 0 %}
-        <section class="stats-overview">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>Resumen</h3>
-                    <div class="stat-value">{{ stats.total }}</div>
-                    <div class="stat-label">Total de eventos</div>
-                    <div class="stat-details">
-                        <p>Registrado de {{ stats.seeds|length }} partidas únicas</p>
-                    </div>
+        </div>
+    </div>
+    
+    <!-- Resumen de estadísticas principales -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-4">
+            <div class="card stat-card h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Eventos Totales</h5>
+                    <p id="total-events" class="stat-value">0</p>
+                    <p class="stat-label">Datos recopilados</p>
                 </div>
-                
-                <div class="stat-card">
-                    <h3>Tipos de Eventos</h3>
-                    <div class="stat-chart event-types-chart">
-                        <div class="chart-container">
-                            <canvas id="event-types-chart"></canvas>
-                        </div>
-                    </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card stat-card h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Partidas</h5>
+                    <p id="total-runs" class="stat-value">0</p>
+                    <p class="stat-label">Seeds jugadas</p>
                 </div>
-                
-                <div class="stat-card">
-                    <h3>Partidas más Activas</h3>
-                    <div class="stat-chart game-events-chart">
-                        <div class="chart-container">
-                            <canvas id="game-events-chart"></canvas>
-                        </div>
-                    </div>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card stat-card h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Enemigos</h5>
+                    <p id="total-enemies" class="stat-value">0</p>
+                    <p class="stat-label">Enemigos encontrados</p>
                 </div>
-                
-                <div class="stat-card">
-                    <h3>Ranking de Eventos</h3>
-                    <div class="stat-table">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Tipo</th>
-                                    <th>Cantidad</th>
-                                    <th>Porcentaje</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for type_stat in stats.types %}
-                                <tr>
-                                    <td>{{ type_stat.type }}</td>
-                                    <td>{{ type_stat.count }}</td>
-                                    <td>{{ "%.1f"|format(type_stat.percentage) }}%</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+            </div>
+        </div>
+        <div class="col-md-3 mb-4">
+            <div class="card stat-card h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Posiciones</h5>
+                    <p id="player-positions" class="stat-value">0</p>
+                    <p class="stat-label">Coordenadas registradas</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Gráficos y estadísticas detalladas -->
+    <div class="row">
+        <!-- Distribución de tipos de eventos -->
+        <div class="col-lg-6 mb-4">
+            <div class="card stat-card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Distribución de Tipos de Eventos</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <canvas id="event-types-chart"></canvas>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
         
-        <section class="games-detail">
-            <h3>Detalles por Partida</h3>
-            <div class="games-list">
-                {% for seed_stat in stats.seeds %}
-                <div class="game-detail-card">
-                    <h4>Partida (Seed: {{ seed_stat.seed }})</h4>
-                    <div class="game-stats">
-                        <div class="stat-item">
-                            <span class="stat-label">Total de eventos:</span>
-                            <span class="stat-value">{{ seed_stat.count }}</span>
+        <!-- Mapa de calor (simplificado) -->
+        <div class="col-lg-6 mb-4">
+            <div class="card stat-card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Mapa de Calor de Posiciones</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <img id="heatmap-img" src="/static/visualizations/player_heatmap.png" class="img-fluid" alt="Mapa de calor de posiciones del jugador">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Estadísticas del jugador -->
+        <div class="col-lg-6 mb-4">
+            <div class="card stat-card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Estadísticas del Jugador</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title">Salud Promedio</h6>
+                                    <p id="avg-health" class="mb-0 fs-4">-</p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="stat-item">
-                            <span class="stat-label">Tipos principales:</span>
-                            <ul>
-                                {% for event_type, count in seed_stat.types %}
-                                <li>{{ event_type }}: {{ count }}</li>
-                                {% endfor %}
-                            </ul>
+                        <div class="col-md-6 mb-3">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title">Daño Recibido</h6>
+                                    <p id="damage-taken" class="mb-0 fs-4">-</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title">Items Recogidos</h6>
+                                    <p id="items-collected" class="mb-0 fs-4">-</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="card bg-light">
+                                <div class="card-body">
+                                    <h6 class="card-title">Salas Visitadas</h6>
+                                    <p id="rooms-visited" class="mb-0 fs-4">-</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <a href="{{ url_for('data') }}?seed={{ seed_stat.seed }}" class="btn">Ver Eventos</a>
                 </div>
-                {% endfor %}
             </div>
-        </section>
-        {% else %}
-        <section class="no-data">
-            <div class="card">
-                <h3>No hay datos para mostrar</h3>
-                <p>No hay datos disponibles. Juega al juego con el mod activado para recopilar datos.</p>
+        </div>
+        
+        <!-- Trayectoria del jugador -->
+        <div class="col-lg-6 mb-4">
+            <div class="card stat-card">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">Trayectoria del Jugador</h5>
+                </div>
+                <div class="card-body">
+                    <div class="chart-container">
+                        <img id="trajectory-img" src="/static/visualizations/player_trajectory.png" class="img-fluid" alt="Trayectoria del jugador">
+                    </div>
+                </div>
             </div>
-        </section>
-        {% endif %}
-    </main>
+        </div>
+    </div>
+</div>
 
-    <footer>
-        <p>Data Event Manager - Mod para The Binding of Isaac: Repentance</p>
-    </footer>
+{% include "footer.html" %}
+{% endblock %}
 
-    <!-- Agregar Chart.js para los gráficos si hay datos -->
-    {% if stats.total > 0 %}
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        // Datos para los gráficos
-        const eventTypesData = {
-            labels: [{% for type_stat in stats.types[:5] %}'{{ type_stat.type }}',{% endfor %} 'Otros'],
-            datasets: [{
-                data: [
-                    {% for type_stat in stats.types[:5] %}
-                    {{ type_stat.count }},
-                    {% endfor %}
-                    {{ stats.total - stats.types[:5]|sum(attribute='count') }}
-                ],
-                backgroundColor: [
-                    '#FF6384',
-                    '#36A2EB',
-                    '#FFCE56',
-                    '#4BC0C0',
-                    '#9966FF',
-                    '#C9CBCF'
-                ]
-            }]
-        };
-        
-        const gameEventsData = {
-            labels: [{% for seed_stat in stats.seeds[:5] %}'Seed {{ seed_stat.seed }}',{% endfor %}],
-            datasets: [{
-                label: 'Eventos por partida',
-                data: [{% for seed_stat in stats.seeds[:5] %}{{ seed_stat.count }},{% endfor %}],
-                backgroundColor: '#36A2EB'
-            }]
-        };
-        
-        // Inicializar gráficos cuando se cargue la página
-        document.addEventListener('DOMContentLoaded', function() {
-            // Gráfico de tipos de eventos (pastel)
-            new Chart(document.getElementById('event-types-chart'), {
-                type: 'pie',
-                data: eventTypesData,
-                options: {
-                    responsive: true,
-                    legend: {
-                        position: 'right',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Distribución de Tipos de Eventos'
-                    }
-                }
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    let eventTypesChart = null;
+    
+    // Función para actualizar los datos
+    function refreshData() {
+        fetch('/api/stats')
+            .then(response => response.json())
+            .then(data => {
+                updateOverviewStats(data);
+                updateEventTypesChart(data.event_types || {});
+                
+                // Actualizar timestamp
+                document.getElementById('last-updated').textContent = 'Última actualización: ' + new Date().toLocaleString();
+                
+                // Refrescar imágenes de visualización (agregando timestamp para evitar caché)
+                const timestamp = new Date().getTime();
+                document.getElementById('heatmap-img').src = `/static/visualizations/player_heatmap.png?t=${timestamp}`;
+                document.getElementById('trajectory-img').src = `/static/visualizations/player_trajectory.png?t=${timestamp}`;
+                
+                // Actualizar estadísticas simuladas del jugador
+                updatePlayerStats();
+            })
+            .catch(error => {
+                console.error('Error al cargar estadísticas:', error);
+                alert('Error al cargar estadísticas: ' + error.message);
             });
-            
-            // Gráfico de eventos por partida (barras)
-            new Chart(document.getElementById('game-events-chart'), {
-                type: 'bar',
-                data: gameEventsData,
-                options: {
-                    responsive: true,
+    }
+    
+    // Actualizar estadísticas generales
+    function updateOverviewStats(data) {
+        document.getElementById('total-events').textContent = data.total_events || 0;
+        document.getElementById('total-runs').textContent = data.unique_seeds || 0;
+        document.getElementById('total-enemies').textContent = data.enemy_stats?.total_enemies || 0;
+        document.getElementById('player-positions').textContent = data.player_stats?.positions_captured || 0;
+    }
+    
+    // Actualizar gráfico de tipos de eventos
+    function updateEventTypesChart(eventTypes) {
+        const ctx = document.getElementById('event-types-chart').getContext('2d');
+        
+        // Convertir datos para Chart.js
+        const labels = [];
+        const data = [];
+        const backgroundColors = [];
+        
+        // Generar colores aleatorios para cada tipo de evento
+        const getRandomColor = () => {
+            const r = Math.floor(Math.random() * 200 + 55);
+            const g = Math.floor(Math.random() * 200 + 55);
+            const b = Math.floor(Math.random() * 200 + 55);
+            return `rgba(${r}, ${g}, ${b}, 0.7)`;
+        };
+        
+        // Ordenar tipos por cantidad (de mayor a menor)
+        const sortedTypes = Object.entries(eventTypes)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 10); // Limitar a los 10 tipos más comunes
+        
+        sortedTypes.forEach(([type, count]) => {
+            labels.push(type);
+            data.push(count);
+            backgroundColors.push(getRandomColor());
+        });
+        
+        // Si ya existe un gráfico, destruirlo
+        if (eventTypesChart) {
+            eventTypesChart.destroy();
+        }
+        
+        // Crear nuevo gráfico
+        eventTypesChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Cantidad de Eventos',
+                    data: data,
+                    backgroundColor: backgroundColors,
+                    borderColor: backgroundColors.map(color => color.replace('0.7', '1')),
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
                     legend: {
                         display: false
                     },
-                    title: {
-                        display: true,
-                        text: 'Eventos por Partida (Top 5)'
-                    },
-                    scales: {
-                        yAxes: [{
-                            ticks: {
-                                beginAtZero: true
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `Cantidad: ${context.raw}`;
                             }
-                        }]
+                        }
                     }
                 }
-            });
+            }
         });
-    </script>
-    {% endif %}
-</body>
-</html> 
+    }
+    
+    // Datos simulados para las estadísticas del jugador
+    function updatePlayerStats() {
+        document.getElementById('avg-health').textContent = '3.7 corazones';
+        document.getElementById('damage-taken').textContent = '42.3 pts';
+        document.getElementById('items-collected').textContent = '24 items';
+        document.getElementById('rooms-visited').textContent = '87 salas';
+    }
+    
+    // Inicializar página
+    document.addEventListener('DOMContentLoaded', () => {
+        refreshData();
+    });
+    
+    // Socket.IO para actualizaciones en tiempo real
+    const socket = io();
+    
+    socket.on('data_updated', (data) => {
+        console.log('Datos actualizados recibidos via Socket.IO');
+        refreshData(); // Recargar datos cuando hay actualizaciones
+    });
+</script>
+{% endblock %} 

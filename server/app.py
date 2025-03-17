@@ -49,24 +49,41 @@ PROCESSED_DATA_DIR = CONFIG.get('paths', {}).get('processed_data_dir', "processe
 RECEIVED_DATA_DIR = CONFIG.get('paths', {}).get('received_data_dir', "received_data")
 LOGS_DIR = CONFIG.get('paths', {}).get('logs_dir', "logs")
 
+# Variables globales
+game_status = {"running": False, "process": None, "pid": None, "last_check": datetime.now().isoformat()}
+last_emit_time = 0
+check_game_status_thread = None
+updating_data = False  # Flag para controlar actualizaciones simultáneas
+
 # Configurar logging
-os.makedirs(LOGS_DIR, exist_ok=True)
-log_level = logging.DEBUG if VERBOSE_LOGGING else logging.INFO
-logging.basicConfig(
-    level=log_level,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    handlers=[
-        logging.FileHandler(os.path.join(LOGS_DIR, LOG_FILE)),
-        logging.StreamHandler()
-    ]
-)
-
-# Configurar loggers específicos
-logging.getLogger('werkzeug').setLevel(logging.WARNING)  # Reducir logs de Flask
-logging.getLogger('matplotlib').setLevel(logging.WARNING)  # Reducir logs de matplotlib
-logging.getLogger('PIL').setLevel(logging.WARNING)  # Reducir logs de Pillow
-
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG if VERBOSE_LOGGING else logging.INFO)
+
+# Crear el directorio de logs si no existe
+if not os.path.exists(LOGS_DIR):
+    os.makedirs(LOGS_DIR)
+
+# Configurar handler para archivo
+file_handler = logging.FileHandler(os.path.join(LOGS_DIR, LOG_FILE))
+file_handler.setLevel(logging.DEBUG)
+
+# Configurar handler para consola
+console_handler = logging.StreamHandler()
+console_handler.setLevel(logging.INFO)
+
+# Formato de log
+formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(message)s')
+file_handler.setFormatter(formatter)
+console_handler.setFormatter(formatter)
+
+# Añadir handlers al logger
+logger.addHandler(file_handler)
+logger.addHandler(console_handler)
+
+# Reducir verbosidad de loggers externos
+logging.getLogger('werkzeug').setLevel(logging.WARNING)
+logging.getLogger('socketio').setLevel(logging.WARNING)
+logging.getLogger('engineio').setLevel(logging.WARNING)
 
 # Asegurar que existan los directorios necesarios
 os.makedirs(STATIC_FOLDER, exist_ok=True)
@@ -85,7 +102,6 @@ update_thread = None
 game_check_thread = None
 thread_stop_event = threading.Event()
 last_data_hash = None  # Hash para verificar si los datos han cambiado
-game_status = {"running": False, "last_check": None, "process_name": None, "pid": None}
 
 def load_database():
     """Cargar la base de datos"""
@@ -628,32 +644,41 @@ def dashboard():
     """Dashboard con visualizaciones"""
     database = load_database()
     stats = get_event_stats(database)
-    return render_template('dashboard.html', stats=stats)
+    return render_template('dashboard.html', stats=stats, page_title="Data Event Manager", active_page="dashboard")
 
 @app.route('/analytics')
 def analytics():
     """Análisis avanzado de datos"""
-    return render_template('analytics.html')
+    return render_template('analytics.html', page_title="Análisis Avanzado", active_page="analytics")
 
 @app.route('/config')
-def config_page():
-    """Página de configuración"""
-    try:
-        with open("config.json", 'r', encoding='utf-8') as f:
-            config_data = json.load(f)
-        return render_template('config.html', config=config_data)
-    except Exception as e:
-        logger.error(f"Error al cargar configuración: {str(e)}")
-        return render_template('config.html', config={}, error=str(e))
+def config():
+    """Renderiza la página de configuración."""
+    return render_template('config.html', page_title="Configuración", active_page="config")
+
+@app.route('/data')
+def data():
+    """Página de datos procesados"""
+    database = load_database()
+    stats = get_event_stats(database)
+    return render_template('data.html', stats=stats, page_title="Datos Procesados", active_page="data")
+
+@app.route('/stats')
+def stats():
+    """Página de estadísticas"""
+    database = load_database()
+    stats = get_event_stats(database)
+    return render_template('stats.html', stats=stats, page_title="Estadísticas", active_page="stats")
 
 # Funciones para manejar la configuración
 def load_configuration():
     """Carga la configuración desde el archivo"""
+    config_file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'config.json')
     try:
-        with open("config.json", 'r', encoding='utf-8') as f:
+        with open(config_file_path, 'r', encoding='utf-8') as f:
             return json.load(f)
     except Exception as e:
-        logger.error(f"Error al cargar configuración: {str(e)}")
+        logger.error(f"Error al cargar configuración desde {config_file_path}: {str(e)}")
         return {
             "server": {
                 "port": 5000,
@@ -675,21 +700,22 @@ def load_configuration():
 
 def save_configuration(config_data):
     """Guarda la configuración al archivo"""
+    config_file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'config.json')
     try:
         # Hacer una copia de seguridad antes de guardar
-        if os.path.exists("config.json"):
+        if os.path.exists(config_file_path):
             backup_dir = os.path.join(LOGS_DIR, "backups")
             os.makedirs(backup_dir, exist_ok=True)
             timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
             backup_file = os.path.join(backup_dir, f"config_{timestamp}.json")
-            shutil.copy2("config.json", backup_file)
+            shutil.copy2(config_file_path, backup_file)
         
         # Guardar nueva configuración
-        with open("config.json", 'w', encoding='utf-8') as f:
+        with open(config_file_path, 'w', encoding='utf-8') as f:
             json.dump(config_data, f, indent=4)
         return True
     except Exception as e:
-        logger.error(f"Error al guardar configuración: {str(e)}")
+        logger.error(f"Error al guardar configuración en {config_file_path}: {str(e)}")
         return False
 
 @app.route('/api/config', methods=['GET'])
@@ -1020,10 +1046,61 @@ def handle_disconnect():
     """Gestionar desconexión de cliente WebSocket"""
     logger.info(f"Cliente desconectado: {request.sid}")
 
+def update_data():
+    """Actualiza los datos ejecutando el script extract_data.py y devuelve el resultado"""
+    import subprocess
+    global last_data_hash
+    
+    logger.info("Ejecutando actualización de datos...")
+    
+    try:
+        # Ejecutar el script de extracción con la opción de mantener archivos originales
+        result = subprocess.run(["python", "extract_data.py", "--keep-originals", "--force"], 
+                               capture_output=True, text=True)
+        
+        update_info = {
+            "success": result.returncode == 0,
+            "output": result.stdout,
+            "error": result.stderr,
+            "timestamp": datetime.now().isoformat()
+        }
+        
+        # Si la actualización fue exitosa, verificar cambios y notificar
+        if update_info["success"]:
+            database = load_database()
+            
+            # Comprobar si los datos han cambiado
+            current_hash = calculate_data_hash(database)
+            data_changed = current_hash != last_data_hash
+            last_data_hash = current_hash
+            
+            if data_changed:
+                stats = get_event_stats(database)
+                # Generar visualizaciones
+                generate_visualizations(database)
+                
+                # Enviar datos actualizados a todos los clientes
+                socketio.emit('data_updated', {
+                    "stats": sanitize_for_json(stats),
+                    "update_info": sanitize_for_json(update_info)
+                })
+                logger.info("Datos actualizados y enviados a clientes")
+                return True
+            else:
+                logger.info("Actualización completada: No hay cambios en los datos")
+                return False
+        else:
+            logger.error(f"Error en actualización de datos: {update_info['error']}")
+            return False
+    except Exception as e:
+        logger.error(f"Error en función update_data: {str(e)}")
+        return False
+
 @socketio.on('manual_update')
 def handle_manual_update(data):
     """Procesa una solicitud de actualización manual de datos."""
     try:
+        global updating_data
         logger.info("Solicitud manual de actualización de datos recibida")
         
         if updating_data:
@@ -1031,17 +1108,24 @@ def handle_manual_update(data):
             return {"success": False, "error": "Ya hay una actualización en curso"}
         
         # Iniciar proceso de actualización
+        updating_data = True
         update_start_time = time.time()
-        update_result = update_data()
         
-        if update_result:
-            logger.info(f"Actualización manual completada en {time.time() - update_start_time:.2f} segundos")
-            return {"success": True, "message": "Datos actualizados correctamente"}
-        else:
-            logger.warning("Actualización manual falló")
-            return {"success": False, "error": "Error al actualizar datos"}
+        try:
+            update_result = update_data()
+            
+            if update_result:
+                logger.info(f"Actualización manual completada en {time.time() - update_start_time:.2f} segundos")
+                return {"success": True}
+            else:
+                logger.warning("La actualización manual no encontró cambios")
+                return {"success": False, "error": "No se encontraron cambios"}
+        finally:
+            updating_data = False
+            
     except Exception as e:
         logger.error(f"Error en actualización manual: {str(e)}")
+        updating_data = False
         return {"success": False, "error": str(e)}
 
 @socketio.on('start_game')

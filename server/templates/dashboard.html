@@ -1,433 +1,438 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - Data Event Manager</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
-    <style>
-        html {
-            overflow-y: scroll; /* Forzar barra de desplazamiento siempre visible */
-        }
-        body {
-            padding-top: 60px;
-            background-color: #f8f9fa;
-            padding-right: 0 !important; /* Evitar que Bootstrap añada padding al abrir modales */
-        }
-        .chart-container {
-            position: relative;
-            height: 300px;
-            margin-bottom: 30px;
-        }
-        .dashboard-card {
-            margin-bottom: 20px;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .dashboard-card .card-header {
-            background-color: #0d6efd;
-            color: white;
-            font-weight: bold;
-        }
-        .stat-card-wrapper {
-            position: relative;
-            width: 100%;
-            padding-bottom: 100%;
-            height: 0;
-            margin-bottom: 20px;
-        }
-        .stat-card-inner {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            background-color: white;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            overflow: hidden;
-        }
-        .stat-card-wrapper:hover .stat-card-inner {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
-        }
-        .stat-card-inner .stat-value {
-            font-size: min(2.5rem, 8vw);
-            font-weight: bold;
-            margin: 8px 0;
-            color: #0d6efd;
-            line-height: 1;
-            /* Evitar que los números muy grandes rompan el diseño */
-            max-width: 100%;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            overflow: hidden;
-        }
-        .stat-card-inner .stat-label {
-            font-size: 1rem;
-            font-weight: 600;
-            color: #6c757d;
-            margin-bottom: 0.5rem;
-            text-align: center;
-        }
-        .stat-card-inner .stat-description {
-            font-size: 0.875rem;
-            color: #6c757d;
-            margin-top: auto;
-            text-align: center;
-        }
-        .visualization-img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .refresh-icon {
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        .refresh-icon:hover {
-            transform: rotate(90deg);
-        }
-        #updateStatus {
-            position: fixed;
-            top: 70px;
-            right: 20px;
-            z-index: 1000;
-            padding: 10px 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-            transition: opacity 0.5s ease;
-        }
-        .game-status-indicator {
-            display: inline-block;
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            margin-right: 5px;
-        }
-        .game-status-active {
-            background-color: #28a745;
-        }
-        .game-status-inactive {
-            background-color: #dc3545;
-        }
-        .game-status-text {
-            font-size: 0.9rem;
-            margin-left: 5px;
-        }
-        /* Efecto de pulso para indicador de estado */
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.3); opacity: 0.7; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        
-        .pulse {
-            animation: pulse 0.5s ease-in-out 3;
-        }
-        
-        /* Estilos para el indicador de estado del juego */
-        .game-status-indicator {
-            transition: background-color 0.3s ease;
-        }
-    </style>
-</head>
-<body>
-    <!-- Barra de navegación -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-        <div class="container-fluid">
-            <!-- Columna 1: Logo -->
-            <div class="col-md-3 d-flex justify-content-start">
-                <a class="navbar-brand" href="/">DEM - Dashboard</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-            </div>
-            
-            <!-- Columna 2: Menú -->
-            <div class="col-md-6">
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav mx-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="/">Inicio</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" href="/dashboard">Dashboard</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/analytics">Análisis</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/config">Configuración</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="apiDropdown" role="button" data-bs-toggle="dropdown">
-                                API
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="/api/stats" target="_blank">Estadísticas</a></li>
-                                <li><a class="dropdown-item" href="/api/events?page=1&per_page=10" target="_blank">Eventos</a></li>
-                                <li><a class="dropdown-item" href="/api/ml/features" target="_blank">ML Features</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="/api/metadata" target="_blank">Metadatos</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            
-            <!-- Columna 3: Controles -->
-            <div class="col-md-3 d-flex justify-content-end">
-                <div class="d-flex">
-                    <div class="dropdown me-2">
-                        <button class="btn btn-outline-light dropdown-toggle" type="button" id="gameActionsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-joystick me-1"></i> Juego
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="gameActionsDropdown">
-                            <li><a class="dropdown-item" href="#" id="startGameBtn"><i class="bi bi-play-fill me-2"></i>Iniciar Juego</a></li>
-                            <li><a class="dropdown-item" href="#" id="openGameFolderBtn"><i class="bi bi-folder me-2"></i>Abrir Carpeta</a></li>
-                        </ul>
-                    </div>
-                    <button id="refreshDataBtn" class="btn btn-outline-light me-2">
-                        <span class="spinner-border spinner-border-sm d-none me-2"></span>
-                        <i class="bi bi-arrow-clockwise me-1"></i> Actualizar
-                    </button>
-                    <button id="gameStatusBtn" class="btn btn-outline-danger">
-                        <i class="bi bi-controller me-1"></i> <span id="gameStatusText">Juego no detectado</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </nav>
+{% extends "header.html" %}
 
-    <!-- Notificación de actualización -->
-    <div id="updateStatus" class="alert alert-success d-none">Datos actualizados correctamente</div>
+{% set page_title = "Data Event Manager" %}
+{% set active_page = "dashboard" %}
 
+{% block content %}
     <!-- Contenido principal -->
-    <main class="container">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1>Dashboard de Análisis</h1>
-        </div>
-
-        <!-- Tarjetas de estadísticas -->
-        <div class="row g-3 mb-4">
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="stat-card-wrapper">
-                    <div class="stat-card-inner">
-                        <div class="stat-label">Eventos Totales</div>
-                        <div id="totalEvents" class="stat-value">{{ stats.total_events }}</div>
-                        <div class="stat-description">registros capturados</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="stat-card-wrapper">
-                    <div class="stat-card-inner">
-                        <div class="stat-label">Semillas Únicas</div>
-                        <div id="uniqueSeeds" class="stat-value">{{ stats.unique_seeds }}</div>
-                        <div class="stat-description">partidas jugadas</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="stat-card-wrapper">
-                    <div class="stat-card-inner">
-                        <div class="stat-label">Posiciones de Jugador</div>
-                        <div id="playerPositions" class="stat-value">{{ stats.player_stats.positions_captured }}</div>
-                        <div class="stat-description">coordenadas registradas</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="stat-card-wrapper">
-                    <div class="stat-card-inner">
-                        <div class="stat-label">Enemigos Rastreados</div>
-                        <div id="enemyCount" class="stat-value">{{ stats.enemy_stats.total_enemies }}</div>
-                        <div class="stat-description">entidades monitorizadas</div>
-                    </div>
-                </div>
+    <main class="container mt-4">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h1 class="mb-3">Dashboard</h1>
+                <p class="lead">Visualización en tiempo real de los datos capturados por el mod DEM.</p>
+                <div id="updateStatus" class="alert alert-success d-none mt-2">Datos actualizados</div>
             </div>
         </div>
-
-        <!-- Gráficos y visualizaciones -->
+        
+        <!-- Resumen de estadísticas -->
+        <div class="row mb-4">
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card h-100 status-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Eventos Totales</h5>
+                        <h2 id="totalEvents" class="display-4 mb-0">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card h-100 status-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Eventos Guardados</h5>
+                        <h2 id="totalEventsSaved" class="display-4 mb-0">0</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card h-100 status-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Tamaño Promedio</h5>
+                        <h2 id="avgSize" class="display-4 mb-0">0</h2>
+                        <p class="text-muted">bytes</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card h-100 status-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Tiempo de Procesamiento</h5>
+                        <h2 id="avgProcessingTime" class="display-4 mb-0">0</h2>
+                        <p class="text-muted">ms</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Gráficos -->
+        <div class="row mb-4">
+            <!-- Gráfico de eventos por tipo -->
+            <div class="col-lg-6 mb-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span>Eventos por Tipo</span>
+                        <button id="refreshEventChart" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-arrow-repeat"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="eventTypesChart" width="400" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Gráfico de daño recibido -->
+            <div class="col-lg-6 mb-4">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span>Daño Recibido por Nivel</span>
+                        <button id="refreshDamageChart" class="btn btn-sm btn-outline-primary">
+                            <i class="bi bi-arrow-repeat"></i>
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="damageChart" width="400" height="300"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Últimos eventos y visualizaciones -->
         <div class="row">
-            <!-- Distribución de eventos -->
-            <div class="col-lg-6">
-                <div class="card dashboard-card">
-                    <div class="card-header d-flex justify-content-between">
-                        <span>Distribución de Eventos</span>
-                        <span class="refresh-icon" id="refreshEventChart">↻</span>
+            <!-- Últimos eventos registrados -->
+            <div class="col-lg-6 mb-4">
+                <div class="card">
+                    <div class="card-header">Últimos Eventos Registrados</div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>Evento</th>
+                                        <th>Timestamp</th>
+                                        <th>Detalles</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentEventsTable">
+                                    <tr>
+                                        <td colspan="3" class="text-center">Cargando eventos...</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <div class="chart-container">
-                            <canvas id="eventDistribution"></canvas>
-                        </div>
-                        <div id="eventInfo"></div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Datos ML -->
-            <div class="col-lg-6">
-                <div class="card dashboard-card">
-                    <div class="card-header">Dataset para Machine Learning</div>
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-4">
-                            <h5 class="card-title mb-0">Características extraídas para IA</h5>
-                            <a href="/api/ml/download" class="btn btn-sm btn-outline-primary">Descargar CSV</a>
-                        </div>
-                        <p>Los datos han sido procesados y preparados para su uso en modelos de machine learning. Se han extraído características relevantes como:</p>
-                        <ul>
-                            <li>Posición y velocidad del jugador</li>
-                            <li>Estado de salud y estadísticas</li>
-                            <li>Entradas del usuario (controles)</li>
-                            <li>Secuencia temporal de eventos</li>
-                        </ul>
-                        <div class="alert alert-info">
-                            El conjunto de datos está optimizado para modelos de aprendizaje supervisado y por refuerzo.
-                        </div>
+                    <div class="card-footer text-center">
+                        <a href="/analytics" class="btn btn-sm btn-outline-primary">Ver todos los eventos</a>
                     </div>
                 </div>
             </div>
-
-            <!-- Trayectoria del jugador -->
-            <div class="col-lg-6 mt-4">
-                <div class="card dashboard-card">
-                    <div class="card-header">Trayectoria del Jugador</div>
+            
+            <!-- Visualizaciones generadas -->
+            <div class="col-lg-6 mb-4">
+                <div class="card">
+                    <div class="card-header">Visualizaciones Generadas</div>
                     <div class="card-body">
-                        <img src="/static/visualizations/player_trajectory.png" alt="Trayectoria del jugador" class="visualization-img" id="trajectoryImage">
-                        <div class="text-center mt-2">
-                            <small class="text-muted">Actualizado: <span id="trajectoryTimestamp">{{ stats.last_update }}</span></small>
+                        <div id="visualizationsContainer" class="row g-3">
+                            <div class="col-12 text-center">
+                                <p class="text-muted">Cargando visualizaciones...</p>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <!-- Mapa de calor -->
-            <div class="col-lg-6 mt-4">
-                <div class="card dashboard-card">
-                    <div class="card-header">Mapa de Calor - Posiciones del Jugador</div>
-                    <div class="card-body">
-                        <img src="/static/visualizations/player_heatmap.png" alt="Mapa de calor de posiciones del jugador" class="visualization-img" id="heatmapImage">
-                        <div class="text-center mt-2">
-                            <small class="text-muted">Actualizado: <span id="heatmapTimestamp">{{ stats.last_update }}</span></small>
-                        </div>
+                    <div class="card-footer text-center">
+                        <a href="/analytics" class="btn btn-sm btn-outline-primary">Ver todas las visualizaciones</a>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Pie de página -->
-    <footer class="bg-dark text-white mt-5 py-4">
-        <div class="container text-center">
-            <p>Data Event Manager para The Binding of Isaac</p>
-            <p class="mb-0"><small>Versión 2.0 - Desarrollado con ❤️ para la comunidad</small></p>
-        </div>
-    </footer>
+    {% include "footer.html" %}
+{% endblock %}
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
-    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const socket = io();
-            const updateStatus = document.getElementById('updateStatus');
-            const refreshDataBtn = document.getElementById('refreshDataBtn');
-            const refreshSpinner = document.querySelector('#refreshDataBtn .spinner-border');
-            const refreshEventChart = document.getElementById('refreshEventChart');
-            const gameStatusBtn = document.getElementById('gameStatusBtn');
-            const gameStatusText = document.getElementById('gameStatusText');
-            const startGameBtn = document.getElementById('startGameBtn');
-            const openGameFolderBtn = document.getElementById('openGameFolderBtn');
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Referencias a elementos
+        const socket = io();
+        const updateStatus = document.getElementById('updateStatus');
+        const refreshDataBtn = document.getElementById('refreshButton');
+        const refreshSpinner = document.querySelector('#refreshButton .spinner-border');
+        const refreshEventChart = document.getElementById('refreshEventChart');
+        const gameStatusBtn = document.getElementById('gameStatusBtn');
+        const gameStatusText = document.getElementById('gameStatusText');
+        
+        // Elementos de estadísticas
+        const totalEventsEl = document.getElementById('totalEvents');
+        const totalEventsSavedEl = document.getElementById('totalEventsSaved');
+        const avgSizeEl = document.getElementById('avgSize');
+        const avgProcessingTimeEl = document.getElementById('avgProcessingTime');
+        const recentEventsTable = document.getElementById('recentEventsTable');
+        const visualizationsContainer = document.getElementById('visualizationsContainer');
+        
+        // Datos para los gráficos
+        let eventTypesChart = null;
+        let damageChart = null;
+        
+        // Cargar datos iniciales y configurar gráficos
+        loadInitialData();
+        
+        // Configurar actualización de datos
+        refreshDataBtn.addEventListener('click', function() {
+            refreshSpinner.classList.remove('d-none');
+            this.disabled = true;
             
-            // Manejar evento de cambio de estado del juego
-            socket.on('game_status_change', function(data) {
-                console.log('Cambio de estado del juego:', data);
+            socket.emit('manual_update', {}, function(response) {
+                refreshSpinner.classList.add('d-none');
+                refreshDataBtn.disabled = false;
                 
-                // Actualizar el botón de estado del juego
-                if (data.running) {
-                    gameStatusBtn.classList.remove('btn-outline-danger');
-                    gameStatusBtn.classList.add('btn-outline-success');
-                    gameStatusText.textContent = 'Juego en ejecución';
-                    if (data.process) {
-                        gameStatusText.textContent += ` (${data.process})`;
-                    }
+                if (response && response.success) {
+                    showToast('Datos actualizados correctamente', 'success');
                 } else {
-                    gameStatusBtn.classList.remove('btn-outline-success');
-                    gameStatusBtn.classList.add('btn-outline-danger');
-                    gameStatusText.textContent = 'Juego no detectado';
+                    showToast('Error al actualizar datos: ' + (response.error || 'Error desconocido'), 'danger');
                 }
             });
+        });
+        
+        // Manejar actualización de datos
+        socket.on('data_updated', function(data) {
+            console.log('Datos actualizados recibidos:', data);
             
-            // Manejar clic en el botón de iniciar juego
-            if (startGameBtn) {
-                startGameBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    // Emitir evento para iniciar el juego
-                    socket.emit('start_game', {}, function(response) {
-                        if (response && response.success) {
-                            // El juego se inició correctamente
-                            showNotification('Juego iniciado correctamente', 'success');
-                        } else {
-                            // Error al iniciar el juego
-                            showNotification('Error al iniciar el juego: ' + (response.error || 'Error desconocido'), 'error');
-                        }
-                    });
-                });
-            }
-            
-            // Manejar clic en el botón de abrir carpeta
-            if (openGameFolderBtn) {
-                openGameFolderBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    // Emitir evento para abrir la carpeta del juego
-                    socket.emit('open_game_folder', {}, function(response) {
-                        if (response && response.success) {
-                            // La carpeta se abrió correctamente
-                            showNotification('Carpeta del juego abierta', 'success');
-                        } else {
-                            // Error al abrir la carpeta
-                            showNotification('Error al abrir la carpeta del juego: ' + (response.error || 'Error desconocido'), 'error');
-                        }
-                    });
-                });
-            }
-            
-            // Función para mostrar notificaciones
-            function showNotification(message, type = 'info') {
-                updateStatus.textContent = message;
-                updateStatus.classList.remove('d-none', 'alert-success', 'alert-danger', 'alert-info');
+            if (data.stats) {
+                updateStats(data.stats);
+                updateRecentEvents(data.stats.recent_events || []);
+                loadVisualizations();
                 
-                switch (type) {
-                    case 'success':
-                        updateStatus.classList.add('alert-success');
-                        break;
-                    case 'error':
-                        updateStatus.classList.add('alert-danger');
-                        break;
-                    default:
-                        updateStatus.classList.add('alert-info');
+                // Actualizar gráficos solo si hay datos que actualizar
+                if (data.stats.event_types) {
+                    updateEventTypesChart(data.stats.event_types);
                 }
-                
-                // Mostrar y luego ocultar después de 3 segundos
-                updateStatus.classList.remove('d-none');
-                setTimeout(() => {
-                    updateStatus.classList.add('d-none');
-                }, 3000);
+                if (data.stats.damage_by_level) {
+                    updateDamageChart(data.stats.damage_by_level);
+                }
             }
         });
-    </script>
-</body>
-</html> 
+        
+        // Botones de actualización de gráficos
+        refreshEventChart.addEventListener('click', function() {
+            fetch('/api/stats/event_types')
+                .then(response => response.json())
+                .then(data => {
+                    updateEventTypesChart(data);
+                    showToast('Gráfico de eventos actualizado', 'success');
+                })
+                .catch(error => {
+                    console.error('Error al actualizar gráfico de eventos:', error);
+                    showToast('Error al actualizar gráfico', 'danger');
+                });
+        });
+        
+        document.getElementById('refreshDamageChart').addEventListener('click', function() {
+            fetch('/api/stats/damage_by_level')
+                .then(response => response.json())
+                .then(data => {
+                    updateDamageChart(data);
+                    showToast('Gráfico de daño actualizado', 'success');
+                })
+                .catch(error => {
+                    console.error('Error al actualizar gráfico de daño:', error);
+                    showToast('Error al actualizar gráfico', 'danger');
+                });
+        });
+        
+        // Funciones auxiliares
+        function loadInitialData() {
+            // Cargar estadísticas generales
+            fetch('/api/stats')
+                .then(response => response.json())
+                .then(data => {
+                    updateStats(data);
+                    updateRecentEvents(data.recent_events || []);
+                })
+                .catch(error => console.error('Error al cargar estadísticas:', error));
+            
+            // Cargar datos para el gráfico de tipos de eventos
+            fetch('/api/stats/event_types')
+                .then(response => response.json())
+                .then(data => updateEventTypesChart(data))
+                .catch(error => console.error('Error al cargar tipos de eventos:', error));
+            
+            // Cargar datos para el gráfico de daño
+            fetch('/api/stats/damage_by_level')
+                .then(response => response.json())
+                .then(data => updateDamageChart(data))
+                .catch(error => console.error('Error al cargar datos de daño:', error));
+            
+            // Cargar visualizaciones
+            loadVisualizations();
+        }
+        
+        function updateStats(data) {
+            totalEventsEl.textContent = data.total_events || 0;
+            totalEventsSavedEl.textContent = data.total_events_saved || 0;
+            avgSizeEl.textContent = data.avg_event_size || 0;
+            avgProcessingTimeEl.textContent = ((data.avg_processing_time || 0) * 1000).toFixed(2);
+        }
+        
+        function updateRecentEvents(events) {
+            if (!events || events.length === 0) {
+                recentEventsTable.innerHTML = '<tr><td colspan="3" class="text-center">No hay eventos registrados</td></tr>';
+                return;
+            }
+            
+            recentEventsTable.innerHTML = '';
+            events.slice(0, 5).forEach(event => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${event.event_type}</td>
+                    <td>${new Date(event.timestamp).toLocaleString()}</td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-info" data-bs-toggle="modal" data-bs-target="#eventModal" 
+                                data-event-id="${event.event_id}">
+                            <i class="bi bi-info-circle"></i>
+                        </button>
+                    </td>
+                `;
+                recentEventsTable.appendChild(tr);
+            });
+        }
+        
+        function loadVisualizations() {
+            fetch('/api/visualizations/list')
+                .then(response => response.json())
+                .then(data => {
+                    if (!data || data.length === 0) {
+                        visualizationsContainer.innerHTML = '<div class="col-12 text-center"><p class="text-muted">No hay visualizaciones disponibles</p></div>';
+                        return;
+                    }
+                    
+                    visualizationsContainer.innerHTML = '';
+                    data.slice(0, 4).forEach(viz => {
+                        const col = document.createElement('div');
+                        col.className = 'col-md-6';
+                        col.innerHTML = `
+                            <div class="card h-100">
+                                <img src="${viz.url}" class="card-img-top" alt="${viz.title}">
+                                <div class="card-body p-2">
+                                    <h6 class="card-title">${viz.title}</h6>
+                                </div>
+                            </div>
+                        `;
+                        visualizationsContainer.appendChild(col);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error al cargar visualizaciones:', error);
+                    visualizationsContainer.innerHTML = '<div class="col-12 text-center"><p class="text-danger">Error al cargar visualizaciones</p></div>';
+                });
+        }
+        
+        function updateEventTypesChart(data) {
+            const labels = Object.keys(data);
+            const values = Object.values(data);
+            
+            const ctx = document.getElementById('eventTypesChart').getContext('2d');
+            
+            if (eventTypesChart) {
+                eventTypesChart.data.labels = labels;
+                eventTypesChart.data.datasets[0].data = values;
+                eventTypesChart.update();
+            } else {
+                eventTypesChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Número de eventos',
+                            data: values,
+                            backgroundColor: [
+                                'rgba(54, 162, 235, 0.5)',
+                                'rgba(255, 99, 132, 0.5)',
+                                'rgba(255, 206, 86, 0.5)',
+                                'rgba(75, 192, 192, 0.5)',
+                                'rgba(153, 102, 255, 0.5)',
+                                'rgba(255, 159, 64, 0.5)'
+                            ],
+                            borderColor: [
+                                'rgba(54, 162, 235, 1)',
+                                'rgba(255, 99, 132, 1)',
+                                'rgba(255, 206, 86, 1)',
+                                'rgba(75, 192, 192, 1)',
+                                'rgba(153, 102, 255, 1)',
+                                'rgba(255, 159, 64, 1)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.raw} eventos`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    precision: 0
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+        
+        function updateDamageChart(data) {
+            const labels = Object.keys(data);
+            const values = Object.values(data);
+            
+            const ctx = document.getElementById('damageChart').getContext('2d');
+            
+            if (damageChart) {
+                damageChart.data.labels = labels;
+                damageChart.data.datasets[0].data = values;
+                damageChart.update();
+            } else {
+                damageChart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Daño recibido',
+                            data: values,
+                            fill: true,
+                            backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            tension: 0.1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.raw} puntos de daño`;
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Puntos de daño'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Nivel'
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+    });
+</script>
+{% endblock %} 

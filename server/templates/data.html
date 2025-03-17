@@ -1,110 +1,290 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DEM - Datos Procesados</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <!-- Socket.IO client library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
-    <script src="{{ url_for('static', filename='app.js') }}" defer></script>
-</head>
-<body>
-    <header>
-        <h1>Data Event Manager</h1>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('index') }}">Inicio</a></li>
-                <li><a href="{{ url_for('data') }}" class="active">Ver Datos Procesados</a></li>
-                <li><a href="{{ url_for('stats') }}">Ver Estadísticas</a></li>
-            </ul>
-        </nav>
-    </header>
+{% extends "header.html" %}
 
-    <main>
-        <section class="hero">
-            <h2>Datos Procesados</h2>
-            <div class="controls">
-                <button id="refresh-btn" onclick="refreshData()">Actualizar Datos</button>
-                <span id="last-updated">
+{% set page_title = "Datos Procesados" %}
+{% set active_page = "data" %}
+
+{% block extra_css %}
+<style>
+    .data-container {
+        margin-top: 2rem;
+    }
+    .data-card {
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .refresh-button {
+        margin-bottom: 1rem;
+    }
+    .data-timestamp {
+        font-size: 0.8rem;
+        color: #666;
+        margin-bottom: 1rem;
+    }
+    .json-view {
+        background-color: #f8f9fa;
+        border-radius: 4px;
+        padding: 1rem;
+        overflow-x: auto;
+        font-family: monospace;
+    }
+    .event-card {
+        transition: transform 0.2s;
+    }
+    .event-card:hover {
+        transform: translateY(-5px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="mb-3">Datos Procesados</h1>
+            <p class="lead">Visualización de los datos capturados y procesados por el mod DEM.</p>
+            
+            <div class="refresh-button">
+                <button id="refresh-btn" class="btn btn-primary" onclick="refreshData()">
+                    <i class="bi bi-arrow-clockwise me-2"></i>Actualizar Datos
+                </button>
+                <span id="last-updated" class="ms-3 data-timestamp">
                     {% if stats.latest_update %}
-                    Última actualización: {{ stats.latest_update.split('T')[0] }} {{ stats.latest_update.split('T')[1][:8] }}
+                        Última actualización: {{ stats.latest_update }}
                     {% else %}
-                    Nunca actualizado
+                        No hay datos disponibles
                     {% endif %}
                 </span>
             </div>
-        </section>
-
-        <section class="data-filters">
-            <div class="filter-controls">
-                <div class="filter-group">
-                    <label for="event-type">Filtrar por tipo:</label>
-                    <select id="event-type" onchange="filterData()">
-                        <option value="">Todos los tipos</option>
-                        {% for type_stat in stats.types %}
-                        <option value="{{ type_stat.type }}">{{ type_stat.type }} ({{ type_stat.count }})</option>
-                        {% endfor %}
-                    </select>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Panel de eventos -->
+        <div class="col-lg-8">
+            <div class="card data-card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Eventos Capturados</h5>
                 </div>
-                <div class="filter-group">
-                    <label for="seed">Filtrar por partida (seed):</label>
-                    <select id="seed" onchange="filterData()">
-                        <option value="">Todas las partidas</option>
-                        {% for seed_stat in stats.seeds %}
-                        <option value="{{ seed_stat.seed }}">Seed: {{ seed_stat.seed }} ({{ seed_stat.count }} eventos)</option>
-                        {% endfor %}
-                    </select>
+                <div class="card-body">
+                    <div id="events-container">
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle me-2"></i>
+                            Cargando eventos...
+                        </div>
+                    </div>
                 </div>
             </div>
-        </section>
+        </div>
+        
+        <!-- Panel de estadísticas -->
+        <div class="col-lg-4">
+            <div class="card data-card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Resumen de Datos</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Total de Eventos
+                            <span id="total-events" class="badge bg-primary rounded-pill">0</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Eventos por Tipo
+                            <span id="event-types" class="badge bg-success rounded-pill">0</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Eventos de Jugador
+                            <span id="player-events" class="badge bg-info rounded-pill">0</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Eventos de Enemigos
+                            <span id="enemy-events" class="badge bg-danger rounded-pill">0</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            Semillas Únicas
+                            <span id="unique-seeds" class="badge bg-warning rounded-pill">0</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="card data-card mt-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Filtros</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label for="event-type-filter" class="form-label">Tipo de Evento</label>
+                        <select id="event-type-filter" class="form-select">
+                            <option value="all">Todos los eventos</option>
+                            <!-- Se llenará dinámicamente -->
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="time-range-filter" class="form-label">Rango de Tiempo</label>
+                        <select id="time-range-filter" class="form-select">
+                            <option value="all">Todo el tiempo</option>
+                            <option value="last_hour">Última hora</option>
+                            <option value="last_day">Último día</option>
+                            <option value="last_week">Última semana</option>
+                        </select>
+                    </div>
+                    <button id="apply-filters" class="btn btn-primary w-100">
+                        <i class="bi bi-filter me-2"></i>Aplicar Filtros
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-        <section class="data-content">
-            {% if stats.total > 0 %}
-            <div class="data-table-container">
-                <table id="events-table" class="data-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Tipo</th>
-                            <th>Timestamp</th>
-                            <th>Partida (Seed)</th>
-                            <th>Nivel</th>
-                            <th>Datos</th>
-                        </tr>
-                    </thead>
-                    <tbody id="events-body">
-                        <!-- Los datos se cargan dinámicamente por JavaScript -->
-                        <tr>
-                            <td colspan="6" class="loading">Cargando datos...</td>
-                        </tr>
-                    </tbody>
-                </table>
+{% include "footer.html" %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Función para actualizar los datos
+    function refreshData() {
+        fetch('/api/stats')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('total-events').textContent = data.total_events || 0;
+                document.getElementById('event-types').textContent = Object.keys(data.event_types || {}).length;
+                document.getElementById('unique-seeds').textContent = data.unique_seeds || 0;
                 
-                <div class="pagination">
-                    <button id="prev-page" onclick="prevPage()" disabled>Anterior</button>
-                    <span id="page-info">Página <span id="current-page">1</span> de <span id="total-pages">1</span></span>
-                    <button id="next-page" onclick="nextPage()" disabled>Siguiente</button>
-                </div>
-            </div>
-            {% else %}
-            <div class="no-data">
-                <p>No hay datos disponibles. Juega al juego con el mod activado para recopilar datos.</p>
-            </div>
-            {% endif %}
-        </section>
-
-        <section id="event-details" class="event-details" style="display: none;">
-            <h3>Detalles del Evento</h3>
-            <div class="detail-content">
-                <!-- Contenido dinámico -->
-            </div>
-            <button onclick="closeDetails()">Cerrar</button>
-        </section>
-    </main>
-
-    <footer>
-        <p>Data Event Manager - Mod para The Binding of Isaac: Repentance</p>
-    </footer>
-</body>
-</html> 
+                // Contar eventos de jugador y enemigos (simplificado)
+                let playerEvents = 0;
+                let enemyEvents = 0;
+                
+                Object.entries(data.event_types || {}).forEach(([type, count]) => {
+                    if (type.includes('player')) {
+                        playerEvents += count;
+                    } else if (type.includes('enemy')) {
+                        enemyEvents += count;
+                    }
+                });
+                
+                document.getElementById('player-events').textContent = playerEvents;
+                document.getElementById('enemy-events').textContent = enemyEvents;
+                
+                // Actualizar timestamp
+                document.getElementById('last-updated').textContent = 'Última actualización: ' + new Date().toLocaleString();
+                
+                // Actualizar selector de tipos de eventos
+                updateEventTypeFilter(Object.keys(data.event_types || {}));
+                
+                // Cargar eventos
+                loadEvents();
+            })
+            .catch(error => {
+                console.error('Error al cargar estadísticas:', error);
+                document.getElementById('events-container').innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        Error al cargar datos: ${error.message}
+                    </div>
+                `;
+            });
+    }
+    
+    // Cargar eventos (simplificado para la visualización)
+    function loadEvents() {
+        fetch('/api/events?page=1&per_page=10')
+            .then(response => response.json())
+            .then(data => {
+                if (data.events && data.events.length > 0) {
+                    const eventsHtml = data.events.map((event, index) => {
+                        return `
+                            <div class="card mb-3 event-card">
+                                <div class="card-header bg-light">
+                                    <div class="d-flex justify-content-between">
+                                        <span class="fw-bold">${event.event_type || 'Evento sin tipo'}</span>
+                                        <span class="text-muted small">${formatTimestamp(event.timestamp)}</span>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="json-view">
+                                        <pre>${JSON.stringify(event, null, 2)}</pre>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                    
+                    document.getElementById('events-container').innerHTML = eventsHtml;
+                } else {
+                    document.getElementById('events-container').innerHTML = `
+                        <div class="alert alert-warning">
+                            <i class="bi bi-info-circle me-2"></i>
+                            No hay eventos disponibles para mostrar.
+                        </div>
+                    `;
+                }
+            })
+            .catch(error => {
+                console.error('Error al cargar eventos:', error);
+                document.getElementById('events-container').innerHTML = `
+                    <div class="alert alert-danger">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        Error al cargar eventos: ${error.message}
+                    </div>
+                `;
+            });
+    }
+    
+    // Actualizar selector de tipos de eventos
+    function updateEventTypeFilter(types) {
+        const select = document.getElementById('event-type-filter');
+        
+        // Mantener la opción "Todos los eventos"
+        select.innerHTML = '<option value="all">Todos los eventos</option>';
+        
+        // Agregar opciones para cada tipo de evento
+        types.sort().forEach(type => {
+            const option = document.createElement('option');
+            option.value = type;
+            option.textContent = type;
+            select.appendChild(option);
+        });
+    }
+    
+    // Formatear timestamp para mostrar
+    function formatTimestamp(timestamp) {
+        if (!timestamp) return 'Fecha desconocida';
+        
+        // Intentar convertir a fecha
+        try {
+            const date = new Date(timestamp);
+            return date.toLocaleString();
+        } catch (e) {
+            return timestamp;
+        }
+    }
+    
+    // Inicializar página
+    document.addEventListener('DOMContentLoaded', () => {
+        refreshData();
+        
+        // Evento para aplicar filtros
+        document.getElementById('apply-filters').addEventListener('click', () => {
+            // Implementación de filtros (simplificada)
+            const eventType = document.getElementById('event-type-filter').value;
+            const timeRange = document.getElementById('time-range-filter').value;
+            
+            console.log(`Aplicando filtros: Tipo=${eventType}, Tiempo=${timeRange}`);
+            // Aquí implementaríamos la lógica real de filtrado
+            
+            // Por ahora, solo recargamos los datos
+            loadEvents();
+        });
+    });
+    
+    // Socket.IO para actualizaciones en tiempo real
+    const socket = io();
+    
+    socket.on('data_updated', (data) => {
+        console.log('Datos actualizados recibidos via Socket.IO');
+        refreshData(); // Recargar datos cuando hay actualizaciones
+    });
+</script>
+{% endblock %} 
