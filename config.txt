@@ -1,0 +1,26 @@
+# Configuracion del entorno
+GAME_PATH=D:\SteamLibrary\steamapps\common\The Binding of Isaac Rebirth
+MOD_NAME=DEM
+GAME_EXE=isaac-ng.exe
+
+{
+    "game": {
+        "path": "D:\\SteamLibrary\\steamapps\\common\\The Binding of Isaac Rebirth",
+        "executable": "isaac-ng.exe",
+        "version": "Repentance",
+        "mod_folder": "D:\\SteamLibrary\\steamapps\\common\\The Binding of Isaac Rebirth\\mods\\dem"
+    },
+    "capture": {
+        "frequency": 5,
+        "key_events": true,
+        "player_data": true,
+        "enemy_data": true,
+        "item_data": true,
+        "room_data": true
+    },
+    "server": {
+        "port": 5000,
+        "update_interval": 20,
+        "emit_throttle": 5
+    }
+}

@@ -6,10 +6,15 @@
     <title>Dashboard - Data Event Manager</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
     <style>
+        html {
+            overflow-y: scroll; /* Forzar barra de desplazamiento siempre visible */
+        }
         body {
             padding-top: 60px;
             background-color: #f8f9fa;
+            padding-right: 0 !important; /* Evitar que Bootstrap añada padding al abrir modales */
         }
         .chart-container {
             position: relative;
@@ -120,40 +125,87 @@
             font-size: 0.9rem;
             margin-left: 5px;
         }
+        /* Efecto de pulso para indicador de estado */
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .pulse {
+            animation: pulse 0.5s ease-in-out 3;
+        }
+        
+        /* Estilos para el indicador de estado del juego */
+        .game-status-indicator {
+            transition: background-color 0.3s ease;
+        }
     </style>
 </head>
 <body>
     <!-- Barra de navegación -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-        <div class="container">
-            <a class="navbar-brand" href="/">DEM - Data Event Manager</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="/">Inicio</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/dashboard">Dashboard</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/analytics">Análisis</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="apiDropdown" role="button" data-bs-toggle="dropdown">
-                            API
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="/api/stats" target="_blank">Estadísticas</a></li>
-                            <li><a class="dropdown-item" href="/api/events?page=1&per_page=10" target="_blank">Eventos</a></li>
-                            <li><a class="dropdown-item" href="/api/ml/features" target="_blank">ML Features</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="/api/metadata" target="_blank">Metadatos</a></li>
+        <div class="container-fluid">
+            <!-- Columna 1: Logo -->
+            <div class="col-md-3 d-flex justify-content-start">
+                <a class="navbar-brand" href="/">DEM - Dashboard</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            
+            <!-- Columna 2: Menú -->
+            <div class="col-md-6">
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav mx-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/dashboard">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/analytics">Análisis</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/config">Configuración</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="apiDropdown" role="button" data-bs-toggle="dropdown">
+                                API
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="/api/stats" target="_blank">Estadísticas</a></li>
+                                <li><a class="dropdown-item" href="/api/events?page=1&per_page=10" target="_blank">Eventos</a></li>
+                                <li><a class="dropdown-item" href="/api/ml/features" target="_blank">ML Features</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/api/metadata" target="_blank">Metadatos</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Columna 3: Controles -->
+            <div class="col-md-3 d-flex justify-content-end">
+                <div class="d-flex">
+                    <div class="dropdown me-2">
+                        <button class="btn btn-outline-light dropdown-toggle" type="button" id="gameActionsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-joystick me-1"></i> Juego
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="gameActionsDropdown">
+                            <li><a class="dropdown-item" href="#" id="startGameBtn"><i class="bi bi-play-fill me-2"></i>Iniciar Juego</a></li>
+                            <li><a class="dropdown-item" href="#" id="openGameFolderBtn"><i class="bi bi-folder me-2"></i>Abrir Carpeta</a></li>
                         </ul>
-                    </li>
-                </ul>
+                    </div>
+                    <button id="refreshDataBtn" class="btn btn-outline-light me-2">
+                        <span class="spinner-border spinner-border-sm d-none me-2"></span>
+                        <i class="bi bi-arrow-clockwise me-1"></i> Actualizar
+                    </button>
+                    <button id="gameStatusBtn" class="btn btn-outline-danger">
+                        <i class="bi bi-controller me-1"></i> <span id="gameStatusText">Juego no detectado</span>
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
@@ -165,16 +217,6 @@
     <main class="container">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1>Dashboard de Análisis</h1>
-            <div>
-                <div id="gameStatus" class="mb-2 text-end">
-                    <span id="gameStatusIndicator" class="game-status-indicator game-status-inactive"></span>
-                    <span id="gameStatusText" class="game-status-text">Juego inactivo</span>
-                </div>
-                <button id="refreshButton" class="btn btn-primary">
-                    <span id="refreshSpinner" class="spinner-border spinner-border-sm d-none me-2"></span>
-                    Actualizar datos
-                </button>
-            </div>
         </div>
 
         <!-- Tarjetas de estadísticas -->
@@ -300,430 +342,91 @@
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Conectar a WebSocket
             const socket = io();
-            
-            // Referencias a elementos DOM
-            const totalEvents = document.getElementById('totalEvents');
-            const uniqueSeeds = document.getElementById('uniqueSeeds');
-            const playerPositions = document.getElementById('playerPositions');
-            const enemyCount = document.getElementById('enemyCount');
-            const heatmapImage = document.getElementById('heatmapImage');
-            const trajectoryImage = document.getElementById('trajectoryImage');
-            const heatmapTimestamp = document.getElementById('heatmapTimestamp');
-            const trajectoryTimestamp = document.getElementById('trajectoryTimestamp');
-            const refreshButton = document.getElementById('refreshButton');
-            const refreshSpinner = document.getElementById('refreshSpinner');
             const updateStatus = document.getElementById('updateStatus');
+            const refreshDataBtn = document.getElementById('refreshDataBtn');
+            const refreshSpinner = document.querySelector('#refreshDataBtn .spinner-border');
             const refreshEventChart = document.getElementById('refreshEventChart');
-            const gameStatusIndicator = document.getElementById('gameStatusIndicator');
+            const gameStatusBtn = document.getElementById('gameStatusBtn');
             const gameStatusText = document.getElementById('gameStatusText');
+            const startGameBtn = document.getElementById('startGameBtn');
+            const openGameFolderBtn = document.getElementById('openGameFolderBtn');
             
-            // Definiciones de tipos de eventos
-            const eventDefinitions = {
-                'frame_state': 'Captura del estado del juego en cada frame',
-                'player_data': 'Datos generales del jugador',
-                'player_health': 'Información sobre la salud del jugador',
-                'player_position': 'Coordenadas y posición del jugador',
-                'enemy_data': 'Información general sobre enemigos',
-                'enemy_position': 'Coordenadas y posición de enemigos',
-                'game_seed': 'Semilla única de la partida',
-                'room_data': 'Información sobre la sala actual',
-                'collision_event': 'Eventos de colisión entre entidades',
-                'temporal_data': 'Datos con marca temporal',
-                'other_event': 'Otros tipos de eventos',
-                'unknown': 'Eventos sin clasificar'
-            };
-            
-            // Función para determinar la categoría de un evento
-            function getEventCategory(label) {
-                if (label.includes('player')) return 'player';
-                if (label.includes('enemy')) return 'enemy';
-                if (label.includes('game')) return 'game';
-                if (label.includes('frame')) return 'frame';
-                if (label.includes('room')) return 'room';
-                if (label.includes('collision')) return 'collision';
-                if (label.includes('temporal')) return 'temporal';
-                return 'other';
-            }
-            
-            // Asignar colores por categoría
-            const categoryColors = {
-                player: { bg: 'rgba(75, 192, 192, 0.7)', border: 'rgba(75, 192, 192, 1)' },
-                enemy: { bg: 'rgba(255, 99, 132, 0.7)', border: 'rgba(255, 99, 132, 1)' },
-                game: { bg: 'rgba(153, 102, 255, 0.7)', border: 'rgba(153, 102, 255, 1)' },
-                frame: { bg: 'rgba(54, 162, 235, 0.7)', border: 'rgba(54, 162, 235, 1)' },
-                room: { bg: 'rgba(255, 205, 86, 0.7)', border: 'rgba(255, 205, 86, 1)' },
-                collision: { bg: 'rgba(255, 159, 64, 0.7)', border: 'rgba(255, 159, 64, 1)' },
-                temporal: { bg: 'rgba(201, 203, 207, 0.7)', border: 'rgba(201, 203, 207, 1)' },
-                other: { bg: 'rgba(128, 128, 128, 0.7)', border: 'rgba(128, 128, 128, 1)' }
-            };
-            
-            // Crear gráfico de distribución de eventos
-            const eventChartCtx = document.getElementById('eventDistribution').getContext('2d');
-            let eventChart = null;
-            
-            function createEventChart(data) {
-                const eventTypes = data.event_types || {};
-                const labels = Object.keys(eventTypes);
-                const values = Object.values(eventTypes);
+            // Manejar evento de cambio de estado del juego
+            socket.on('game_status_change', function(data) {
+                console.log('Cambio de estado del juego:', data);
                 
-                // Destruir gráfico existente si hay uno
-                if (eventChart) {
-                    eventChart.destroy();
-                }
-                
-                // Colores para cada tipo de evento
-                const backgroundColors = labels.map(label => {
-                    const category = getEventCategory(label);
-                    return categoryColors[category].bg;
-                });
-                
-                const borderColors = labels.map(label => {
-                    const category = getEventCategory(label);
-                    return categoryColors[category].border;
-                });
-                
-                // Crear gráfico nuevo
-                eventChart = new Chart(eventChartCtx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Número de eventos',
-                            data: values,
-                            backgroundColor: backgroundColors,
-                            borderColor: borderColors,
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
-                            },
-                            tooltip: {
-                                callbacks: {
-                                    label: function(context) {
-                                        const value = context.raw;
-                                        const total = values.reduce((a, b) => a + b, 0);
-                                        const percentage = ((value / total) * 100).toFixed(1);
-                                        return `${value} eventos (${percentage}%)`;
-                                    }
-                                }
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                title: {
-                                    display: true,
-                                    text: 'Cantidad'
-                                }
-                            },
-                            x: {
-                                title: {
-                                    display: true,
-                                    text: 'Tipo de Evento'
-                                },
-                                ticks: {
-                                    maxRotation: 45,
-                                    minRotation: 45,
-                                    font: {
-                                        size: 10
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-                
-                // Añadir detalles acerca de los tipos de eventos debajo del gráfico
-                const eventInfoElement = document.getElementById('eventInfo');
-                if (eventInfoElement) {
-                    // Agrupar eventos por categoría
-                    const eventsByCategory = {};
-                    let totalEvents = 0;
-                    
-                    for (const label of labels) {
-                        const count = eventTypes[label];
-                        totalEvents += count;
-                        const category = getEventCategory(label);
-                        
-                        if (!eventsByCategory[category]) {
-                            eventsByCategory[category] = {
-                                count: 0,
-                                events: []
-                            };
-                        }
-                        
-                        eventsByCategory[category].count += count;
-                        eventsByCategory[category].events.push({
-                            label: label,
-                            count: count,
-                            definition: eventDefinitions[label] || 'Tipo de evento personalizado'
-                        });
-                    }
-                    
-                    // Crear leyenda agrupada por categoría
-                    let eventInfoHTML = '<h6 class="mt-3">Leyenda de tipos de eventos:</h6>';
-                    
-                    // Primero mostrar el resumen por categoría
-                    eventInfoHTML += '<div class="card mb-3"><div class="card-header">Resumen por categoría</div><div class="card-body p-0"><ul class="list-group list-group-flush">';
-                    
-                    for (const category in eventsByCategory) {
-                        const categoryData = eventsByCategory[category];
-                        const percentage = ((categoryData.count / totalEvents) * 100).toFixed(1);
-                        const color = categoryColors[category]?.bg || 'rgba(128, 128, 128, 0.7)';
-                        
-                        eventInfoHTML += `
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <span class="badge" style="background-color: ${color}; width: 20px;">&nbsp;</span>
-                                    <strong>${category.charAt(0).toUpperCase() + category.slice(1)}</strong>
-                                </div>
-                                <span class="badge bg-primary rounded-pill">${categoryData.count} (${percentage}%)</span>
-                            </li>
-                        `;
-                    }
-                    
-                    eventInfoHTML += '</ul></div></div>';
-                    
-                    // Luego mostrar el detalle de cada evento
-                    eventInfoHTML += '<div class="accordion" id="eventDetailsAccordion">';
-                    
-                    let accordionIndex = 0;
-                    for (const category in eventsByCategory) {
-                        accordionIndex++;
-                        const categoryData = eventsByCategory[category];
-                        const color = categoryColors[category]?.bg || 'rgba(128, 128, 128, 0.7)';
-                        
-                        eventInfoHTML += `
-                            <div class="accordion-item">
-                                <h2 class="accordion-header" id="heading${accordionIndex}">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
-                                            data-bs-target="#collapse${accordionIndex}" aria-expanded="false" 
-                                            aria-controls="collapse${accordionIndex}" style="background-color: ${color}; color: black;">
-                                        ${category.charAt(0).toUpperCase() + category.slice(1)} (${categoryData.count})
-                                    </button>
-                                </h2>
-                                <div id="collapse${accordionIndex}" class="accordion-collapse collapse" 
-                                     aria-labelledby="heading${accordionIndex}" data-bs-parent="#eventDetailsAccordion">
-                                    <div class="accordion-body p-0">
-                                        <ul class="list-group list-group-flush">
-                        `;
-                        
-                        // Ordenar eventos por cantidad (de mayor a menor)
-                        categoryData.events.sort((a, b) => b.count - a.count);
-                        
-                        for (const event of categoryData.events) {
-                            const eventPercentage = ((event.count / totalEvents) * 100).toFixed(1);
-                            
-                            eventInfoHTML += `
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <strong>${event.label}</strong>: ${event.definition}
-                                    </div>
-                                    <span class="badge bg-secondary rounded-pill">${event.count} (${eventPercentage}%)</span>
-                                </li>
-                            `;
-                        }
-                        
-                        eventInfoHTML += `
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
-                    }
-                    
-                    eventInfoHTML += '</div>';
-                    eventInfoElement.innerHTML = eventInfoHTML;
-                }
-            }
-            
-            // Actualizar imágenes con timestamp para evitar caché
-            function updateImages(timestamp) {
-                const queryParam = `?t=${timestamp}`;
-                heatmapImage.src = `/static/visualizations/player_heatmap.png${queryParam}`;
-                trajectoryImage.src = `/static/visualizations/player_trajectory.png${queryParam}`;
-                
-                // Formatear timestamp para mostrar
-                const date = new Date(timestamp);
-                const formattedDate = date.toLocaleString();
-                heatmapTimestamp.textContent = formattedDate;
-                trajectoryTimestamp.textContent = formattedDate;
-            }
-            
-            // Función para actualizar el estado del juego
-            function updateGameStatus(isRunning) {
-                if (isRunning) {
-                    gameStatusIndicator.classList.remove('game-status-inactive');
-                    gameStatusIndicator.classList.add('game-status-active');
+                // Actualizar el botón de estado del juego
+                if (data.running) {
+                    gameStatusBtn.classList.remove('btn-outline-danger');
+                    gameStatusBtn.classList.add('btn-outline-success');
                     gameStatusText.textContent = 'Juego en ejecución';
+                    if (data.process) {
+                        gameStatusText.textContent += ` (${data.process})`;
+                    }
                 } else {
-                    gameStatusIndicator.classList.remove('game-status-active');
-                    gameStatusIndicator.classList.add('game-status-inactive');
-                    gameStatusText.textContent = 'Juego inactivo';
+                    gameStatusBtn.classList.remove('btn-outline-success');
+                    gameStatusBtn.classList.add('btn-outline-danger');
+                    gameStatusText.textContent = 'Juego no detectado';
                 }
+            });
+            
+            // Manejar clic en el botón de iniciar juego
+            if (startGameBtn) {
+                startGameBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    // Emitir evento para iniciar el juego
+                    socket.emit('start_game', {}, function(response) {
+                        if (response && response.success) {
+                            // El juego se inició correctamente
+                            showNotification('Juego iniciado correctamente', 'success');
+                        } else {
+                            // Error al iniciar el juego
+                            showNotification('Error al iniciar el juego: ' + (response.error || 'Error desconocido'), 'error');
+                        }
+                    });
+                });
             }
             
-            // Manejar actualización de datos
-            socket.on('data_updated', function(data) {
-                console.log('Datos actualizados recibidos:', data);
-                
-                // Actualizar estado del juego si está disponible
-                if (data.update_info && 'game_running' in data.update_info) {
-                    updateGameStatus(data.update_info.game_running);
-                }
-                
-                // Actualizar estadísticas
-                if (data.stats) {
-                    totalEvents.textContent = data.stats.total_events || 0;
-                    uniqueSeeds.textContent = data.stats.unique_seeds || 0;
-                    
-                    if (data.stats.player_stats) {
-                        playerPositions.textContent = data.stats.player_stats.positions_captured || 0;
-                    }
-                    
-                    if (data.stats.enemy_stats) {
-                        enemyCount.textContent = data.stats.enemy_stats.total_enemies || 0;
-                    }
-                    
-                    // Actualizar gráfico de eventos
-                    createEventChart(data.stats);
-                    
-                    // Actualizar imágenes
-                    if (data.stats.last_update) {
-                        updateImages(data.stats.last_update);
-                    }
-                }
-                
-                // Mostrar notificación
-                let statusMessage = 'Datos actualizados correctamente';
-                if (data.update_info && data.update_info.game_status_message) {
-                    statusMessage += ' - ' + data.update_info.game_status_message;
-                }
-                updateStatus.textContent = statusMessage;
-                updateStatus.classList.remove('d-none', 'alert-danger');
-                updateStatus.classList.add('alert-success');
-                
-                // Ocultar notificación después de 5 segundos
-                setTimeout(() => {
-                    updateStatus.classList.add('d-none');
-                }, 5000);
-                
-                // Ocultar spinner si está visible
-                refreshSpinner.classList.add('d-none');
-                refreshButton.disabled = false;
-            });
-            
-            // Manejar errores
-            socket.on('connect_error', function(error) {
-                console.error('Error de conexión:', error);
-                updateStatus.textContent = 'Error de conexión con el servidor';
-                updateStatus.classList.remove('d-none', 'alert-success');
-                updateStatus.classList.add('alert-danger');
-            });
-            
-            // Manejar status de actualización
-            socket.on('update_status', function(data) {
-                console.log('Estado de actualización:', data);
-                refreshSpinner.classList.add('d-none');
-                refreshButton.disabled = false;
-                
-                if (data.status === 'success') {
-                    updateStatus.textContent = data.message || 'Operación completada con éxito';
-                    updateStatus.classList.remove('d-none', 'alert-danger');
-                    updateStatus.classList.add('alert-success');
-                } else {
-                    let errorMsg = data.message || 'Error desconocido';
-                    // Verificar si el error está relacionado con el juego no en ejecución
-                    if (data.update_info && data.update_info.output && data.update_info.output.includes('juego no está en ejecución')) {
-                        errorMsg = 'El juego no está en ejecución. Inicia el juego para recolectar nuevos datos.';
-                    }
-                    updateStatus.textContent = errorMsg;
-                    updateStatus.classList.remove('d-none', 'alert-success');
-                    updateStatus.classList.add('alert-danger');
-                }
-                
-                // Ocultar notificación después de 5 segundos
-                setTimeout(() => {
-                    updateStatus.classList.add('d-none');
-                }, 5000);
-            });
-            
-            // Manejar clic en botón de actualización
-            refreshButton.addEventListener('click', function() {
-                // Mostrar spinner
-                refreshSpinner.classList.remove('d-none');
-                refreshButton.disabled = true;
-                
-                // Solicitar actualización manual
-                socket.emit('manual_update', {}, function(response) {
-                    console.log('Respuesta de actualización manual:', response);
-                    
-                    // Si no hay respuesta del servidor después de 3 segundos, mostrar mensaje
-                    setTimeout(() => {
-                        if (refreshButton.disabled) {
-                            refreshSpinner.classList.add('d-none');
-                            refreshButton.disabled = false;
-                            
-                            updateStatus.textContent = 'No se recibió respuesta del servidor';
-                            updateStatus.classList.remove('d-none', 'alert-success');
-                            updateStatus.classList.add('alert-danger');
-                            
-                            setTimeout(() => {
-                                updateStatus.classList.add('d-none');
-                            }, 5000);
+            // Manejar clic en el botón de abrir carpeta
+            if (openGameFolderBtn) {
+                openGameFolderBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    // Emitir evento para abrir la carpeta del juego
+                    socket.emit('open_game_folder', {}, function(response) {
+                        if (response && response.success) {
+                            // La carpeta se abrió correctamente
+                            showNotification('Carpeta del juego abierta', 'success');
+                        } else {
+                            // Error al abrir la carpeta
+                            showNotification('Error al abrir la carpeta del juego: ' + (response.error || 'Error desconocido'), 'error');
                         }
-                    }, 3000);
-                });
-            });
-            
-            // Manejar clic en icono de refresh de gráfico
-            refreshEventChart.addEventListener('click', function() {
-                fetch('/api/stats')
-                    .then(response => response.json())
-                    .then(data => {
-                        createEventChart(data);
-                    })
-                    .catch(error => {
-                        console.error('Error al actualizar gráfico:', error);
                     });
-            });
-            
-            // Inicializar gráfico con datos actuales
-            var statsData = {
-                total_events: 0,
-                unique_seeds: 0,
-                player_stats: {
-                    positions_captured: 0
-                },
-                enemy_stats: {
-                    total_enemies: 0
-                },
-                event_types: {},
-                last_update: ""
-            };
-            
-            // Solicitar datos iniciales al cargar la página
-            fetch('/api/stats')
-                .then(response => response.json())
-                .then(data => {
-                    statsData = data;
-                    createEventChart(data);
-                    if (data.last_update) {
-                        updateImages(data.last_update);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error al cargar estadísticas:', error);
-                    createEventChart(statsData);
-                    updateImages(new Date().toISOString());
                 });
+            }
+            
+            // Función para mostrar notificaciones
+            function showNotification(message, type = 'info') {
+                updateStatus.textContent = message;
+                updateStatus.classList.remove('d-none', 'alert-success', 'alert-danger', 'alert-info');
+                
+                switch (type) {
+                    case 'success':
+                        updateStatus.classList.add('alert-success');
+                        break;
+                    case 'error':
+                        updateStatus.classList.add('alert-danger');
+                        break;
+                    default:
+                        updateStatus.classList.add('alert-info');
+                }
+                
+                // Mostrar y luego ocultar después de 3 segundos
+                updateStatus.classList.remove('d-none');
+                setTimeout(() => {
+                    updateStatus.classList.add('d-none');
+                }, 3000);
+            }
         });
     </script>
 </body>

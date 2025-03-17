@@ -1,0 +1,37 @@
+{
+    "data_capture": {
+        "capture_enemy_data": true,
+        "capture_player_data": true,
+        "frame_rate": 5,
+        "capture_item_data": true,
+        "capture_room_data": true,
+        "capture_game_state": true,
+        "capture_inputs": true
+    },
+    "database": {
+        "backup_interval": 3600,
+        "file": "dem_database.json",
+        "max_events": 100000
+    },
+    "server": {
+        "emit_throttle": 5,
+        "game_check_interval": 10,
+        "port": 5000,
+        "update_interval": 20
+    },
+    "events": {
+        "key_events": {
+            "damage_taken": true,
+            "damage_dealt": true,
+            "item_collected": true,
+            "enemy_killed": true,
+            "boss_encounter": true,
+            "room_cleared": true
+        }
+    },
+    "advanced": {
+        "verbose_logging": false,
+        "debug_mode": false,
+        "memory_optimization": false
+    }
+}

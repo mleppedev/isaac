@@ -233,4 +233,77 @@ Una vez iniciado el servidor (opción 2 en go.cmd), puedes acceder a la interfaz
 Este proyecto está licenciado bajo MIT License.
 
 ## Contacto
-Para preguntas o sugerencias, abre un issue en el repositorio. 
+Para preguntas o sugerencias, abre un issue en el repositorio.
+
+# Mejoras en la Captura de Datos - Mod DEM
+
+Este proyecto incluye varias mejoras significativas para aumentar la cantidad y calidad de datos que captura el mod DEM (Data Extraction Mod) para The Binding of Isaac.
+
+## Características Principales
+
+- **Mayor frecuencia de muestreo**: Reducción de intervalos de captura para obtener datos más precisos
+- **Captura adaptativa**: Aumenta la frecuencia durante combates y encuentros con jefes
+- **Captura de eventos específicos**: Registra eventos clave independientemente del intervalo regular
+- **Enriquecimiento de datos**: Añade metadatos, coordenadas de cuadrícula y clasificación mejorada
+- **Gestión mejorada de datos**: Archivos separados por nivel y mejor organización
+
+## Archivos Modificados
+
+- `server/app.py`: Intervalos reducidos, nuevas opciones de configuración
+- `config.json`: Configuración global centralizada para el servidor
+- `extract_data.py`: Script mejorado con procesamiento y captura más detallada
+- `mod_config.lua`: Configuración del mod para el juego (copiar al directorio del mod)
+
+## Nuevas Capacidades de Captura
+
+### Datos del Jugador
+- Posición y velocidad en cada captura
+- Datos completos de salud y estadísticas
+- Seguimiento de todos los coleccionables, trinkets, cartas y píldoras
+- Registro de familiares y su comportamiento
+
+### Datos de Enemigos
+- Posiciones y movimientos
+- Salud y cambios en tiempo real
+- Patrones de ataque y objetivos
+- Seguimiento de proyectiles enemigos
+
+### Datos de Combate
+- Eventos de daño (dado y recibido)
+- Registro de proyectiles, lágrimas, láseres y explosiones
+- Información sobre el combate con detalles del contexto
+
+### Sala y Nivel
+- Disposición completa de salas
+- Tipos de habitaciones y contenido
+- Eventos de transición entre salas
+- Datos sobre trampas y secretos
+
+### Eventos Específicos
+- Inicio y fin de partida
+- Inicio y fin de nivel
+- Encuentros con jefes
+- Recolección de objetos
+- Uso de objetos activos y consumibles
+
+## Configuración
+
+Puedes personalizar el comportamiento modificando:
+
+1. `config.json` - Para el servidor web
+2. `mod_config.lua` - Para el mod en el juego (requiere reiniciar el juego)
+
+## Instalación
+
+1. Copia todos los archivos a la carpeta del servidor
+2. Copia `mod_config.lua` a la carpeta del mod en el juego
+3. Reinicia tanto el servidor como el juego
+
+## Recomendaciones
+
+Para obtener la captura de datos óptima:
+
+- Mantén activada la opción `events.key_events`
+- Reduce `capture_interval` si tu sistema tiene buen rendimiento
+- Activa `advanced.track_combat_metrics` para análisis detallado
+- Usa `file.split_files_by_level = true` para mejor organización 

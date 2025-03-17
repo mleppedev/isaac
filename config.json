@@ -1,0 +1,60 @@
+{
+    "server": {
+        "port": 5000,
+        "update_interval": 20,
+        "emit_throttle": 5,
+        "game_check_interval": 10
+    },
+    "database": {
+        "file": "dem_database.json",
+        "backup_interval": 3600,
+        "max_events": 100000
+    },
+    "data_capture": {
+        "frame_rate": 5,
+        "capture_player_data": true,
+        "capture_enemy_data": true,
+        "capture_item_data": true,
+        "capture_room_data": true,
+        "capture_game_state": true,
+        "capture_inputs": true,
+        "capture_collisions": true,
+        "capture_stats": true,
+        "track_event_chains": true,
+        "detailed_positions": true,
+        "extract_run_metrics": true
+    },
+    "events": {
+        "key_events": {
+            "damage_taken": true,
+            "damage_dealt": true,
+            "item_collected": true,
+            "enemy_killed": true,
+            "boss_encounter": true,
+            "room_cleared": true,
+            "floor_changed": true,
+            "run_started": true,
+            "run_ended": true
+        }
+    },
+    "advanced": {
+        "verbose_logging": true,
+        "debug_mode": false,
+        "memory_optimization": true,
+        "aggregate_similar_events": true,
+        "track_gameplay_patterns": true
+    },
+    "paths": {
+        "data_dir": "data",
+        "processed_data_dir": "processed_data",
+        "received_data_dir": "received_data",
+        "logs_dir": "logs",
+        "visualizations_dir": "static/visualizations"
+    },
+    "game": {
+        "path": "D:\\SteamLibrary\\steamapps\\common\\The Binding of Isaac Rebirth",
+        "executable": "isaac-ng.exe",
+        "version": "Repentance",
+        "mod_folder": "D:\\SteamLibrary\\steamapps\\common\\The Binding of Isaac Rebirth\\mods\\dem"
+    }
+} 

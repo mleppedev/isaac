@@ -19,14 +19,20 @@ from datetime import datetime
 from collections import Counter, defaultdict
 from flask import Flask, jsonify, render_template, send_from_directory, request, Response
 from flask_socketio import SocketIO
+import shutil
+import game_manager  # Importar el módulo para gestionar acciones del juego
 
 # Configuración
 DATABASE_FILE = "dem_database.json"
 STATIC_FOLDER = "static"
 TEMPLATE_FOLDER = "templates"
 PORT = 5000
-UPDATE_INTERVAL = 60  # segundos entre actualizaciones automáticas
-EMIT_THROTTLE = 10    # segundos mínimos entre emisiones a clientes
+UPDATE_INTERVAL = 20  # segundos entre actualizaciones automáticas (reducido de 60 a 20)
+EMIT_THROTTLE = 5     # segundos mínimos entre emisiones a clientes (reducido de 10 a 5)
+GAME_CHECK_INTERVAL = 10  # segundos entre verificaciones de estado del juego (reducido de 15 a 10)
+CAPTURE_FRAME_RATE = 5  # capturar cada N frames (nuevo parámetro)
+CAPTURE_KEY_EVENTS = True  # capturar eventos clave como daño, pickups, etc. (nuevo parámetro)
+VERBOSE_LOGGING = True  # aumentar detalle de logs (nuevo parámetro)
 LOG_FILE = "server.log"
 DATA_DIR = "data"
 PROCESSED_DATA_DIR = "processed_data"
@@ -59,8 +65,10 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 
 # Variable para controlar el thread de actualización
 update_thread = None
+game_check_thread = None
 thread_stop_event = threading.Event()
 last_data_hash = None  # Hash para verificar si los datos han cambiado
+game_status = {"running": False, "last_check": None, "process_name": None, "pid": None}
 
 def load_database():
     """Cargar la base de datos"""
@@ -99,41 +107,118 @@ def get_event_stats(database):
     # Contar tipos de eventos
     event_types = Counter()
     
-    # Mejorar la clasificación de eventos para evitar categorías "unknown"
+    # Mejorar la clasificación de eventos para evitar categorías "unknown" y "other"
     for e in events:
         event_type = e.get("event_type")
         
-        # Si el tipo de evento es None o no existe, intentar inferirlo por otros campos
-        if event_type is None or event_type == "unknown":
+        # Si el tipo de evento es None, desconocido o "other_event", intentar inferirlo por otros campos
+        if event_type is None or event_type == "unknown" or event_type == "other_event":
             # Verificar si hay datos de jugador
             if "data" in e and "player" in e["data"]:
-                event_type = "player_data"
+                # Verificar datos específicos del jugador
+                player_data = e["data"]["player"]
+                
                 # Verificar si hay información de salud
-                if e["data"]["player"].get("health"):
+                if player_data.get("health"):
                     event_type = "player_health"
                 # Verificar si hay información de posición
-                elif e["data"]["player"].get("position"):
+                elif player_data.get("position"):
                     event_type = "player_position"
+                # Verificar si hay información de velocidad
+                elif player_data.get("velocity"):
+                    event_type = "player_movement"
+                # Verificar si hay información de estadísticas
+                elif player_data.get("stats"):
+                    event_type = "player_stats"
+                # Verificar si hay información de inventario
+                elif player_data.get("inventory") or player_data.get("items"):
+                    event_type = "player_items"
+                else:
+                    event_type = "player_state"
+            
             # Verificar si hay datos de enemigos
-            elif "data" in e and "entities" in e["data"] and any(entity.get("is_enemy", False) for entity in e["data"]["entities"] if entity):
-                event_type = "enemy_data"
-                # Verificar si hay información de posición de enemigos
-                if any(entity.get("position") for entity in e["data"]["entities"] if entity and entity.get("is_enemy", False)):
-                    event_type = "enemy_position"
+            elif "data" in e and "entities" in e["data"]:
+                entities = e["data"]["entities"]
+                if entities and any(entity and entity.get("is_enemy", False) for entity in entities):
+                    # Verificar si hay información de posición de enemigos
+                    if any(entity and entity.get("position") for entity in entities if entity and entity.get("is_enemy", False)):
+                        event_type = "enemy_position"
+                    # Verificar si hay información de salud de enemigos
+                    elif any(entity and entity.get("health") for entity in entities if entity and entity.get("is_enemy", False)):
+                        event_type = "enemy_health"
+                    # Verificar si hay información de estado de enemigos
+                    elif any(entity and entity.get("state") for entity in entities if entity and entity.get("is_enemy", False)):
+                        event_type = "enemy_state"
+                    else:
+                        event_type = "enemy_data"
+                elif entities:
+                    event_type = "entity_data"
+            
             # Verificar si es un evento relacionado con semillas
             elif "game_data" in e and "seed" in e["game_data"]:
                 event_type = "game_seed"
-            # Verificar si es un evento de estado de sala
-            elif "data" in e and "room" in e["data"]:
-                event_type = "room_data"
+            
+            # Verificar si es un evento de estado de sala o nivel
+            elif "data" in e:
+                data = e["data"]
+                # Verificar estado de sala
+                if "room" in data:
+                    event_type = "room_state"
+                # Verificar estado de nivel
+                elif "level" in data:
+                    event_type = "level_state"
+                # Verificar estado de juego
+                elif "game_state" in data or "game" in data:
+                    event_type = "game_state"
+            
             # Verificar si hay información de colisiones
             elif "data" in e and "collision" in e["data"]:
                 event_type = "collision_event"
+            
+            # Verificar si es un evento de entrada/controles
+            elif "data" in e and "inputs" in e["data"]:
+                event_type = "input_event"
+            
+            # Verificar si es un evento con datos de items o pickups
+            elif "data" in e and ("items" in e["data"] or "pickups" in e["data"]):
+                event_type = "item_event"
+            
+            # Verificar si hay datos de audio
+            elif "data" in e and "audio" in e["data"]:
+                event_type = "audio_event"
+            
+            # Verificar si hay datos de combate
+            elif "data" in e and ("combat" in e["data"] or "damage" in e["data"]):
+                event_type = "combat_event"
+            
             # Si tiene timestamp pero no tiene clasificación
             elif "timestamp" in e:
-                event_type = "temporal_data"
+                # Verificar si tiene otros metadatos útiles
+                if "metadata" in e:
+                    event_type = "metadata_event"
+                elif "game_data" in e:
+                    event_type = "game_metadata"
+                else:
+                    event_type = "timestamped_event"
+            
+            # Verificar si tiene ID pero no otros datos reconocibles
+            elif "id" in e:
+                event_type = "id_event"
+            
+            # Si nada más funciona, categorizar por las claves que contiene
             else:
-                event_type = "other_event"
+                keys = set(e.keys())
+                if "event" in keys:
+                    event_type = "event_data"
+                elif "message" in keys:
+                    event_type = "message_event"
+                elif "log" in keys:
+                    event_type = "log_event"
+                elif "data" in keys:
+                    event_type = "general_data"
+                else:
+                    # Último recurso: crear un tipo basado en las claves disponibles
+                    event_type = "data_" + "_".join(sorted(list(keys)[:2]))
         
         # Incrementar el contador para este tipo de evento
         event_types[event_type] = event_types.get(event_type, 0) + 1
@@ -209,20 +294,50 @@ def calculate_data_hash(database):
     hash_str = json.dumps(data_to_hash, sort_keys=True)
     return hashlib.md5(hash_str.encode()).hexdigest()
 
+def check_game_status():
+    """Comprueba si el juego está en ejecución y notifica a los clientes."""
+    global game_status
+    
+    while not thread_stop_event.is_set():
+        try:
+            # Verificar si el juego está en ejecución usando game_manager
+            game_running, process_name = game_manager.is_game_running()
+            pid = None  # No necesitamos el PID para esta implementación
+            
+            # Si el estado cambió, actualizar y notificar a los clientes
+            if game_running != game_status.get('running', False):
+                game_status = {
+                    'running': game_running,
+                    'process': process_name,
+                    'pid': pid,
+                    'last_check': datetime.now().isoformat()
+                }
+                
+                # Enviar actualizaciones por SocketIO
+                try:
+                    socketio.emit('game_status_change', game_status, namespace='/')
+                    logging.info(f"Estado del juego actualizado: {'en ejecución' if game_running else 'no detectado'}")
+                except Exception as e:
+                    logging.error(f"Error al enviar actualización de estado del juego: {str(e)}")
+                    
+        except Exception as e:
+            logging.error(f"Error al verificar el estado del juego: {str(e)}")
+            
+        # Esperar el intervalo configurado
+        time.sleep(GAME_CHECK_INTERVAL)
+
 def update_data_background():
     """Función de actualización de datos en segundo plano"""
     import subprocess
-    global last_data_hash
+    global last_data_hash, game_status
     last_emission_time = 0  # Última vez que se emitió una actualización
     
     while not thread_stop_event.is_set():
         logger.info("Ejecutando actualización automática de datos...")
         
         try:
-            # Verificar si Isaac está en ejecución (Windows)
-            game_check = subprocess.run(['tasklist', '/FI', 'IMAGENAME eq isaac-ng.exe'], 
-                                   capture_output=True, text=True)
-            game_running = 'isaac-ng.exe' in game_check.stdout
+            # Usar el estado global del juego
+            game_running = game_status.get("running", False)
             
             if game_running:
                 logger.info("Juego en ejecución detectado. Realizando actualización normal.")
@@ -233,12 +348,17 @@ def update_data_background():
                 # No actualizar nada si el juego no está corriendo
                 time.sleep(UPDATE_INTERVAL)
                 continue
-                
+            
             update_data = {
                 "success": result.returncode == 0,
                 "output": result.stdout,
                 "error": result.stderr,
-                "timestamp": datetime.now().isoformat()
+                "timestamp": datetime.now().isoformat(),
+                "game_running": game_running,
+                "game_info": {
+                    "process": game_status.get("process_name"),
+                    "pid": game_status.get("pid")
+                }
             }
             
             if update_data["success"]:
@@ -461,6 +581,191 @@ def analytics():
     """Análisis avanzado de datos"""
     return render_template('analytics.html')
 
+@app.route('/config')
+def config_page():
+    """Página de configuración"""
+    try:
+        with open("config.json", 'r', encoding='utf-8') as f:
+            config_data = json.load(f)
+        return render_template('config.html', config=config_data)
+    except Exception as e:
+        logger.error(f"Error al cargar configuración: {str(e)}")
+        return render_template('config.html', config={}, error=str(e))
+
+# Funciones para manejar la configuración
+def load_configuration():
+    """Carga la configuración desde el archivo"""
+    try:
+        with open("config.json", 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception as e:
+        logger.error(f"Error al cargar configuración: {str(e)}")
+        return {
+            "server": {
+                "port": 5000,
+                "update_interval": 20,
+                "emit_throttle": 5,
+                "game_check_interval": 10
+            },
+            "database": {
+                "file": "dem_database.json",
+                "backup_interval": 3600,
+                "max_events": 100000
+            },
+            "data_capture": {
+                "frame_rate": 5,
+                "capture_player_data": True,
+                "capture_enemy_data": True
+            }
+        }
+
+def save_configuration(config_data):
+    """Guarda la configuración al archivo"""
+    try:
+        # Hacer una copia de seguridad antes de guardar
+        if os.path.exists("config.json"):
+            backup_dir = os.path.join(LOGS_DIR, "backups")
+            os.makedirs(backup_dir, exist_ok=True)
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            backup_file = os.path.join(backup_dir, f"config_{timestamp}.json")
+            shutil.copy2("config.json", backup_file)
+        
+        # Guardar nueva configuración
+        with open("config.json", 'w', encoding='utf-8') as f:
+            json.dump(config_data, f, indent=4)
+        return True
+    except Exception as e:
+        logger.error(f"Error al guardar configuración: {str(e)}")
+        return False
+
+@app.route('/api/config', methods=['GET'])
+def api_get_config():
+    """API para obtener la configuración actual"""
+    config_data = load_configuration()
+    return jsonify(config_data)
+
+@app.route('/api/config', methods=['POST'])
+def api_update_config():
+    """API para actualizar la configuración"""
+    try:
+        # Validar que sea JSON válido
+        if not request.is_json:
+            return jsonify({"error": "Se requiere datos JSON"}), 400
+        
+        config_data = request.json
+        
+        # Validar estructura mínima
+        required_sections = ['server', 'database', 'data_capture']
+        for section in required_sections:
+            if section not in config_data:
+                return jsonify({"error": f"Falta la sección '{section}' en la configuración"}), 400
+        
+        # Guardar configuración
+        if save_configuration(config_data):
+            logger.info("Configuración actualizada correctamente")
+            # Notificar a clientes conectados
+            socketio.emit('config_updated', {
+                "message": "Configuración actualizada",
+                "timestamp": datetime.now().isoformat()
+            })
+            return jsonify({"success": True, "message": "Configuración actualizada correctamente"})
+        else:
+            return jsonify({"error": "Error al guardar la configuración"}), 500
+            
+    except Exception as e:
+        logger.error(f"Error en api_update_config: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/config/reload', methods=['POST'])
+def api_reload_config():
+    """API para recargar la configuración sin reiniciar el servidor"""
+    try:
+        global UPDATE_INTERVAL, EMIT_THROTTLE, GAME_CHECK_INTERVAL, CAPTURE_FRAME_RATE, CAPTURE_KEY_EVENTS, VERBOSE_LOGGING
+        
+        # Cargar configuración
+        config_data = load_configuration()
+        
+        # Actualizar variables globales
+        if 'server' in config_data:
+            server_config = config_data['server']
+            UPDATE_INTERVAL = server_config.get('update_interval', UPDATE_INTERVAL)
+            EMIT_THROTTLE = server_config.get('emit_throttle', EMIT_THROTTLE)
+            GAME_CHECK_INTERVAL = server_config.get('game_check_interval', GAME_CHECK_INTERVAL)
+        
+        if 'data_capture' in config_data:
+            capture_config = config_data['data_capture']
+            CAPTURE_FRAME_RATE = capture_config.get('frame_rate', CAPTURE_FRAME_RATE)
+        
+        if 'advanced' in config_data:
+            advanced_config = config_data['advanced']
+            VERBOSE_LOGGING = advanced_config.get('verbose_logging', VERBOSE_LOGGING)
+        
+        logger.info("Configuración recargada correctamente")
+        return jsonify({"success": True, "message": "Configuración recargada correctamente"})
+        
+    except Exception as e:
+        logger.error(f"Error al recargar configuración: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/config/defaults', methods=['GET'])
+def api_get_default_config():
+    """API para obtener la configuración por defecto"""
+    default_config = {
+        "server": {
+            "port": 5000,
+            "update_interval": 20,
+            "emit_throttle": 5,
+            "game_check_interval": 10
+        },
+        "database": {
+            "file": "dem_database.json",
+            "backup_interval": 3600,
+            "max_events": 100000
+        },
+        "data_capture": {
+            "frame_rate": 5,
+            "capture_player_data": True,
+            "capture_enemy_data": True,
+            "capture_item_data": True,
+            "capture_room_data": True,
+            "capture_game_state": True,
+            "capture_inputs": True,
+            "capture_collisions": True,
+            "capture_stats": True,
+            "track_event_chains": True,
+            "detailed_positions": True,
+            "extract_run_metrics": True
+        },
+        "events": {
+            "key_events": {
+                "damage_taken": True,
+                "damage_dealt": True,
+                "item_collected": True,
+                "enemy_killed": True,
+                "boss_encounter": True,
+                "room_cleared": True,
+                "floor_changed": True,
+                "run_started": True,
+                "run_ended": True
+            }
+        },
+        "advanced": {
+            "verbose_logging": True,
+            "debug_mode": False,
+            "memory_optimization": True,
+            "aggregate_similar_events": True,
+            "track_gameplay_patterns": True
+        },
+        "paths": {
+            "data_dir": "data",
+            "processed_data_dir": "processed_data",
+            "received_data_dir": "received_data",
+            "logs_dir": "logs",
+            "visualizations_dir": "static/visualizations"
+        }
+    }
+    return jsonify(default_config)
+
 # Función de sanitización para JSON que debe definirse antes de su uso
 def sanitize_for_json(obj):
     """Asegura que todos los objetos sean serializables a JSON"""
@@ -638,7 +943,22 @@ def handle_connect():
     # Enviar estadísticas actuales al cliente que se conecta
     database = load_database()
     stats = get_event_stats(database)
-    socketio.emit('data_updated', {"stats": stats}, room=request.sid)
+    
+    # Enviar estado actual del juego
+    socketio.emit('game_status_change', {
+        "running": game_status.get("running", False),
+        "process": game_status.get("process_name"),
+        "timestamp": datetime.now().isoformat()
+    }, room=request.sid)
+    
+    # Enviar estadísticas
+    socketio.emit('data_updated', {
+        "stats": sanitize_for_json(stats), 
+        "update_info": {
+            "game_running": game_status.get("running", False),
+            "timestamp": datetime.now().isoformat()
+        }
+    }, room=request.sid)
 
 @socketio.on('disconnect')
 def handle_disconnect():
@@ -647,95 +967,61 @@ def handle_disconnect():
 
 @socketio.on('manual_update')
 def handle_manual_update(data):
-    """Gestionar actualización manual solicitada por cliente"""
-    logger.info(f"Actualización manual solicitada por {request.sid}")
-    # Ejecutar actualización pero no devolver directamente la respuesta
+    """Procesa una solicitud de actualización manual de datos."""
     try:
-        # Importar aquí para evitar dependencias circulares
-        import subprocess
-        global last_data_hash
+        logger.info("Solicitud manual de actualización de datos recibida")
         
-        # Verificar si el juego está en ejecución
-        game_check = subprocess.run(['tasklist', '/FI', 'IMAGENAME eq isaac-ng.exe'], 
-                                capture_output=True, text=True)
-        game_running = 'isaac-ng.exe' in game_check.stdout
+        if updating_data:
+            logger.info("Ya hay una actualización en curso, ignorando solicitud")
+            return {"success": False, "error": "Ya hay una actualización en curso"}
         
-        # Preparar mensaje informativo sobre el estado del juego
-        game_status_message = ""
-        if not game_running:
-            game_status_message = "El juego no está en ejecución. Se usará la opción --force para actualizar datos."
-            logger.info(game_status_message)
+        # Iniciar proceso de actualización
+        update_start_time = time.time()
+        update_result = update_data()
         
-        # Ejecutar con forzado para que no verifique si el juego está en ejecución
-        result = subprocess.run(["python", "extract_data.py", "--keep-originals", "--force"], capture_output=True, text=True)
-        
-        update_data = {
-            "success": result.returncode == 0,
-            "output": result.stdout,
-            "error": result.stderr,
-            "timestamp": datetime.now().isoformat(),
-            "game_running": game_running,
-            "game_status_message": game_status_message
-        }
-        
-        # Si la actualización fue exitosa, notificar a los clientes
-        if update_data["success"]:
-            database = load_database()
-            
-            # Comprobar si los datos han cambiado
-            current_hash = calculate_data_hash(database)
-            data_changed = current_hash != last_data_hash
-            last_data_hash = current_hash
-            
-            # Sanitizar stats antes de enviarlos
-            stats = sanitize_for_json(get_event_stats(database))
-            update_data = sanitize_for_json(update_data)
-            
-            # Solo enviar notificación si los datos han cambiado
-            if data_changed:
-                # Generar visualizaciones
-                generate_visualizations(database)
-                
-                # Enviar datos completos
-                socketio.emit('data_updated', {
-                    "stats": stats,
-                    "update_info": update_data
-                })
-                logger.info("Datos actualizados manualmente y enviados a clientes")
-            else:
-                logger.info("Actualización manual: No hay cambios en los datos")
-                
-                # Mensajes según el estado del juego
-                status_message = "No hay cambios en los datos"
-                if not game_running:
-                    status_message += ". El juego no está en ejecución actualmente."
-                
-                # Enviar confirmación sólo al cliente que solicitó la actualización
-                socketio.emit('update_status', {
-                    "status": "success",
-                    "message": status_message,
-                    "update_info": update_data
-                }, room=request.sid)
+        if update_result:
+            logger.info(f"Actualización manual completada en {time.time() - update_start_time:.2f} segundos")
+            return {"success": True, "message": "Datos actualizados correctamente"}
         else:
-            logger.error(f"Error en actualización manual: {update_data['error']}")
-            # Enviar mensaje de error al cliente
-            error_message = "Error al actualizar los datos"
-            if not game_running:
-                error_message += ". El juego no está en ejecución actualmente."
-                
-            socketio.emit('update_status', {
-                "status": "error",
-                "message": error_message,
-                "update_info": update_data
-            }, room=request.sid)
+            logger.warning("Actualización manual falló")
+            return {"success": False, "error": "Error al actualizar datos"}
     except Exception as e:
-        logger.error(f"Error en handle_manual_update: {str(e)}")
-        logger.exception("Detalles del error:")
-        # Enviar mensaje de error al cliente
-        socketio.emit('update_status', {
-            "status": "error",
-            "message": f"Error inesperado: {str(e)}"
-        }, room=request.sid)
+        logger.error(f"Error en actualización manual: {str(e)}")
+        return {"success": False, "error": str(e)}
+
+@socketio.on('start_game')
+def handle_start_game(data):
+    """Maneja la solicitud para iniciar el juego."""
+    try:
+        logger.info("Solicitud para iniciar el juego recibida")
+        result = game_manager.start_game()
+        
+        if result['success']:
+            logger.info(f"Juego iniciado correctamente: {result.get('message', '')}")
+        else:
+            logger.error(f"Error al iniciar el juego: {result.get('error', 'Error desconocido')}")
+            
+        return result
+    except Exception as e:
+        logger.error(f"Error al iniciar el juego: {str(e)}")
+        return {"success": False, "error": str(e)}
+
+@socketio.on('open_game_folder')
+def handle_open_game_folder(data):
+    """Maneja la solicitud para abrir la carpeta del juego."""
+    try:
+        logger.info("Solicitud para abrir la carpeta del juego recibida")
+        result = game_manager.open_game_folder()
+        
+        if result['success']:
+            logger.info(f"Carpeta del juego abierta correctamente: {result.get('message', '')}")
+        else:
+            logger.error(f"Error al abrir la carpeta del juego: {result.get('error', 'Error desconocido')}")
+            
+        return result
+    except Exception as e:
+        logger.error(f"Error al abrir la carpeta del juego: {str(e)}")
+        return {"success": False, "error": str(e)}
 
 @app.route('/api/metadata')
 def api_metadata():
@@ -776,6 +1062,11 @@ if __name__ == "__main__":
     update_thread = threading.Thread(target=update_data_background)
     update_thread.daemon = True
     update_thread.start()
+    
+    # Iniciar thread de verificación del juego
+    game_check_thread = threading.Thread(target=check_game_status)
+    game_check_thread.daemon = True
+    game_check_thread.start()
     
     logger.info(f"Servidor iniciado en http://localhost:{PORT}")
     socketio.run(app, host="0.0.0.0", port=PORT, debug=True, allow_unsafe_werkzeug=True) 

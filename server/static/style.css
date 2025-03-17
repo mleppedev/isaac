@@ -20,6 +20,10 @@ html, body {
     padding: 0;
 }
 
+html {
+    overflow-y: scroll; /* Forzar barra de desplazamiento siempre visible */
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -27,6 +31,7 @@ html, body {
 }
 
 body {
+    padding-right: 0 !important; /* Evitar que Bootstrap añada padding al abrir modales */
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
     color: var(--text-color);

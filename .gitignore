@@ -1,6 +1,3 @@
-# Archivos de configuración local
-config.txt
-
 # Entorno virtual
 server/venv/
 venv/
