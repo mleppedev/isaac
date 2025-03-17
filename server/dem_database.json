@@ -1,0 +1,99 @@
+{
+  "events": [
+    {
+      "timestamp": 80,
+      "game_data": {
+        "room_id": 71,
+        "room_type": 4,
+        "seed": 543109967,
+        "frame_count": 80,
+        "stage_type": 0,
+        "level": 1
+      },
+      "event_type": "item_collected",
+      "data": {
+        "item_id": 0,
+        "item_name": "Unknown"
+      },
+      "event_id": "dem_item_collected_80_80",
+      "processed_timestamp": "2025-03-16T22:58:55.645963"
+    },
+    {
+      "timestamp": 81,
+      "game_data": {
+        "room_id": 71,
+        "room_type": 4,
+        "seed": 543109967,
+        "frame_count": 81,
+        "stage_type": 0,
+        "level": 1
+      },
+      "event_type": "item_collected",
+      "data": {
+        "item_id": 0,
+        "item_name": "Unknown"
+      },
+      "event_id": "dem_item_collected_81_81",
+      "processed_timestamp": "2025-03-16T22:58:55.645963"
+    },
+    {
+      "timestamp": 82,
+      "game_data": {
+        "room_id": 71,
+        "room_type": 4,
+        "seed": 543109967,
+        "frame_count": 82,
+        "stage_type": 0,
+        "level": 1
+      },
+      "event_type": "item_collected",
+      "data": {
+        "item_id": 0,
+        "item_name": "Unknown"
+      },
+      "event_id": "dem_item_collected_82_82",
+      "processed_timestamp": "2025-03-16T22:58:55.645963"
+    },
+    {
+      "timestamp": 83,
+      "game_data": {
+        "room_id": 71,
+        "room_type": 4,
+        "seed": 543109967,
+        "frame_count": 83,
+        "stage_type": 0,
+        "level": 1
+      },
+      "event_type": "item_collected",
+      "data": {
+        "item_id": 0,
+        "item_name": "Unknown"
+      },
+      "event_id": "dem_item_collected_83_83",
+      "processed_timestamp": "2025-03-16T22:58:55.645963"
+    },
+    {
+      "timestamp": 111,
+      "game_data": {
+        "room_id": 84,
+        "room_type": 1,
+        "seed": 543109967,
+        "frame_count": 111,
+        "stage_type": 0,
+        "level": 1
+      },
+      "event_type": "room_entered",
+      "data": {
+        "room_type": 1,
+        "room_shape": 1
+      },
+      "event_id": "dem_room_entered_111_111",
+      "processed_timestamp": "2025-03-16T22:58:55.645963"
+    }
+  ],
+  "metadata": {
+    "last_update": "2025-03-16T22:58:55.646975",
+    "total_events": 5,
+    "version": "1.0"
+  }
+}

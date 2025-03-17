@@ -1,0 +1,387 @@
+/* Estilos básicos */
+:root {
+    --primary-color: #4a6fc0;
+    --secondary-color: #7b50d9;
+    --accent-color: #ffad33;
+    --text-color: #333;
+    --light-bg: #f5f7fa;
+    --card-bg: #ffffff;
+    --border-color: #e1e5eb;
+    --success-color: #4caf50;
+    --warning-color: #ff9800;
+    --error-color: #f44336;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: var(--light-bg);
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+button, .btn {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+button:hover, .btn:hover {
+    background-color: var(--secondary-color);
+    text-decoration: none;
+}
+
+/* Layout */
+header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+nav ul {
+    list-style: none;
+    display: flex;
+    margin-top: 0.5rem;
+}
+
+nav li {
+    margin-right: 1rem;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+}
+
+nav a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    text-decoration: none;
+}
+
+nav a.active {
+    background-color: rgba(255, 255, 255, 0.3);
+    text-decoration: none;
+}
+
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+}
+
+footer {
+    background-color: var(--text-color);
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    margin-top: 2rem;
+}
+
+/* Secciones */
+.hero {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.hero h2 {
+    margin-bottom: 1rem;
+    color: var(--secondary-color);
+}
+
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card {
+    background: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Página de Inicio */
+.summary {
+    margin-bottom: 2rem;
+}
+
+.event-types {
+    margin-top: 1rem;
+}
+
+.event-types h4 {
+    margin-bottom: 0.5rem;
+}
+
+.recent-games {
+    margin-bottom: 2rem;
+}
+
+.game-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.game-card {
+    background: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+}
+
+.game-card h4 {
+    margin-bottom: 1rem;
+    color: var(--secondary-color);
+}
+
+.game-card p {
+    margin-bottom: 1rem;
+}
+
+.game-card .btn {
+    margin-top: 1rem;
+}
+
+/* Página de Datos */
+.data-filters {
+    margin-bottom: 1.5rem;
+}
+
+.filter-controls {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.filter-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.filter-group label {
+    font-weight: bold;
+}
+
+.filter-group select {
+    padding: 6px 10px;
+    border-radius: 4px;
+    border: 1px solid var(--border-color);
+}
+
+.data-table-container {
+    overflow-x: auto;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 1rem;
+}
+
+.data-table th, .data-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.data-table th {
+    background-color: var(--light-bg);
+    font-weight: bold;
+}
+
+.data-table tr:hover {
+    background-color: rgba(0, 0, 0, 0.02);
+}
+
+.loading {
+    text-align: center;
+    padding: 2rem;
+    color: #888;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.no-data {
+    text-align: center;
+    padding: 3rem 0;
+    color: #888;
+}
+
+.event-details {
+    background: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    margin-top: 2rem;
+}
+
+.event-details h3 {
+    margin-bottom: 1rem;
+    color: var(--secondary-color);
+}
+
+.detail-content {
+    margin-bottom: 1rem;
+}
+
+/* Página de Estadísticas */
+.stats-overview {
+    margin-bottom: 2rem;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    gap: 1.5rem;
+}
+
+.stat-card {
+    background: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    min-height: 300px;
+}
+
+.stat-card h3 {
+    margin-bottom: 1rem;
+    color: var(--secondary-color);
+}
+
+.stat-value {
+    font-size: 48px;
+    font-weight: bold;
+    margin: 1rem 0;
+    color: var(--primary-color);
+}
+
+.stat-label {
+    font-size: 16px;
+    color: #666;
+}
+
+.stat-details {
+    margin-top: 1rem;
+}
+
+.stat-chart {
+    height: 220px;
+    position: relative;
+}
+
+.chart-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.stat-table {
+    max-height: 220px;
+    overflow-y: auto;
+}
+
+.stat-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.stat-table th, .stat-table td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.stat-table th {
+    background-color: var(--light-bg);
+    position: sticky;
+    top: 0;
+}
+
+.games-detail {
+    margin-top: 2rem;
+}
+
+.games-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.game-detail-card {
+    background: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+}
+
+.game-detail-card h4 {
+    margin-bottom: 1rem;
+    color: var(--secondary-color);
+}
+
+.game-stats {
+    margin-bottom: 1rem;
+}
+
+.stat-item {
+    margin-bottom: 0.5rem;
+}
+
+.stat-item ul {
+    margin-left: 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .filter-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .stat-card {
+        min-height: auto;
+    }
+} 

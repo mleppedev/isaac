@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DEM - Data Event Manager</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Data Event Manager</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}" class="active">Inicio</a></li>
+                <li><a href="{{ url_for('data') }}">Ver Datos Procesados</a></li>
+                <li><a href="{{ url_for('stats') }}">Ver Estadísticas</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h2>Datos Extraídos del Juego</h2>
+            <div class="controls">
+                <button id="refresh-btn" onclick="refreshData()">Actualizar Datos</button>
+                <span id="last-updated">
+                    {% if stats.latest_update %}
+                    Última actualización: {{ stats.latest_update.split('T')[0] }} {{ stats.latest_update.split('T')[1][:8] }}
+                    {% else %}
+                    Nunca actualizado
+                    {% endif %}
+                </span>
+            </div>
+        </section>
+
+        <section class="summary">
+            <div class="card">
+                <h3>Registros Recibidos: <span id="total-events">{{ stats.total }}</span></h3>
+                {% if stats.total > 0 %}
+                <p>Se han procesado eventos de {{ stats.seeds|length }} partidas diferentes.</p>
+                <div class="event-types">
+                    <h4>Tipos de eventos:</h4>
+                    <ul>
+                        {% for type_stat in stats.types[:5] %}
+                        <li>{{ type_stat.type }}: {{ type_stat.count }} ({{ "%.1f"|format(type_stat.percentage) }}%)</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% else %}
+                <p>No hay datos disponibles. Juega al juego con el mod activado para recopilar datos.</p>
+                {% endif %}
+            </div>
+        </section>
+
+        {% if stats.total > 0 %}
+        <section class="recent-games">
+            <h3>Partidas Recientes</h3>
+            <div class="game-list">
+                {% for seed_stat in stats.seeds[:3] %}
+                <div class="game-card">
+                    <h4>Partida (Seed: {{ seed_stat.seed }})</h4>
+                    <p>{{ seed_stat.count }} eventos registrados</p>
+                    <div class="event-types">
+                        <h5>Principales eventos:</h5>
+                        <ul>
+                            {% for event_type, count in seed_stat.types %}
+                            <li>{{ event_type }}: {{ count }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <a href="{{ url_for('data') }}?seed={{ seed_stat.seed }}" class="btn">Ver Detalles</a>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+    </main>
+
+    <footer>
+        <p>Data Event Manager - Mod para The Binding of Isaac: Repentance</p>
+    </footer>
+</body>
+</html> 

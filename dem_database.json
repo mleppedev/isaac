@@ -1,0 +1,88 @@
+{
+  "events": [
+    {
+      "game_data": {
+        "room_type": 1,
+        "level": 1,
+        "frame_count": 918,
+        "seed": 2508344436,
+        "stage_type": 0,
+        "room_id": 83
+      },
+      "timestamp": 918,
+      "data": {
+        "hp_after": 4,
+        "player_index": 0,
+        "source_type": 9,
+        "damage_amount": 1.0,
+        "soul_hearts_after": 0,
+        "damage_flags": 0
+      },
+      "event_type": "player_damage",
+      "event_id": "dem_player_damage_918_918",
+      "processed_timestamp": "2025-03-16T22:49:03.340296"
+    },
+    {
+      "game_data": {
+        "room_type": 1,
+        "level": 1,
+        "frame_count": 960,
+        "seed": 2508344436,
+        "stage_type": 0,
+        "room_id": 83
+      },
+      "timestamp": 960,
+      "data": {
+        "hp_after": 3,
+        "player_index": 0,
+        "source_type": 9,
+        "damage_amount": 1.0,
+        "soul_hearts_after": 0,
+        "damage_flags": 0
+      },
+      "event_type": "player_damage",
+      "event_id": "dem_player_damage_960_960",
+      "processed_timestamp": "2025-03-16T22:49:03.340296"
+    },
+    {
+      "game_data": {
+        "room_type": 1,
+        "level": 1,
+        "frame_count": 1076,
+        "seed": 2508344436,
+        "stage_type": 0,
+        "room_id": 56
+      },
+      "timestamp": 1076,
+      "data": {
+        "room_type": 1,
+        "room_shape": 10
+      },
+      "event_type": "room_entered",
+      "event_id": "dem_room_entered_1076_1076",
+      "processed_timestamp": "2025-03-16T22:49:03.340296"
+    },
+    {
+      "game_data": {
+        "room_type": 1,
+        "level": 1,
+        "frame_count": 1132,
+        "seed": 2508344436,
+        "stage_type": 0,
+        "room_id": 56
+      },
+      "timestamp": 1132,
+      "data": {
+        "timestamp": 1132
+      },
+      "event_type": "game_exit",
+      "event_id": "dem_game_exit_1132_1132",
+      "processed_timestamp": "2025-03-16T22:49:03.340296"
+    }
+  ],
+  "metadata": {
+    "last_update": "2025-03-16T22:49:03.355400",
+    "total_events": 4,
+    "version": "1.0"
+  }
+}

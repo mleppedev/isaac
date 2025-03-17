@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Estadísticas - DEM</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Data Event Manager</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Inicio</a></li>
+                <li><a href="{{ url_for('data') }}">Ver Datos Procesados</a></li>
+                <li><a href="{{ url_for('stats') }}" class="active">Ver Estadísticas</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h2>Estadísticas del Juego</h2>
+            <div class="controls">
+                <button id="refresh-btn" onclick="refreshData()">Actualizar Datos</button>
+                <span id="last-updated">
+                    {% if stats.latest_update %}
+                    Última actualización: {{ stats.latest_update.split('T')[0] }} {{ stats.latest_update.split('T')[1][:8] }}
+                    {% else %}
+                    Nunca actualizado
+                    {% endif %}
+                </span>
+            </div>
+        </section>
+
+        {% if stats.total > 0 %}
+        <section class="stats-overview">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Resumen</h3>
+                    <div class="stat-value">{{ stats.total }}</div>
+                    <div class="stat-label">Total de eventos</div>
+                    <div class="stat-details">
+                        <p>Registrado de {{ stats.seeds|length }} partidas únicas</p>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Tipos de Eventos</h3>
+                    <div class="stat-chart event-types-chart">
+                        <div class="chart-container">
+                            <canvas id="event-types-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Partidas más Activas</h3>
+                    <div class="stat-chart game-events-chart">
+                        <div class="chart-container">
+                            <canvas id="game-events-chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Ranking de Eventos</h3>
+                    <div class="stat-table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Cantidad</th>
+                                    <th>Porcentaje</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for type_stat in stats.types %}
+                                <tr>
+                                    <td>{{ type_stat.type }}</td>
+                                    <td>{{ type_stat.count }}</td>
+                                    <td>{{ "%.1f"|format(type_stat.percentage) }}%</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="games-detail">
+            <h3>Detalles por Partida</h3>
+            <div class="games-list">
+                {% for seed_stat in stats.seeds %}
+                <div class="game-detail-card">
+                    <h4>Partida (Seed: {{ seed_stat.seed }})</h4>
+                    <div class="game-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">Total de eventos:</span>
+                            <span class="stat-value">{{ seed_stat.count }}</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Tipos principales:</span>
+                            <ul>
+                                {% for event_type, count in seed_stat.types %}
+                                <li>{{ event_type }}: {{ count }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                    <a href="{{ url_for('data') }}?seed={{ seed_stat.seed }}" class="btn">Ver Eventos</a>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% else %}
+        <section class="no-data">
+            <div class="card">
+                <h3>No hay datos para mostrar</h3>
+                <p>No hay datos disponibles. Juega al juego con el mod activado para recopilar datos.</p>
+            </div>
+        </section>
+        {% endif %}
+    </main>
+
+    <footer>
+        <p>Data Event Manager - Mod para The Binding of Isaac: Repentance</p>
+    </footer>
+
+    <!-- Agregar Chart.js para los gráficos si hay datos -->
+    {% if stats.total > 0 %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Datos para los gráficos
+        const eventTypesData = {
+            labels: [{% for type_stat in stats.types[:5] %}'{{ type_stat.type }}',{% endfor %} 'Otros'],
+            datasets: [{
+                data: [
+                    {% for type_stat in stats.types[:5] %}
+                    {{ type_stat.count }},
+                    {% endfor %}
+                    {{ stats.total - stats.types[:5]|sum(attribute='count') }}
+                ],
+                backgroundColor: [
+                    '#FF6384',
+                    '#36A2EB',
+                    '#FFCE56',
+                    '#4BC0C0',
+                    '#9966FF',
+                    '#C9CBCF'
+                ]
+            }]
+        };
+        
+        const gameEventsData = {
+            labels: [{% for seed_stat in stats.seeds[:5] %}'Seed {{ seed_stat.seed }}',{% endfor %}],
+            datasets: [{
+                label: 'Eventos por partida',
+                data: [{% for seed_stat in stats.seeds[:5] %}{{ seed_stat.count }},{% endfor %}],
+                backgroundColor: '#36A2EB'
+            }]
+        };
+        
+        // Inicializar gráficos cuando se cargue la página
+        document.addEventListener('DOMContentLoaded', function() {
+            // Gráfico de tipos de eventos (pastel)
+            new Chart(document.getElementById('event-types-chart'), {
+                type: 'pie',
+                data: eventTypesData,
+                options: {
+                    responsive: true,
+                    legend: {
+                        position: 'right',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Distribución de Tipos de Eventos'
+                    }
+                }
+            });
+            
+            // Gráfico de eventos por partida (barras)
+            new Chart(document.getElementById('game-events-chart'), {
+                type: 'bar',
+                data: gameEventsData,
+                options: {
+                    responsive: true,
+                    legend: {
+                        display: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Eventos por Partida (Top 5)'
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+            });
+        });
+    </script>
+    {% endif %}
+</body>
+</html> 

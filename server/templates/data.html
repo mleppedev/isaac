@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datos Procesados - DEM</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body>
+    <header>
+        <h1>Data Event Manager</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Inicio</a></li>
+                <li><a href="{{ url_for('data') }}" class="active">Ver Datos Procesados</a></li>
+                <li><a href="{{ url_for('stats') }}">Ver Estadísticas</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h2>Datos Procesados</h2>
+            <div class="controls">
+                <button id="refresh-btn" onclick="refreshData()">Actualizar Datos</button>
+                <span id="last-updated">
+                    {% if stats.latest_update %}
+                    Última actualización: {{ stats.latest_update.split('T')[0] }} {{ stats.latest_update.split('T')[1][:8] }}
+                    {% else %}
+                    Nunca actualizado
+                    {% endif %}
+                </span>
+            </div>
+        </section>
+
+        <section class="data-filters">
+            <div class="filter-controls">
+                <div class="filter-group">
+                    <label for="event-type">Filtrar por tipo:</label>
+                    <select id="event-type" onchange="filterData()">
+                        <option value="">Todos los tipos</option>
+                        {% for type_stat in stats.types %}
+                        <option value="{{ type_stat.type }}">{{ type_stat.type }} ({{ type_stat.count }})</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="seed">Filtrar por partida (seed):</label>
+                    <select id="seed" onchange="filterData()">
+                        <option value="">Todas las partidas</option>
+                        {% for seed_stat in stats.seeds %}
+                        <option value="{{ seed_stat.seed }}">Seed: {{ seed_stat.seed }} ({{ seed_stat.count }} eventos)</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </section>
+
+        <section class="data-content">
+            {% if stats.total > 0 %}
+            <div class="data-table-container">
+                <table id="events-table" class="data-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Tipo</th>
+                            <th>Timestamp</th>
+                            <th>Partida (Seed)</th>
+                            <th>Nivel</th>
+                            <th>Datos</th>
+                        </tr>
+                    </thead>
+                    <tbody id="events-body">
+                        <!-- Los datos se cargan dinámicamente por JavaScript -->
+                        <tr>
+                            <td colspan="6" class="loading">Cargando datos...</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="pagination">
+                    <button id="prev-page" onclick="prevPage()" disabled>Anterior</button>
+                    <span id="page-info">Página <span id="current-page">1</span> de <span id="total-pages">1</span></span>
+                    <button id="next-page" onclick="nextPage()" disabled>Siguiente</button>
+                </div>
+            </div>
+            {% else %}
+            <div class="no-data">
+                <p>No hay datos disponibles. Juega al juego con el mod activado para recopilar datos.</p>
+            </div>
+            {% endif %}
+        </section>
+
+        <section id="event-details" class="event-details" style="display: none;">
+            <h3>Detalles del Evento</h3>
+            <div class="detail-content">
+                <!-- Contenido dinámico -->
+            </div>
+            <button onclick="closeDetails()">Cerrar</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>Data Event Manager - Mod para The Binding of Isaac: Repentance</p>
+    </footer>
+</body>
+</html> 

@@ -152,9 +152,9 @@ function DEM:onRender()
             if frame % 900 == 0 then
                 Isaac.DebugString("DEM: Guardando buffer cada 30 segundos (frame " .. frame .. ")")
                 DataManager.saveEvents()
-            end
-        end
+      end
     end
+  end
 end
 
 -- Registrar callbacks adicionales (no registrados en data_manager)
