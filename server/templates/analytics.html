@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análisis Avanzado - Data Event Manager</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            padding-top: 60px;
+            background-color: #f8f9fa;
+        }
+        .analysis-card {
+            margin-bottom: 30px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .analysis-card .card-header {
+            background-color: #0d6efd;
+            color: white;
+            font-weight: bold;
+        }
+        .tool-card {
+            height: 100%;
+            transition: transform 0.3s ease;
+        }
+        .tool-card:hover {
+            transform: translateY(-5px);
+        }
+        .code-block {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">DEM - Data Event Manager</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/analytics">Análisis</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="apiDropdown" role="button" data-bs-toggle="dropdown">
+                            API
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/api/stats" target="_blank">Estadísticas</a></li>
+                            <li><a class="dropdown-item" href="/api/events?page=1&per_page=10" target="_blank">Eventos</a></li>
+                            <li><a class="dropdown-item" href="/api/ml/features" target="_blank">ML Features</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/api/metadata" target="_blank">Metadatos</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenido principal -->
+    <main class="container">
+        <h1 class="mb-4">Análisis Avanzado de Datos</h1>
+        <p class="lead mb-5">Herramientas y recursos para el análisis profundo de los datos recopilados por el mod DEM, con enfoque en Machine Learning y modelado predictivo.</p>
+
+        <!-- Sección de ML -->
+        <div class="card analysis-card">
+            <div class="card-header">
+                <h2 class="h5 mb-0">Machine Learning con DEM</h2>
+            </div>
+            <div class="card-body">
+                <p>El sistema DEM está diseñado específicamente para facilitar el entrenamiento de modelos de inteligencia artificial que puedan aprender a jugar The Binding of Isaac. A continuación se presentan las principales características y posibilidades.</p>
+                
+                <h3 class="h5 mt-4">Características para ML</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul>
+                            <li><strong>Estados por frame</strong>: Capturas completas del estado del juego a 60 FPS</li>
+                            <li><strong>Vectorización</strong>: Conversión de estados a representaciones vectoriales</li>
+                            <li><strong>Secuenciación</strong>: Registro temporal para modelos secuenciales</li>
+                            <li><strong>Limpieza automática</strong>: Eliminación de datos redundantes</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul>
+                            <li><strong>Etiquetado</strong>: Mapeo de acciones de usuario a estados</li>
+                            <li><strong>Contextualización</strong>: Información sobre el entorno de juego</li>
+                            <li><strong>Normalización</strong>: Preparación de datos para entrenamiento</li>
+                            <li><strong>Exportación</strong>: Formatos compatibles con frameworks de ML</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 class="h5 mt-4">Frameworks Compatibles</h3>
+                <div class="row row-cols-1 row-cols-md-3 g-4 mb-4">
+                    <div class="col">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">TensorFlow / Keras</h5>
+                                <p class="card-text">Ideal para modelos de CNN y RNN para capturar patrones espaciales y temporales.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">PyTorch</h5>
+                                <p class="card-text">Flexibilidad para implementar arquitecturas complejas y experimentales.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">Stable Baselines</h5>
+                                <p class="card-text">Implementaciones robustas de algoritmos de aprendizaje por refuerzo.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <h3 class="h5">Ejemplo de Código - Carga de Datos</h3>
+                <div class="code-block">
+<pre>import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+
+# Cargar dataset procesado
+df = pd.read_csv('/api/ml/download')
+
+# Separar características y etiquetas
+X = df.drop(['input_left', 'input_right', 'input_up', 'input_down', 
+            'shoot_left', 'shoot_right', 'shoot_up', 'shoot_down'], axis=1)
+y = df[['input_left', 'input_right', 'input_up', 'input_down', 
+      'shoot_left', 'shoot_right', 'shoot_up', 'shoot_down']]
+
+# Dividir en conjuntos de entrenamiento y prueba
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+print(f"Datos cargados: {len(df)} registros")
+print(f"Características: {X.shape}")
+print(f"Etiquetas: {y.shape}")</pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección de herramientas -->
+        <h2 class="mb-4 mt-5">Herramientas de Análisis</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+            <div class="col">
+                <div class="card tool-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Preprocesamiento</h5>
+                        <p class="card-text">Herramientas para limpiar, normalizar y preparar datos para modelos de ML.</p>
+                        <a href="/api/ml/features" class="btn btn-outline-primary btn-sm">Ver API</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card tool-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Visualización Avanzada</h5>
+                        <p class="card-text">Gráficos interactivos y visualizaciones para explorar patrones en los datos.</p>
+                        <a href="/dashboard" class="btn btn-outline-primary btn-sm">Ver Dashboard</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card tool-card">
+                    <div class="card-body">
+                        <h5 class="card-title">Extracción de Datos</h5>
+                        <p class="card-text">Scripts para extraer y consolidar datos del mod en tiempo real.</p>
+                        <button class="btn btn-outline-primary btn-sm" disabled>Próximamente</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejemplo de ML -->
+        <div class="card analysis-card">
+            <div class="card-header">
+                <h2 class="h5 mb-0">Modelo de Ejemplo - Predicción de Acciones</h2>
+            </div>
+            <div class="card-body">
+                <p>A continuación se presenta un ejemplo de implementación de un modelo básico para predecir las acciones del jugador basado en el estado del juego.</p>
+
+                <div class="code-block">
+<pre>import tensorflow as tf
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, LSTM, Dropout
+
+# Crear modelo secuencial para predecir acciones del jugador
+def create_player_model(input_shape, output_shape):
+    model = Sequential([
+        Dense(128, activation='relu', input_shape=(input_shape,)),
+        Dropout(0.3),
+        Dense(64, activation='relu'),
+        Dropout(0.3),
+        Dense(output_shape, activation='sigmoid')
+    ])
+    
+    model.compile(
+        optimizer='adam',
+        loss='binary_crossentropy',
+        metrics=['accuracy']
+    )
+    
+    return model
+
+# Crear y entrenar modelo
+model = create_player_model(X_train.shape[1], y_train.shape[1])
+history = model.fit(
+    X_train, y_train,
+    validation_data=(X_test, y_test),
+    epochs=50,
+    batch_size=32,
+    callbacks=[
+        tf.keras.callbacks.EarlyStopping(patience=5, restore_best_weights=True)
+    ]
+)
+
+# Evaluar modelo
+loss, accuracy = model.evaluate(X_test, y_test)
+print(f"Precisión del modelo: {accuracy:.4f}")</pre>
+                </div>
+
+                <div class="alert alert-info mt-4">
+                    <strong>Nota:</strong> Este es un ejemplo simplificado. Para modelos más avanzados, considera arquitecturas LSTM o Transformer para capturar dependencias temporales, o modelos de aprendizaje por refuerzo para optimizar estrategias de juego a largo plazo.
+                </div>
+            </div>
+        </div>
+
+        <!-- Posibles direcciones futuras -->
+        <h2 class="mb-4 mt-5">Direcciones Futuras</h2>
+        <div class="row mb-5">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Aprendizaje por Imitación</h5>
+                        <p class="card-text">Los datos capturados por DEM son ideales para entrenar agentes que imiten el comportamiento de jugadores humanos. Este enfoque permite crear rápidamente modelos que reproduzcan estrategias efectivas.</p>
+                        <p class="card-text"><small class="text-muted">Frameworks recomendados: Imitation Learning (IL), GAIL</small></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">Aprendizaje por Refuerzo Profundo</h5>
+                        <p class="card-text">Utilizando los estados del juego como observaciones y las recompensas naturales (progreso, puntuación, supervivencia), es posible entrenar agentes que optimicen sus estrategias de juego.</p>
+                        <p class="card-text"><small class="text-muted">Frameworks recomendados: Stable Baselines3, RLlib</small></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="bg-dark text-white mt-5 py-4">
+        <div class="container text-center">
+            <p>Data Event Manager para The Binding of Isaac</p>
+            <p class="mb-0"><small>Versión 2.0 - Desarrollado con ❤️ para la comunidad</small></p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html> 

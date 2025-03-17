@@ -12,6 +12,7 @@ import shutil
 import logging
 import argparse
 from datetime import datetime
+import subprocess
 
 # Configuración - Rutas según el log
 # Ubicación donde Isaac guarda los datos de los mods - Documentos del usuario
@@ -38,6 +39,10 @@ MOD_DATA_FILE = "Data Event Manager.dat"
 PROCESSED_DIR = "processed"
 DATABASE_FILE = "dem_database.json"
 LOG_FILE = "extract_data.log"
+
+# Variables globales para control de verificaciones
+check_game_running = True
+check_file_timestamp = True
 
 def setup_logging(log_file=LOG_FILE, debug=False):
     """Configurar el registro de eventos"""
@@ -95,14 +100,44 @@ def save_database(database, db_file=DATABASE_FILE):
 
 def find_all_possible_data_files():
     """Encuentra todas las posibles ubicaciones de archivos de datos"""
+    global check_game_running, check_file_timestamp
     possible_paths = []
     found_files = []
     
+    # Verificar si el juego está en ejecución (solo si check_game_running es True)
+    if check_game_running:
+        try:
+            # Verificar si Isaac está en ejecución (Windows)
+            result = subprocess.run(['tasklist', '/FI', 'IMAGENAME eq isaac-ng.exe'], 
+                                   capture_output=True, text=True)
+            game_running = 'isaac-ng.exe' in result.stdout
+            
+            if not game_running:
+                logging.warning("El juego no está en ejecución. No se procesarán datos.")
+                return []
+        except Exception as e:
+            logging.error(f"Error al verificar si el juego está en ejecución: {e}")
+            # Si hay error al verificar, continuar normalmente
+    else:
+        logging.info("Verificación de ejecución del juego desactivada. Se procesarán los datos independientemente.")
+    
+    # Obtener información de la última modificación del archivo de base de datos (solo si check_file_timestamp es True)
+    last_modified = None
+    if check_file_timestamp and os.path.exists(DATABASE_FILE):
+        last_modified = os.path.getmtime(DATABASE_FILE)
+        logging.info(f"Última modificación de la base de datos: {datetime.fromtimestamp(last_modified)}")
+    
     # 1. Verificar la ubicación real encontrada (PRINCIPAL)
     if os.path.exists(REAL_DATA_PATH):
+        file_modified = os.path.getmtime(REAL_DATA_PATH)
         size = os.path.getsize(REAL_DATA_PATH)
-        found_files.append((REAL_DATA_PATH, size))
-        logging.info(f"Archivo encontrado en ubicación real: {REAL_DATA_PATH} ({size} bytes)")
+        
+        # Verificar si el archivo ha cambiado desde la última vez (solo si check_file_timestamp es True)
+        if check_file_timestamp and last_modified and file_modified <= last_modified:
+            logging.info(f"Archivo {REAL_DATA_PATH} no ha cambiado desde la última actualización. Se omitirá.")
+        else:
+            found_files.append((REAL_DATA_PATH, size))
+            logging.info(f"Archivo encontrado en ubicación real: {REAL_DATA_PATH} ({size} bytes)")
     else:
         logging.warning(f"No se encontró el archivo en la ubicación real: {REAL_DATA_PATH}")
         
@@ -134,60 +169,40 @@ def find_all_possible_data_files():
                     for filename in os.listdir(path):
                         if filename.endswith((".dat", ".json")):
                             full_path = os.path.join(path, filename)
+                            
+                            # Verificar si el archivo ha cambiado desde la última vez
+                            if check_file_timestamp:
+                                file_modified = os.path.getmtime(full_path)
+                                if last_modified and file_modified <= last_modified:
+                                    logging.info(f"Archivo {full_path} no ha cambiado desde la última actualización. Se omitirá.")
+                                    continue
+                                
                             size = os.path.getsize(full_path)
                             if size > 0:  # Solo incluir archivos no vacíos
                                 found_files.append((full_path, size))
                                 logging.info(f"Encontrado archivo en {desc}: {filename} ({size} bytes)")
                 else:
                     # Es un archivo específico
-                    size = os.path.getsize(path)
-                    if size > 0:  # Solo incluir archivos no vacíos
-                        found_files.append((path, size))
-                        logging.info(f"Encontrado archivo en {desc}: {os.path.basename(path)} ({size} bytes)")
+                    # Verificar si el archivo ha cambiado desde la última vez
+                    if os.path.exists(path):
+                        if check_file_timestamp:
+                            file_modified = os.path.getmtime(path)
+                            if last_modified and file_modified <= last_modified:
+                                logging.info(f"Archivo {path} no ha cambiado desde la última actualización. Se omitirá.")
+                                continue
+                            
+                        size = os.path.getsize(path)
+                        if size > 0:  # Solo incluir archivos no vacíos
+                            found_files.append((path, size))
+                            logging.info(f"Encontrado archivo en {desc}: {os.path.basename(path)} ({size} bytes)")
     
     # Si no se encontraron archivos en las rutas principales, buscar en directorios adicionales
     if not found_files:
-        logging.warning("No se encontraron archivos en rutas principales, buscando en directorios adicionales...")
-        additional_dirs = [
-            os.path.join(os.path.expanduser("~"), "Documents", "My Games"),
-            ISAAC_STEAM_DIR,
-            os.path.join(ISAAC_STEAM_DIR, "data")
-        ]
-        
-        for base_dir in additional_dirs:
-            if os.path.exists(base_dir):
-                logging.debug(f"Buscando en directorio adicional: {base_dir}")
-                try:
-                    for root, dirs, files in os.walk(base_dir, topdown=True):
-                        # Limitar profundidad
-                        dirs[:] = [d for d in dirs if d not in [".git", "node_modules", "__pycache__"]]
-                        
-                        # Si la profundidad es mayor a 3 niveles, ignorar
-                        if root[len(base_dir) + 1:].count(os.sep) > 3:
-                            dirs[:] = []
-                            continue
-                        
-                        for filename in files:
-                            if filename.endswith((".dat", ".json")) and ("dem" in filename.lower() or "event" in filename.lower()):
-                                full_path = os.path.join(root, filename)
-                                size = os.path.getsize(full_path)
-                                if size > 0:
-                                    found_files.append((full_path, size))
-                                    logging.info(f"Encontrado archivo adicional: {full_path} ({size} bytes)")
-                except Exception as e:
-                    logging.error(f"Error buscando en {base_dir}: {e}")
-    
-    # Ordenar por tamaño (de mayor a menor)
-    found_files.sort(key=lambda x: x[1], reverse=True)
-    
-    # Mostrar resumen
-    if not found_files:
-        logging.warning("No se encontraron archivos de datos")
-    else:
-        logging.info(f"Se encontraron {len(found_files)} archivos de datos")
-        for path, size in found_files[:5]:  # Mostrar los 5 archivos más grandes
-            logging.info(f"  - {path} ({size} bytes)")
-    
+        if check_file_timestamp:
+            logging.warning("No se encontraron archivos en rutas principales o no han cambiado desde la última actualización.")
+        else:
+            logging.warning("No se encontraron archivos en rutas principales.")
+            
     return found_files
 
 def backup_mod_data(file_path, keep_original=False):
@@ -324,8 +339,14 @@ def process_all_files(found_files, db_file=DATABASE_FILE, backup=True, keep_orig
     
     return total_processed
 
-def extract_data(backup=True, keep_originals=False, db_file=DATABASE_FILE, debug=False):
+def extract_data(backup=True, keep_originals=False, db_file=DATABASE_FILE, debug=False, force_processing=False, ignore_timestamp=False):
     """Función principal para extraer datos"""
+    global check_game_running, check_file_timestamp
+    
+    # Configurar variables de control de verificación
+    check_game_running = not force_processing
+    check_file_timestamp = not ignore_timestamp
+    
     # Configurar logging
     logger = setup_logging(debug=debug)
     logger.info("=== Iniciando extracción de datos ===")
@@ -349,17 +370,29 @@ def extract_data(backup=True, keep_originals=False, db_file=DATABASE_FILE, debug
     return total_processed
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Extrae datos del mod DEM")
-    parser.add_argument("--no-backup", action="store_true", help="No hacer backup de los archivos originales")
-    parser.add_argument("--keep-originals", action="store_true", help="Mantener archivos originales después del backup")
-    parser.add_argument("--db-file", default=DATABASE_FILE, help="Ruta al archivo de base de datos")
-    parser.add_argument("--debug", action="store_true", help="Modo de depuración (más información en logs)")
+    # Configurar los argumentos de línea de comandos
+    parser = argparse.ArgumentParser(description='Extraer datos del mod DEM')
+    parser.add_argument('--no-backup', action='store_true', help='No hacer backup de los archivos originales')
+    parser.add_argument('--keep-originals', action='store_true', help='Mantener archivos originales después del procesamiento')
+    parser.add_argument('--db', default=DATABASE_FILE, help=f'Archivo de base de datos (default: {DATABASE_FILE})')
+    parser.add_argument('--debug', action='store_true', help='Activar mensajes de depuración')
+    parser.add_argument('--force', action='store_true', help='Forzar procesamiento aunque el juego no esté en ejecución')
+    parser.add_argument('--ignore-timestamp', action='store_true', help='Ignorar verificación de timestamp y procesar aunque no haya cambios')
     
     args = parser.parse_args()
     
+    if args.force:
+        print("AVISO: Se ha forzado el procesamiento aunque el juego no esté en ejecución.")
+    
+    if args.ignore_timestamp:
+        print("AVISO: Se ignorará la verificación de timestamps, todos los archivos serán procesados.")
+    
+    # Ejecutar la extracción de datos
     extract_data(
         backup=not args.no_backup,
         keep_originals=args.keep_originals,
-        db_file=args.db_file,
-        debug=args.debug
+        db_file=args.db,
+        debug=args.debug,
+        force_processing=args.force,
+        ignore_timestamp=args.ignore_timestamp
     ) 

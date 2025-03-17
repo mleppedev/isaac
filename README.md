@@ -1,7 +1,7 @@
 # Data Event Manager (DEM) para The Binding of Isaac
 
 ## Visión General
-Este mod recopila datos detallados del juego para entrenar modelos de Inteligencia Artificial que puedan aprender a jugar The Binding of Isaac.
+Este mod recopila datos detallados del juego para entrenar modelos de Inteligencia Artificial que puedan aprender a jugar The Binding of Isaac. Funciona como un sistema completo que incluye recolección de datos, procesamiento y visualización a través de un servidor web dedicado.
 
 ### Características Avanzadas para ML/IA
 - **Recopilación de Datos por Frame**: Captura el estado completo del juego 60 veces por segundo
@@ -10,6 +10,27 @@ Este mod recopila datos detallados del juego para entrenar modelos de Inteligenc
 - **Entrada del Usuario**: Captura todas las acciones del jugador para entrenar el modelo de IA
 - **Vectores de Movimiento**: Cálculos de física para determinar trayectorias y patrones de movimiento
 - **Optimización de Datos**: Eliminación de datos duplicados y compresión para reducir el tamaño del conjunto de datos
+- **Automatización Completa**: Sistema integrado que maneja la recolección, extracción y procesamiento de datos
+
+## Componentes del Sistema
+
+El sistema DEM consta de tres componentes principales:
+
+1. **Mod Lua (carpeta DEM)**: 
+   - Recopila datos durante el juego
+   - Optimiza y comprime la información en tiempo real
+   - Guarda periódicamente los datos usando la API de Isaac.SaveModData
+
+2. **Servidor Web (carpeta server)**:
+   - Visualiza los datos recopilados en tiempo real
+   - Proporciona análisis estadísticos y representaciones gráficas
+   - Permite la exploración interactiva de los datos de juego
+   - Implementa comunicación bidireccional con el mod mediante websockets
+
+3. **Script de Control (go.cmd)**:
+   - Facilita la gestión del sistema completo
+   - Proporciona un menú interactivo en español
+   - Automatiza tareas comunes como actualizar el mod y extraer datos
 
 ## Estructura de Datos
 Los datos se recopilan en formato JSON estructurado para facilitar su procesamiento posterior. La estructura básica es:
@@ -63,195 +84,153 @@ Los datos se recopilan en formato JSON estructurado para facilitar su procesamie
 }
 ```
 
-## Tipos de Eventos
-El mod registra varios tipos de eventos, incluyendo:
+## Características del Servidor
 
-1. **frame_state**: Estado completo del juego capturado cada frame
-2. **room_detailed**: Información detallada sobre una habitación al entrar
-3. **player_damage_detailed**: Información sobre daño recibido con contexto completo
-4. **enemy_killed_detailed**: Datos detallados sobre la muerte de un enemigo
-5. **item_collected_detailed**: Información sobre ítems recogidos y sus efectos
-6. **input_change**: Cambios en la entrada del usuario para aprendizaje secuencial
-7. **performance_stats**: Estadísticas de rendimiento del mod para optimizaciones
+El servidor web implementa una serie de funcionalidades esenciales para el análisis de datos:
 
-## Entrenamiento de IA
+- **Visualización en Tiempo Real**: Muestra estadísticas actualizadas mientras juegas
+- **Dashboard Interactivo**: Interfaz web para explorar los datos recopilados
+- **Gráficos y Visualizaciones**:
+  - Mapas de calor de posiciones de jugador y enemigos
+  - Gráficos de daño y tasa de supervivencia
+  - Análisis temporal de eventos
+  - Patrones de movimiento del jugador
+- **Análisis Estadístico**: Procesamiento automático para identificar patrones
+- **API REST**: Permite acceder a los datos desde otras aplicaciones
+- **Conexión WebSocket**: Comunicación bidireccional con el mod durante el juego
+- **Preprocesamiento para ML**: Preparación de datos para entrenamiento de modelos
+
+## Machine Learning con DEM
+
+El sistema está diseñado específicamente para facilitar el entrenamiento de modelos de ML:
+
+- **Preparación de Datasets**: Scripts para convertir los datos en formatos compatibles con frameworks de ML
+- **Vectorización de Estados**: Conversión de estados del juego en representaciones vectoriales
+- **Secuencias Temporales**: Captura de secuencias de eventos para modelos recurrentes
+- **Características para Entrenamiento**:
+  - Estados completos del juego por frame
+  - Acciones del jugador etiquetadas
+  - Contexto de decisiones (proximidad de enemigos, objetos, etc.)
+  - Resultados de acciones (daño, recolección de ítems, etc.)
+
+### Modelos de IA Compatibles
+
 El conjunto de datos generado puede utilizarse para entrenar varios tipos de modelos de IA:
 
-- **Redes neuronales convolucionales (CNN)**: Para procesamiento de patrones espaciales
-- **Redes recurrentes (LSTM/GRU)**: Para aprender secuencias de acción
-- **Aprendizaje por refuerzo**: Para optimizar estrategias de juego
-- **Modelos de atención**: Para focalizar en elementos importantes en el juego
+- **Redes Neuronales Convolucionales (CNN)**: Para procesamiento de patrones espaciales
+- **Redes Recurrentes (LSTM/GRU)**: Para aprender secuencias de acción
+- **Aprendizaje por Refuerzo (RL)**: Para optimizar estrategias de juego
+- **Modelos de Atención**: Para focalizar en elementos importantes en el juego
+- **Aprendizaje por Imitación**: Para replicar el comportamiento del jugador humano
 
-## Instalación
-1. Descarga el mod
-2. Coloca la carpeta DEM en `...\Documents\My Games\Binding of Isaac Repentance+\mods\`
-3. Activa el mod en el menú de mods del juego
+## Instalación y Uso
 
-## Uso
-El mod funciona automáticamente en segundo plano, recopilando datos mientras juegas. Los datos se guardan periódicamente en:
+### Requisitos Previos
+- The Binding of Isaac: Rebirth con la expansión Repentance+
+- Python 3.8 o superior (para el servidor y scripts)
+- Paquetes Python (instalados automáticamente): Flask, Pandas, Matplotlib, NumPy, SciKit-Learn, Flask-SocketIO
+
+### Instalación Rápida
+
+1. Clona o descarga este repositorio
+2. Ejecuta `go.cmd` desde la línea de comandos
+3. Selecciona la opción 1 para copiar el mod al directorio del juego
+4. Activa el mod en el menú de mods del juego
+
+### Uso del Sistema Completo
+
+Para utilizar todas las funcionalidades del sistema:
+
+1. Ejecuta `go.cmd` sin argumentos para ver el menú interactivo
+2. Selecciona la opción adecuada según tus necesidades:
+   - **Opción 1**: Copiar archivos del mod al directorio del juego
+   - **Opción 2**: Iniciar el servidor web para visualización
+   - **Opción 3**: Lanzar el juego
+   - **Opción 4**: Hacer todo lo anterior en un solo paso
+   - **Opción 5**: Salir
+
+### Archivo de Configuración
+
+El sistema utiliza `config.txt` para configurar las rutas y parámetros:
+
 ```
-[Carpeta de instalación del juego]/data/dem/save1.dat
+# Configuracion del entorno
+GAME_PATH=D:\SteamLibrary\steamapps\common\The Binding of Isaac Rebirth
+MOD_NAME=DEM
+GAME_EXE=isaac-ng.exe
 ```
 
-## Scripts de Utilidad
-- **go.cmd**: Script de inicio rápido que controla el juego y el servidor web
-- **get_dem_data.py**: Extrae datos del juego para procesamiento
-- **server/**: Servidor web para visualizar los datos recopilados
+## Estructura de Archivos
 
-## Visualización y Análisis
-El servidor web incluido proporciona visualizaciones básicas de los datos recopilados:
-- Distribución de tipos de eventos
-- Mapas de calor de posiciones de jugador y enemigos
-- Gráficos de daño y tasa de supervivencia
-- Secuencias de entrada del usuario
+```
+/
+├── config.txt           # Configuración del sistema
+├── go.cmd               # Script principal de control
+├── DEM/                 # Archivos del mod
+│   ├── main.lua         # Punto de entrada del mod
+│   ├── data_manager.lua # Sistema de gestión de datos
+│   ├── metadata.xml     # Metadatos del mod
+│   ├── json.lua         # Biblioteca para manejo de JSON
+│   └── README.md        # Documentación del mod
+└── server/              # Servidor web y herramientas
+    ├── app.py           # Aplicación principal del servidor
+    ├── extract_data.py  # Script de extracción de datos
+    ├── process_data.py  # Procesamiento de datos
+    ├── train_model.py   # Entrenamiento de modelos ML
+    ├── find_data.py     # Herramienta de búsqueda de datos
+    ├── requirements.txt # Dependencias Python
+    ├── static/          # Archivos estáticos del servidor
+    ├── templates/       # Plantillas HTML
+    ├── data/            # Datos procesados
+    ├── logs/            # Archivos de registro
+    ├── received_data/   # Datos recibidos sin procesar
+    └── processed_data/  # Datos procesados para ML
+```
 
-## Configuración
-Puedes modificar varios parámetros en `data_manager.lua`:
-- `BUFFER_SIZE`: Número de eventos antes de guardar
-- `DATA_COMPRESSION`: Activar/desactivar compresión
-- `FRAME_LIMIT`: Tiempo máximo entre guardados
-- `FILE_ROTATION`: Activar rotación de archivos
+## Flujo de Trabajo para ML
 
-## Rendimiento
+Para utilizar los datos en proyectos de Machine Learning:
+
+1. **Recolección de Datos**: Juega al juego con el mod activado
+2. **Extracción**: El servidor extrae y procesa automáticamente los datos
+3. **Preprocesamiento**: Los scripts en la carpeta `server` preparan los datos para ML
+4. **Entrenamiento**: Utiliza `train_model.py` para entrenar modelos básicos o exporta los datos para frameworks externos
+
+### Scripts de ML Disponibles
+
+- **process_data.py**: Preprocesa los datos para entrenamiento
+- **train_model.py**: Implementa modelos básicos de ML
+- **find_data.py**: Busca patrones específicos en los datos
+
+## Rendimiento y Limitaciones
+
 El mod está optimizado para tener un impacto mínimo en el rendimiento del juego:
 - Procesamiento asíncrono de datos
 - Eliminación inteligente de datos duplicados
 - Ajuste dinámico del tamaño del buffer basado en rendimiento
 - Monitorización de uso de memoria
 
+### Limitaciones Importantes
+
+1. **Un solo evento a la vez**:
+   - La API SaveModData solo permite guardar un archivo único por mod
+   - Cada nuevo evento sobrescribe cualquier evento anterior que no se haya extraído
+   - Por eso es importante ejecutar el servidor para extraer datos continuamente
+
+2. **Ubicación del archivo de datos**:
+   - Isaac guarda los datos en `Documents\My Games\Binding of Isaac Repentance+\` 
+   - No se puede cambiar esta ubicación, es fijada por el juego
+
+## Acceso al Servidor Web
+
+Una vez iniciado el servidor (opción 2 en go.cmd), puedes acceder a la interfaz web:
+
+- **URL**: http://localhost:5000
+- **Dashboard**: http://localhost:5000/dashboard
+- **API**: http://localhost:5000/api/events
+
 ## Licencia
 Este proyecto está licenciado bajo MIT License.
 
 ## Contacto
-Para preguntas o sugerencias, abre un issue en el repositorio.
-
-## Descripción
-
-DEM (Data Event Manager) es un sistema simplificado para recolectar y analizar eventos del juego The Binding of Isaac: Rebirth. El sistema recopila diversos eventos durante el juego (como recoger ítems, recibir daño o derrotar enemigos) y los almacena para su posterior análisis.
-
-## Características Principales
-
-- **Recolección automática de eventos:** Registra eventos del juego sin intervención del usuario
-- **Almacenamiento local:** Guarda los datos usando la API oficial de Isaac.SaveModData
-- **Scripts de extracción:** Herramientas para procesar y analizar los datos recolectados
-- **Interfaz simple:** Script `go.cmd` para gestionar todas las funciones del sistema
-
-## Estructura del Sistema
-
-El sistema consta de tres componentes principales:
-
-1. **Módulo Lua (DEM):** Mod para el juego que recolecta eventos y los guarda usando SaveModData
-2. **Scripts Python:** Herramientas para extraer y procesar los datos guardados por el mod
-3. **Script de Control:** Archivo `go.cmd` que facilita la gestión del sistema
-
-## Instalación
-
-1. **Instalar el mod:**
-   - Ejecuta `go update` para copiar los archivos al directorio de mods del juego
-
-2. **Configurar Python (opcional):**
-   - Si quieres usar las herramientas de extracción, asegúrate de tener Python instalado
-   - El sistema configurará automáticamente un entorno virtual la primera vez que se ejecuten los scripts
-
-3. **Configurar la ruta del juego:**
-   - Si la ruta por defecto no es correcta, usa `go setpath "RUTA_DEL_JUEGO"`
-
-## Uso
-
-### Mediante el menú interactivo
-
-Ejecuta `go` sin argumentos para acceder al menú interactivo con las siguientes opciones:
-
-1. **Iniciar servidor** - Inicia el servidor local (si está configurado)
-2. **Actualizar mod** - Copia los archivos del mod al directorio del juego
-3. **Configurar ruta** - Establece la ubicación del juego
-4. **Monitoreo automático** - Extrae datos periódicamente mientras juegas
-5. **Ejecutar juego** - Inicia The Binding of Isaac: Rebirth
-6. **Mostrar ayuda** - Muestra información detallada sobre el sistema
-7. **Probar sistema** - Prueba el funcionamiento del sistema de datos
-8. **Extraer datos** - Extrae y procesa los datos almacenados localmente
-9. **Salir** - Cierra el programa
-
-### Mediante línea de comandos
-
-También puedes usar comandos directos:
-- `go update` - Actualiza el mod
-- `go play` - Inicia el juego
-- `go extract` - Extrae los datos guardados
-- `go test` - Prueba el sistema
-- `go help` - Muestra la ayuda
-
-## Datos Almacenados
-
-### Ubicación de los Datos
-
-El mod guarda todos los eventos en un único archivo:
-
-```
-%USERPROFILE%\Documents\My Games\Binding of Isaac Repentance+\Data Event Manager.dat
-```
-
-### Formato de Datos
-
-Cada evento se guarda en formato JSON con la siguiente estructura:
-
-```json
-{
-  "event_type": "tipo_de_evento",
-  "timestamp": 1647359012,
-  "event_id": "dem_tipo_de_evento_1647359012_1234",
-  "data": {
-    // Datos específicos del evento
-  },
-  "game_data": {
-    "seed": 1234567890,
-    "level": 1,
-    "room_id": 1001,
-    // Más información del estado del juego
-  }
-}
-```
-
-## Cómo Funciona
-
-1. **Recolección de Datos:**
-   - El mod Lua registra eventos durante el juego
-   - Los datos se guardan usando la API de Isaac.SaveModData
-   - Nota: Cada nuevo evento sobrescribe el anterior debido a limitaciones de la API
-
-2. **Extracción de Datos:**
-   - El script `extract_data.py` lee el archivo guardado por el mod
-   - Consolida los datos en una base de datos local (JSON)
-   - Hace copias de seguridad del archivo original
-
-3. **Análisis de Datos:**
-   - Los datos consolidados pueden analizarse con las herramientas proporcionadas
-
-## Limitaciones Importantes
-
-1. **Un solo evento a la vez:**
-   - La API SaveModData solo permite guardar un archivo único por mod
-   - Cada nuevo evento sobrescribe cualquier evento anterior que no se haya extraído
-   - Por eso es importante extraer datos regularmente
-
-2. **Ubicación del archivo de datos:**
-   - Isaac guarda los datos en `Documents\My Games\Binding of Isaac Repentance+\` 
-   - No se puede cambiar esta ubicación, es fijada por el juego
-
-## Flujo de Trabajo Recomendado
-
-1. Instala el mod con `go update`
-2. Juega al juego normalmente
-3. Ejecuta la extracción con `go extract` periódicamente durante o después de jugar
-4. Repite el proceso para recolectar más datos
-
-## Desarrollo y Extensión
-
-Para extender el sistema, puedes:
-- Añadir nuevos tipos de eventos en `data_manager.lua`
-- Crear nuevas herramientas de análisis en Python
-- Modificar el extractor para procesar los datos de diferentes maneras
-
-## Licencia
-
-Este proyecto está licenciado bajo MIT License. 
+Para preguntas o sugerencias, abre un issue en el repositorio. 
