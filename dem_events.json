@@ -1,0 +1,74 @@
+[
+  {
+    "event_type": "room_entered",
+    "timestamp": 217,
+    "event_id": "dem_room_entered_217_217",
+    "data": {
+      "room_shape": 1,
+      "room_type": 1
+    },
+    "game_data": {
+      "level": 1,
+      "room_type": 1,
+      "room_id": 84,
+      "frame_count": 217,
+      "seed": 3109665752,
+      "stage_type": 0
+    }
+  },
+  {
+    "event_type": "room_entered",
+    "timestamp": 258,
+    "event_id": "dem_room_entered_258_258",
+    "data": {
+      "room_shape": 1,
+      "room_type": 1
+    },
+    "game_data": {
+      "level": 1,
+      "room_type": 1,
+      "room_id": 85,
+      "frame_count": 258,
+      "seed": 3109665752,
+      "stage_type": 0
+    }
+  },
+  {
+    "event_type": "gameplay_snapshot",
+    "timestamp": 300,
+    "event_id": "dem_gameplay_snapshot_300_300",
+    "data": {
+      "room_id": 85,
+      "frame": 300,
+      "enemies": 0,
+      "player_position": {
+        "x": 124.38761138916,
+        "y": 401.9208984375
+      }
+    },
+    "game_data": {
+      "level": 1,
+      "room_type": 1,
+      "room_id": 85,
+      "frame_count": 300,
+      "seed": 3109665752,
+      "stage_type": 0
+    }
+  },
+  {
+    "event_type": "game_exit",
+    "timestamp": 504,
+    "event_id": "dem_game_exit_504_504",
+    "data": {
+      "timestamp": 504
+    },
+    "game_data": {
+      "level": 1,
+      "room_type": 1,
+      "room_id": 85,
+      "frame_count": 504,
+      "seed": 3109665752,
+      "stage_type": 0
+    }
+  }
+]

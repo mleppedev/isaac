@@ -1,4 +1,4 @@
-# DataExtractorMod
+# DEM
 
 Mod para The Binding of Isaac: Rebirth que extrae datos relevantes del juego para entrenar una IA.
 

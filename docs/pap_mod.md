@@ -19,11 +19,11 @@ Documentos\My Games\Binding of Isaac Rebirth\mods
 ```
 
 **Crear una carpeta para tu mod:**
-Por ejemplo, crea una carpeta llamada `DataExtractorMod`.
+Por ejemplo, crea una carpeta llamada `DEM`.
 
 ## 2. Estructura Básica del Mod
 
-Dentro de la carpeta `DataExtractorMod` crea al menos los siguientes archivos:
+Dentro de la carpeta `DEM` crea al menos los siguientes archivos:
 
 - **metadata.xml**: Este archivo contiene la información básica del mod.
 - **main.lua**: Archivo principal donde escribirás el código en Lua.
@@ -33,7 +33,7 @@ Dentro de la carpeta `DataExtractorMod` crea al menos los siguientes archivos:
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <metadata>
-  <name>DataExtractorMod</name>
+  <name>DEM</name>
   <version>1.0</version>
   <author>TuNombre</author>
   <description>Mod para extraer datos relevantes del juego para entrenar una IA.</description>
@@ -114,7 +114,7 @@ Isaac.RegisterCallback(Mod(), MC_POST_NEW_ROOM, ModCallbacks.MC_POST_NEW_ROOM)
 
 **Carga el mod en el juego:**
 1. Arranca The Binding of Isaac: Rebirth.
-2. En el menú de mods, activa DataExtractorMod.
+2. En el menú de mods, activa DEM.
 
 **Verifica la extracción:**
 1. Juega y cambia de habitaciones.

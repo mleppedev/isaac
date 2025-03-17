@@ -34,7 +34,7 @@ def home():
     <!DOCTYPE html>
     <html>
     <head>
-        <title>DataExtractorMod Server</title>
+        <title>DEM Server</title>
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -83,7 +83,7 @@ def home():
         </style>
     </head>
     <body>
-        <h1>DataExtractorMod - Servidor de Recepción de Datos</h1>
+        <h1>DEM - Servidor de Recepción de Datos</h1>
         
         <div class="status">
             <h2>Estado del Servidor</h2>
@@ -107,7 +107,7 @@ def home():
         </div>
         
         <h2>Información de Uso</h2>
-        <p>Este servidor está diseñado para recibir datos del mod DataExtractorMod para The Binding of Isaac.</p>
+        <p>Este servidor está diseñado para recibir datos del mod DEM para The Binding of Isaac.</p>
         <p>Los datos recibidos se almacenan en la carpeta <code>received_data</code> para su posterior procesamiento.</p>
         
         <h2>Configuración del Mod</h2>
@@ -144,7 +144,7 @@ def view_raw_data():
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Datos Extraídos - DataExtractorMod</title>
+        <title>Datos Extraídos - DEM</title>
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -261,7 +261,7 @@ def view_processed_data():
         <!DOCTYPE html>
         <html>
         <head>
-            <title>Datos Procesados - DataExtractorMod</title>
+            <title>Datos Procesados - DEM</title>
             <style>
                 body {
                     font-family: Arial, sans-serif;
@@ -379,7 +379,7 @@ def view_processed_data():
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Datos Procesados - DataExtractorMod</title>
+        <title>Datos Procesados - DEM</title>
         <style>
             body {
                 font-family: Arial, sans-serif;
@@ -496,7 +496,7 @@ def view_stats():
         <!DOCTYPE html>
         <html>
         <head>
-            <title>Estadísticas - DataExtractorMod</title>
+            <title>Estadísticas - DEM</title>
             <style>
                 body {
                     font-family: Arial, sans-serif;
@@ -559,7 +559,7 @@ def view_stats():
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Estadísticas - DataExtractorMod</title>
+        <title>Estadísticas - DEM</title>
         <style>
             body {
                 font-family: Arial, sans-serif;

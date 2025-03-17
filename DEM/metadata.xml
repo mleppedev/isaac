@@ -1,7 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?> 
-<metadata> 
-  <name>DataExtractorMod</name> 
-  <version>1.0</version> 
-  <author>Michael Leppe</author> 
-  <description>Mod para extraer datos relevantes del juego para entrenar una IA.</description> 
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <name>Data Event Manager</name>
+  <directory>DEM</directory>
+  <id>dem</id>
+  <description>Recolector simplificado de datos de eventos del juego. Solo genera archivos JSON locales sin envío externo.</description>
+  <version>1.1</version>
+  <visibility>Private</visibility>
+  <tag>Tool</tag>
 </metadata> 

@@ -1,183 +1,132 @@
-# Proyecto de Extracción de Datos de The Binding of Isaac para IA
+# DEM - Data Event Manager
 
-Este proyecto consiste en un sistema para extraer datos del juego The Binding of Isaac: Rebirth, procesarlos y utilizarlos para entrenar modelos de inteligencia artificial.
+## Descripción
 
-## Estructura del Proyecto
+DEM (Data Event Manager) es un sistema simplificado para recolectar y analizar eventos del juego The Binding of Isaac: Rebirth. El sistema recopila diversos eventos durante el juego (como recoger ítems, recibir daño o derrotar enemigos) y los almacena para su posterior análisis.
 
-El proyecto está dividido en dos componentes principales:
+## Características Principales
 
-1. **Mod para The Binding of Isaac** (carpeta `DataExtractorMod`)
-   - Extrae datos del juego en tiempo real
-   - Guarda los datos localmente y/o los envía a un servidor
+- **Recolección automática de eventos:** Registra eventos del juego sin intervención del usuario
+- **Almacenamiento local:** Guarda los datos usando la API oficial de Isaac.SaveModData
+- **Scripts de extracción:** Herramientas para procesar y analizar los datos recolectados
+- **Interfaz simple:** Script `go.cmd` para gestionar todas las funciones del sistema
 
-2. **Servidor y Procesamiento** (carpeta `server`)
-   - Recibe y almacena los datos enviados por el mod
-   - Procesa los datos para su uso en entrenamiento de IA
-   - Entrena modelos de IA con los datos procesados
-   - Proporciona una interfaz web para visualizar los datos
+## Estructura del Sistema
 
-## Requisitos
+El sistema consta de tres componentes principales:
 
-### Para el Mod
-- The Binding of Isaac: Rebirth (con Afterbirth+ o Repentance)
-- Python 3.8+ (para el script auxiliar de envío de datos)
-
-### Para el Servidor
-- Python 3.8+
-- Flask
-- pandas
-- scikit-learn
-- matplotlib
-- numpy
+1. **Módulo Lua (DEM):** Mod para el juego que recolecta eventos y los guarda usando SaveModData
+2. **Scripts Python:** Herramientas para extraer y procesar los datos guardados por el mod
+3. **Script de Control:** Archivo `go.cmd` que facilita la gestión del sistema
 
 ## Instalación
 
-### Mod
-1. Coloca la carpeta `DataExtractorMod` en el directorio de mods de The Binding of Isaac:
-   - **Steam**: `{SteamInstallPath}\Steam\userdata\{tuSteamID}\250900\mods`
-   - **No-Steam**: `Documentos\My Games\Binding of Isaac Rebirth\mods`
-2. Configura el archivo `config.lua` con tus ajustes (copia `config.example.lua` como `config.lua`)
-3. Activa el mod desde el menú de mods en el juego
+1. **Instalar el mod:**
+   - Ejecuta `go update` para copiar los archivos al directorio de mods del juego
 
-### Servidor
-1. Navega a la carpeta `server`
-2. Crea un entorno virtual: `python -m venv venv`
-3. Activa el entorno virtual:
-   - Windows: `venv\Scripts\activate`
-   - Linux/Mac: `source venv/bin/activate`
-4. Instala las dependencias: `pip install -r requirements.txt`
-5. Configura el archivo `.env` (copia `.env.example` como `.env`)
+2. **Configurar Python (opcional):**
+   - Si quieres usar las herramientas de extracción, asegúrate de tener Python instalado
+   - El sistema configurará automáticamente un entorno virtual la primera vez que se ejecuten los scripts
+
+3. **Configurar la ruta del juego:**
+   - Si la ruta por defecto no es correcta, usa `go setpath "RUTA_DEL_JUEGO"`
 
 ## Uso
 
-### Scripts de Automatización
+### Mediante el menú interactivo
 
-Para facilitar el uso del sistema, se incluyen los siguientes scripts batch:
+Ejecuta `go` sin argumentos para acceder al menú interactivo con las siguientes opciones:
 
-1. **go.cmd**: Inicia el servidor automáticamente
-   - Crea el entorno virtual si no existe
-   - Instala las dependencias necesarias
-   - Ejecuta el servidor en http://localhost:8000
+1. **Iniciar servidor** - Inicia el servidor local (si está configurado)
+2. **Actualizar mod** - Copia los archivos del mod al directorio del juego
+3. **Configurar ruta** - Establece la ubicación del juego
+4. **Monitoreo automático** - Extrae datos periódicamente mientras juegas
+5. **Ejecutar juego** - Inicia The Binding of Isaac: Rebirth
+6. **Mostrar ayuda** - Muestra información detallada sobre el sistema
+7. **Probar sistema** - Prueba el funcionamiento del sistema de datos
+8. **Extraer datos** - Extrae y procesa los datos almacenados localmente
+9. **Salir** - Cierra el programa
 
-2. **send_data.cmd**: Envía los datos pendientes del mod al servidor
-   - Configura el entorno necesario automáticamente
-   - Ejecuta el script send_data.py del mod
+### Mediante línea de comandos
 
-3. **train.cmd**: Procesa los datos y entrena el modelo de IA
-   - Configura el entorno necesario automáticamente
-   - Ejecuta los scripts process_data.py y train_model.py
+También puedes usar comandos directos:
+- `go update` - Actualiza el mod
+- `go play` - Inicia el juego
+- `go extract` - Extrae los datos guardados
+- `go test` - Prueba el sistema
+- `go help` - Muestra la ayuda
 
-### Flujo de Trabajo Completo
+## Datos Almacenados
 
-1. **Iniciar el servidor**:
-   ```
-   go.cmd
-   ```
+### Ubicación de los Datos
 
-2. **Jugar al juego con el mod activado**:
-   - Los datos se extraerán automáticamente durante el juego
-   - Se guardarán localmente en `extracted_data.txt`
-   - Se prepararán para envío en `pending_data.json`
+El mod guarda todos los eventos en un único archivo:
 
-3. **Enviar datos al servidor**:
-   ```
-   send_data.cmd
-   ```
+```
+%USERPROFILE%\Documents\My Games\Binding of Isaac Repentance+\Data Event Manager.dat
+```
 
-4. **Procesar los datos y entrenar el modelo**:
-   ```
-   train.cmd
-   ```
+### Formato de Datos
 
-### Interfaz Web de Visualización
+Cada evento se guarda en formato JSON con la siguiente estructura:
 
-El servidor incluye una interfaz web para visualizar los datos extraídos y procesados:
+```json
+{
+  "event_type": "tipo_de_evento",
+  "timestamp": 1647359012,
+  "event_id": "dem_tipo_de_evento_1647359012_1234",
+  "data": {
+    // Datos específicos del evento
+  },
+  "game_data": {
+    "seed": 1234567890,
+    "level": 1,
+    "room_id": 1001,
+    // Más información del estado del juego
+  }
+}
+```
 
-1. **Página principal**: http://localhost:8000/
-   - Muestra información general sobre el servidor
-   - Proporciona enlaces a todas las secciones de visualización
+## Cómo Funciona
 
-2. **Datos extraídos**: http://localhost:8000/view/raw
-   - Muestra todos los datos extraídos del juego en formato de tarjetas
-   - Organiza la información de manera clara y legible
+1. **Recolección de Datos:**
+   - El mod Lua registra eventos durante el juego
+   - Los datos se guardan usando la API de Isaac.SaveModData
+   - Nota: Cada nuevo evento sobrescribe el anterior debido a limitaciones de la API
 
-3. **Datos procesados**: http://localhost:8000/view/processed
-   - Muestra una tabla con los datos procesados
-   - Incluye visualizaciones gráficas como:
-     - Gráfico de salud a lo largo del tiempo
-     - Distribución de enemigos por habitación
-   - Permite procesar los datos directamente desde la interfaz
+2. **Extracción de Datos:**
+   - El script `extract_data.py` lee el archivo guardado por el mod
+   - Consolida los datos en una base de datos local (JSON)
+   - Hace copias de seguridad del archivo original
 
-4. **Estadísticas**: http://localhost:8000/view/stats
-   - Muestra estadísticas generales sobre los datos
-   - Incluye métricas como número de registros, habitaciones únicas, salud promedio, etc.
+3. **Análisis de Datos:**
+   - Los datos consolidados pueden analizarse con las herramientas proporcionadas
 
-### Uso Manual (Alternativa)
+## Limitaciones Importantes
 
-Si prefieres ejecutar los comandos manualmente:
+1. **Un solo evento a la vez:**
+   - La API SaveModData solo permite guardar un archivo único por mod
+   - Cada nuevo evento sobrescribe cualquier evento anterior que no se haya extraído
+   - Por eso es importante extraer datos regularmente
 
-1. **Iniciar el servidor**:
-   ```
-   cd server
-   python app.py
-   ```
+2. **Ubicación del archivo de datos:**
+   - Isaac guarda los datos en `Documents\My Games\Binding of Isaac Repentance+\` 
+   - No se puede cambiar esta ubicación, es fijada por el juego
 
-2. **Enviar datos al servidor**:
-   ```
-   cd DataExtractorMod
-   python send_data.py
-   ```
+## Flujo de Trabajo Recomendado
 
-3. **Procesar los datos recibidos**:
-   ```
-   cd server
-   python process_data.py
-   ```
+1. Instala el mod con `go update`
+2. Juega al juego normalmente
+3. Ejecuta la extracción con `go extract` periódicamente durante o después de jugar
+4. Repite el proceso para recolectar más datos
 
-4. **Entrenar un modelo de IA**:
-   ```
-   cd server
-   python train_model.py
-   ```
+## Desarrollo y Extensión
 
-## Personalización
-
-### Mod
-- Modifica `main.lua` para extraer datos adicionales del juego
-- Ajusta la frecuencia de extracción o los eventos que la desencadenan
-
-### Servidor
-- Modifica `process_data.py` para realizar diferentes transformaciones en los datos
-- Ajusta `train_model.py` para utilizar diferentes algoritmos de IA o hiperparámetros
-- Personaliza las visualizaciones en `app.py` para mostrar diferentes gráficos
-
-## Solución de Problemas
-
-### Mod
-- Verifica que los archivos estén en la ubicación correcta
-- Comprueba que `config.lua` esté correctamente configurado
-- Revisa la consola del juego para mensajes de error (si está habilitada)
-
-### Servidor
-- Verifica que el puerto 8000 no esté en uso por otra aplicación
-- Revisa los logs en `server.log` para más información sobre errores
-- Asegúrate de que el firewall permita conexiones al puerto configurado
-- Si aparece el error "No module named 'pandas'" u otro similar, ejecuta `pip install -r requirements.txt` para instalar las dependencias faltantes
-
-## Contribuciones
-
-Las contribuciones son bienvenidas. Por favor, sigue estos pasos:
-1. Haz un fork del repositorio
-2. Crea una rama para tu característica (`git checkout -b feature/nueva-caracteristica`)
-3. Haz commit de tus cambios (`git commit -am 'Añadir nueva característica'`)
-4. Haz push a la rama (`git push origin feature/nueva-caracteristica`)
-5. Crea un Pull Request
+Para extender el sistema, puedes:
+- Añadir nuevos tipos de eventos en `data_manager.lua`
+- Crear nuevas herramientas de análisis en Python
+- Modificar el extractor para procesar los datos de diferentes maneras
 
 ## Licencia
 
-Este proyecto está licenciado bajo [MIT License](LICENSE).
-
-## Agradecimientos
-
-- Nicalis y Edmund McMillen por crear The Binding of Isaac
-- La comunidad de modding de Isaac por su documentación y ejemplos 
+Este proyecto está licenciado bajo MIT License. 

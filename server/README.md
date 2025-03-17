@@ -1,6 +1,6 @@
-# Servidor para DataExtractorMod
+# Servidor para DEM
 
-Este es un servidor simple desarrollado en Flask para recibir y almacenar los datos enviados por el mod DataExtractorMod para The Binding of Isaac.
+Este es un servidor simple desarrollado en Flask para recibir y almacenar los datos enviados por el mod DEM para The Binding of Isaac.
 
 ## Requisitos
 
