@@ -3,7 +3,7 @@
         "port": 5000,
         "update_interval": 20,
         "emit_throttle": 5,
-        "game_check_interval": 10
+        "game_check_interval": 15
     },
     "database": {
         "file": "dem_database.json",

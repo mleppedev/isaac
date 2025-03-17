@@ -22,33 +22,50 @@ from flask_socketio import SocketIO
 import shutil
 import game_manager  # Importar el módulo para gestionar acciones del juego
 
+# Cargar configuración desde config.json
+CONFIG_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'config.json')
+try:
+    with open(CONFIG_FILE, 'r') as f:
+        CONFIG = json.load(f)
+    logging.info(f"Configuración cargada desde {CONFIG_FILE}")
+except Exception as e:
+    logging.error(f"Error al cargar la configuración desde {CONFIG_FILE}: {str(e)}")
+    CONFIG = {}  # Configuración predeterminada
+
 # Configuración
-DATABASE_FILE = "dem_database.json"
+DATABASE_FILE = CONFIG.get('database', {}).get('file', "dem_database.json")
 STATIC_FOLDER = "static"
 TEMPLATE_FOLDER = "templates"
-PORT = 5000
-UPDATE_INTERVAL = 20  # segundos entre actualizaciones automáticas (reducido de 60 a 20)
-EMIT_THROTTLE = 5     # segundos mínimos entre emisiones a clientes (reducido de 10 a 5)
-GAME_CHECK_INTERVAL = 10  # segundos entre verificaciones de estado del juego (reducido de 15 a 10)
-CAPTURE_FRAME_RATE = 5  # capturar cada N frames (nuevo parámetro)
-CAPTURE_KEY_EVENTS = True  # capturar eventos clave como daño, pickups, etc. (nuevo parámetro)
-VERBOSE_LOGGING = True  # aumentar detalle de logs (nuevo parámetro)
+PORT = CONFIG.get('server', {}).get('port', 5000)
+UPDATE_INTERVAL = CONFIG.get('server', {}).get('update_interval', 20)  # segundos entre actualizaciones automáticas
+EMIT_THROTTLE = CONFIG.get('server', {}).get('emit_throttle', 5)       # segundos mínimos entre emisiones a clientes 
+GAME_CHECK_INTERVAL = CONFIG.get('server', {}).get('game_check_interval', 15)  # segundos entre verificaciones de estado del juego
+CAPTURE_FRAME_RATE = CONFIG.get('data_capture', {}).get('frame_rate', 5)  # capturar cada N frames
+CAPTURE_KEY_EVENTS = CONFIG.get('events', {}).get('key_events', {}).get('enabled', True)  # capturar eventos clave
+VERBOSE_LOGGING = CONFIG.get('advanced', {}).get('verbose_logging', True)  # aumentar detalle de logs
 LOG_FILE = "server.log"
-DATA_DIR = "data"
-PROCESSED_DATA_DIR = "processed_data"
-RECEIVED_DATA_DIR = "received_data"
-LOGS_DIR = "logs"
+DATA_DIR = CONFIG.get('paths', {}).get('data_dir', "data")
+PROCESSED_DATA_DIR = CONFIG.get('paths', {}).get('processed_data_dir', "processed_data")
+RECEIVED_DATA_DIR = CONFIG.get('paths', {}).get('received_data_dir', "received_data")
+LOGS_DIR = CONFIG.get('paths', {}).get('logs_dir', "logs")
 
 # Configurar logging
 os.makedirs(LOGS_DIR, exist_ok=True)
+log_level = logging.DEBUG if VERBOSE_LOGGING else logging.INFO
 logging.basicConfig(
-    level=logging.INFO,
+    level=log_level,
     format='%(asctime)s [%(levelname)s] %(message)s',
     handlers=[
         logging.FileHandler(os.path.join(LOGS_DIR, LOG_FILE)),
         logging.StreamHandler()
     ]
 )
+
+# Configurar loggers específicos
+logging.getLogger('werkzeug').setLevel(logging.WARNING)  # Reducir logs de Flask
+logging.getLogger('matplotlib').setLevel(logging.WARNING)  # Reducir logs de matplotlib
+logging.getLogger('PIL').setLevel(logging.WARNING)  # Reducir logs de Pillow
+
 logger = logging.getLogger(__name__)
 
 # Asegurar que existan los directorios necesarios
@@ -298,33 +315,70 @@ def check_game_status():
     """Comprueba si el juego está en ejecución y notifica a los clientes."""
     global game_status
     
+    # Inicializar el estado
+    game_running, process_name = game_manager.is_game_running()
+    game_status = {
+        'running': game_running,
+        'process': process_name,
+        'pid': None,
+        'last_check': datetime.now().isoformat()
+    }
+    
+    # Emitir estado inicial
+    try:
+        socketio.emit('game_status_change', game_status, namespace='/')
+        logger.info(f"Estado inicial del juego: {'en ejecución' if game_running else 'no detectado'}")
+    except Exception as e:
+        logger.error(f"Error al enviar estado inicial del juego: {str(e)}")
+    
+    # Bucle principal de verificación
+    last_check_time = time.time()
     while not thread_stop_event.is_set():
         try:
+            # Control de tiempo más preciso
+            current_time = time.time()
+            elapsed = current_time - last_check_time
+            
+            # Si no ha pasado el intervalo completo, dormir solo el tiempo restante
+            if elapsed < GAME_CHECK_INTERVAL:
+                # Dormir en incrementos pequeños para poder responder rápidamente al evento thread_stop_event
+                sleep_time = min(1.0, GAME_CHECK_INTERVAL - elapsed)
+                time.sleep(sleep_time)
+                continue
+            
+            # Registrar el momento de la verificación
+            last_check_time = current_time
+            logger.debug(f"Verificando estado del juego (intervalo: {GAME_CHECK_INTERVAL}s)")
+            
             # Verificar si el juego está en ejecución usando game_manager
             game_running, process_name = game_manager.is_game_running()
-            pid = None  # No necesitamos el PID para esta implementación
             
             # Si el estado cambió, actualizar y notificar a los clientes
             if game_running != game_status.get('running', False):
+                logger.info(f"Cambio de estado del juego detectado: {'en ejecución' if game_running else 'no detectado'}")
+                
                 game_status = {
                     'running': game_running,
                     'process': process_name,
-                    'pid': pid,
+                    'pid': None,
                     'last_check': datetime.now().isoformat()
                 }
                 
                 # Enviar actualizaciones por SocketIO
                 try:
                     socketio.emit('game_status_change', game_status, namespace='/')
-                    logging.info(f"Estado del juego actualizado: {'en ejecución' if game_running else 'no detectado'}")
+                    logger.info(f"Estado del juego enviado a clientes")
                 except Exception as e:
-                    logging.error(f"Error al enviar actualización de estado del juego: {str(e)}")
+                    logger.error(f"Error al enviar actualización de estado del juego: {str(e)}")
+            else:
+                logger.debug(f"Estado del juego sin cambios: {'en ejecución' if game_running else 'no detectado'}")
                     
         except Exception as e:
-            logging.error(f"Error al verificar el estado del juego: {str(e)}")
+            logger.error(f"Error al verificar el estado del juego: {str(e)}")
+            # En caso de error, esperar un poco antes de intentar de nuevo
+            time.sleep(1.0)
             
-        # Esperar el intervalo configurado
-        time.sleep(GAME_CHECK_INTERVAL)
+    logger.info("Hilo de verificación de estado del juego detenido")
 
 def update_data_background():
     """Función de actualización de datos en segundo plano"""
@@ -944,11 +998,12 @@ def handle_connect():
     database = load_database()
     stats = get_event_stats(database)
     
-    # Enviar estado actual del juego
+    # Enviar estado actual del juego con el formato correcto
     socketio.emit('game_status_change', {
         "running": game_status.get("running", False),
-        "process": game_status.get("process_name"),
-        "timestamp": datetime.now().isoformat()
+        "process": game_status.get("process"),  # Nombre corregido del campo
+        "pid": game_status.get("pid"),
+        "last_check": game_status.get("last_check", datetime.now().isoformat())
     }, room=request.sid)
     
     # Enviar estadísticas

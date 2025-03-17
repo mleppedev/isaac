@@ -3,8 +3,23 @@ import subprocess
 import platform
 import json
 import logging
+import time
+from datetime import datetime, timedelta
 
 logger = logging.getLogger(__name__)
+
+# Variables globales para caché
+_game_status_cache = {"running": False, "process": None, "timestamp": None}
+_CACHE_DURATION = 3  # Segundos que la caché es válida
+
+def _is_cache_valid():
+    """Comprueba si la caché del estado del juego es válida"""
+    if _game_status_cache["timestamp"] is None:
+        return False
+    
+    # Verificar si han pasado menos de CACHE_DURATION segundos desde la última verificación
+    elapsed = time.time() - _game_status_cache["timestamp"]
+    return elapsed < _CACHE_DURATION
 
 # Definir función para leer la ruta del juego desde config.json
 def get_game_path():
@@ -238,39 +253,112 @@ def open_game_folder():
 
 def is_game_running():
     """
-    Verifica si el juego está en ejecución.
+    Verifica si el juego está en ejecución de manera más eficiente.
     Retorna una tupla (bool, str) donde bool indica si está en ejecución
     y str es el nombre del proceso.
+    
+    Implementa un sistema de caché para reducir el número de consultas al sistema,
+    lo que mejora el rendimiento y reduce el impacto en recursos.
     """
-    # Esta implementación es básica y debería adaptarse a cada juego específico
-    game_exe, _ = get_game_path()
+    global _game_status_cache
+    
+    # Usar la caché si es válida
+    if _is_cache_valid():
+        logger.debug("Usando caché para estado del juego")
+        return _game_status_cache["running"], _game_status_cache["process"]
+        
+    # Esta implementación es más robusta y eficiente
+    game_exe, game_dir = get_game_path()
     
     if not game_exe:
         logger.warning("No se pudo obtener la ruta del ejecutable para verificar si el juego está en ejecución")
+        _update_cache(False, None)
         return False, None
         
+    # Obtener solo el nombre del archivo sin la ruta
     exe_name = os.path.basename(game_exe)
     logger.debug(f"Verificando si el juego está en ejecución: {exe_name}")
     
+    # Lista de nombres alternativos posibles para el proceso
+    possible_names = [
+        exe_name,                           # Nombre exacto del ejecutable
+        exe_name.lower(),                   # Nombre en minúsculas
+        os.path.splitext(exe_name)[0],      # Sin extensión
+        "isaac-ng.exe",                     # Versiones específicas del juego
+        "isaac.exe",
+        "Rebirth.exe",
+        "Afterbirth.exe",
+        "AfterbirthPlus.exe", 
+        "RepentanceDX11.exe", 
+        "RepentanceDX9.exe"
+    ]
+    
     try:
         if platform.system() == 'Windows':
-            # Usar tasklist en Windows
-            cmd = f'tasklist /FI "IMAGENAME eq {exe_name}"'
-            logger.debug(f"Ejecutando comando: {cmd}")
-            output = subprocess.check_output(cmd, shell=True).decode('utf-8')
-            
-            is_running = exe_name.lower() in output.lower()
-            logger.debug(f"Resultado de la verificación: {'en ejecución' if is_running else 'no detectado'}")
-            return is_running, exe_name
+            # En Windows, usar un enfoque más liviano con tasklist
+            output = ""
+            # Verificar solo una vez en lugar de para cada posible nombre
+            try:
+                # Usar tasklist que es más rápido y eficiente
+                output = subprocess.check_output("tasklist /FO CSV /NH", shell=True, 
+                                               stderr=subprocess.DEVNULL).decode('utf-8', errors='ignore')
+                logger.debug("Consulta de procesos completada satisfactoriamente")
+            except Exception as e:
+                logger.warning(f"Error al consultar procesos: {str(e)}")
+                _update_cache(False, None)
+                return False, None
+                
+            # Buscar cualquiera de los nombres posibles en la salida
+            output_lower = output.lower()
+            for name in possible_names:
+                name_lower = name.lower()
+                if name_lower in output_lower:
+                    logger.info(f"¡Juego detectado! Proceso: {name}")
+                    _update_cache(True, name)
+                    return True, name
+                    
+            # También verificar si hay algún proceso que contenga "isaac" en su nombre (más flexible)
+            if "isaac" in output_lower:
+                logger.info("¡Juego detectado a través de coincidencia parcial!")
+                _update_cache(True, "Isaac (nombre parcial)")
+                return True, "Isaac (nombre parcial)"
+                
+            logger.debug("Juego no detectado en la lista de procesos")
+            _update_cache(False, None)
+            return False, None
         else:
-            # Usar ps en sistemas Unix
-            cmd = 'ps -A'
-            logger.debug(f"Ejecutando comando: {cmd}")
-            output = subprocess.check_output(['ps', '-A']).decode('utf-8')
+            # Para Linux/Mac usar ps
+            output = subprocess.check_output(['ps', '-A'], stderr=subprocess.DEVNULL).decode('utf-8', errors='ignore')
+            output_lower = output.lower()
             
-            is_running = exe_name in output
-            logger.debug(f"Resultado de la verificación: {'en ejecución' if is_running else 'no detectado'}")
-            return is_running, exe_name
+            # Buscar cualquiera de los nombres posibles en la salida
+            for name in possible_names:
+                name_lower = name.lower()
+                if name_lower in output_lower:
+                    logger.info(f"¡Juego detectado! Proceso: {name}")
+                    _update_cache(True, name)
+                    return True, name
+                    
+            # También verificar para "isaac"
+            if "isaac" in output_lower or "binding" in output_lower:
+                logger.info("¡Juego detectado a través de coincidencia parcial!")
+                _update_cache(True, "Isaac (nombre parcial)")
+                return True, "Isaac (nombre parcial)"
+                
+            logger.debug("Juego no detectado en la lista de procesos")
+            _update_cache(False, None)
+            return False, None
+            
     except Exception as e:
         logger.error(f"Error al verificar si el juego está en ejecución: {str(e)}")
-        return False, None 
+        _update_cache(False, None)
+        return False, None
+
+def _update_cache(running, process):
+    """Actualiza la caché del estado del juego"""
+    global _game_status_cache
+    _game_status_cache = {
+        "running": running,
+        "process": process,
+        "timestamp": time.time()
+    } 
