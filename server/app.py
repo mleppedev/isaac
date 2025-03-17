@@ -97,7 +97,46 @@ def get_event_stats(database):
     events = database.get("events", [])
     
     # Contar tipos de eventos
-    event_types = Counter([e.get("event_type", "unknown") for e in events])
+    event_types = Counter()
+    
+    # Mejorar la clasificación de eventos para evitar categorías "unknown"
+    for e in events:
+        event_type = e.get("event_type")
+        
+        # Si el tipo de evento es None o no existe, intentar inferirlo por otros campos
+        if event_type is None or event_type == "unknown":
+            # Verificar si hay datos de jugador
+            if "data" in e and "player" in e["data"]:
+                event_type = "player_data"
+                # Verificar si hay información de salud
+                if e["data"]["player"].get("health"):
+                    event_type = "player_health"
+                # Verificar si hay información de posición
+                elif e["data"]["player"].get("position"):
+                    event_type = "player_position"
+            # Verificar si hay datos de enemigos
+            elif "data" in e and "entities" in e["data"] and any(entity.get("is_enemy", False) for entity in e["data"]["entities"] if entity):
+                event_type = "enemy_data"
+                # Verificar si hay información de posición de enemigos
+                if any(entity.get("position") for entity in e["data"]["entities"] if entity and entity.get("is_enemy", False)):
+                    event_type = "enemy_position"
+            # Verificar si es un evento relacionado con semillas
+            elif "game_data" in e and "seed" in e["game_data"]:
+                event_type = "game_seed"
+            # Verificar si es un evento de estado de sala
+            elif "data" in e and "room" in e["data"]:
+                event_type = "room_data"
+            # Verificar si hay información de colisiones
+            elif "data" in e and "collision" in e["data"]:
+                event_type = "collision_event"
+            # Si tiene timestamp pero no tiene clasificación
+            elif "timestamp" in e:
+                event_type = "temporal_data"
+            else:
+                event_type = "other_event"
+        
+        # Incrementar el contador para este tipo de evento
+        event_types[event_type] = event_types.get(event_type, 0) + 1
     
     # Estadísticas temporales
     timestamps = [e.get("timestamp") for e in events if "timestamp" in e and e.get("timestamp") is not None]

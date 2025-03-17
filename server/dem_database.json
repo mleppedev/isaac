@@ -11927,11 +11927,529 @@
         }
       ],
       "processed_timestamp": "2025-03-17T15:50:58.380356"
+    },
+    {
+      "events": [
+        {
+          "event_type": "room_entered",
+          "game_state": {
+            "level": 1,
+            "frame": 0,
+            "seed": 3013514692,
+            "room_id": 84
+          },
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "timestamp": 0,
+          "event_id": "dem_room_entered_0_0"
+        },
+        {
+          "event_type": "game_start",
+          "game_state": {
+            "level": 1,
+            "frame": 0,
+            "seed": 3013514692,
+            "room_id": 84
+          },
+          "data": {
+            "player_type": 0,
+            "continued": false,
+            "hard_mode": false
+          },
+          "timestamp": 0,
+          "event_id": "dem_game_start_0_0"
+        },
+        {
+          "event_type": "game_start_ml",
+          "game_state": {
+            "level": 1,
+            "frame": 0,
+            "seed": 3013514692,
+            "room_id": 84
+          },
+          "data": {
+            "continued": false,
+            "ml_enabled": true,
+            "data_types": [
+              "player_state",
+              "entity_tracking",
+              "room_mapping",
+              "input_tracking",
+              "physics_calculation"
+            ],
+            "processing_frequency": 1,
+            "hard_mode": false,
+            "timestamp": 0,
+            "raw_seed": 3013514692,
+            "player_type": 0,
+            "seed": "1T28 YQMF",
+            "version": "2.0"
+          },
+          "timestamp": 0,
+          "event_id": "dem_game_start_ml_0_0"
+        }
+      ],
+      "stats": {
+        "total_events_recorded": 3,
+        "performance": {
+          "avg_processing_time": 0.0,
+          "processing_samples": 3
+        },
+        "current_file_index": 1,
+        "largest_event_size": 573,
+        "save_operations": 0,
+        "total_events_saved": 0,
+        "last_save_timestamp": 0
+      },
+      "metadata": {
+        "file_id": 1,
+        "is_ml_data": true,
+        "version": "2.0",
+        "timestamp": 0,
+        "event_count": 3
+      },
+      "processed_timestamp": "2025-03-17T16:11:35.280297"
+    },
+    {
+      "events": [
+        {
+          "event_type": "room_entered",
+          "game_state": {
+            "level": 1,
+            "frame": 1430,
+            "seed": 3013514692,
+            "room_id": 100
+          },
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "timestamp": 1430,
+          "event_id": "dem_room_entered_1430_1430"
+        },
+        {
+          "event_type": "player_damage_detailed",
+          "game_state": {
+            "level": 1,
+            "frame": 1559,
+            "seed": 3013514692,
+            "room_id": 100
+          },
+          "data": {
+            "frame_count": 1559,
+            "damage_amount": 1.0,
+            "soul_hearts_after": 0,
+            "soul_hearts_before": 0,
+            "player_position": {
+              "y": 280.0,
+              "x": 84.414237976074
+            },
+            "source": {
+              "type": 9,
+              "variant": 0,
+              "entity_type": "Projectile"
+            },
+            "damage_flags": 0,
+            "hp_before": 7.0,
+            "room_id": 100,
+            "player_velocity": {
+              "y": 0.0,
+              "x": 2.4398817926978e-15
+            },
+            "player_index": 0,
+            "hp_after": 6,
+            "invincibility_frames": 1559
+          },
+          "timestamp": 1559,
+          "event_id": "dem_player_damage_detailed_1559_1559"
+        },
+        {
+          "event_type": "player_damage_detailed",
+          "game_state": {
+            "level": 1,
+            "frame": 1679,
+            "seed": 3013514692,
+            "room_id": 100
+          },
+          "data": {
+            "frame_count": 1679,
+            "damage_amount": 1.0,
+            "soul_hearts_after": 0,
+            "soul_hearts_before": 0,
+            "player_position": {
+              "y": 302.82485961914,
+              "x": 202.41120910645
+            },
+            "source": {
+              "type": 9,
+              "variant": 0,
+              "entity_type": "Projectile"
+            },
+            "damage_flags": 0,
+            "hp_before": 6.0,
+            "room_id": 100,
+            "player_velocity": {
+              "y": 3.0123524665833,
+              "x": 0.50685083866119
+            },
+            "player_index": 0,
+            "hp_after": 5,
+            "invincibility_frames": 1679
+          },
+          "timestamp": 1679,
+          "event_id": "dem_player_damage_detailed_1679_1679"
+        }
+      ],
+      "stats": {
+        "total_events_recorded": 13,
+        "performance": {
+          "avg_processing_time": 0.076923076923077,
+          "processing_samples": 13
+        },
+        "current_file_index": 1,
+        "largest_event_size": 760,
+        "save_operations": 3,
+        "total_events_saved": 10,
+        "last_save_timestamp": 1200
+      },
+      "metadata": {
+        "file_id": 1,
+        "is_ml_data": true,
+        "version": "2.0",
+        "timestamp": 1800,
+        "event_count": 3
+      },
+      "processed_timestamp": "2025-03-17T16:12:27.410185"
+    },
+    {
+      "events": [
+        {
+          "event_type": "performance_stats",
+          "game_state": {
+            "level": 1,
+            "frame": 1800,
+            "seed": 3013514692,
+            "room_id": 100
+          },
+          "data": {
+            "avg_processing_time": 0.076923076923077,
+            "memory_usage_kb": 1462.521484375,
+            "buffer_size": 300,
+            "largest_event_size": 760,
+            "events_saved": 13,
+            "events_recorded": 13
+          },
+          "timestamp": 1800,
+          "event_id": "dem_performance_stats_1800_1800"
+        },
+        {
+          "event_type": "player_damage_detailed",
+          "game_state": {
+            "level": 1,
+            "frame": 1803,
+            "seed": 3013514692,
+            "room_id": 100
+          },
+          "data": {
+            "frame_count": 1803,
+            "damage_amount": 1.0,
+            "soul_hearts_after": 0,
+            "soul_hearts_before": 0,
+            "player_position": {
+              "y": 348.44290161133,
+              "x": 183.15057373047
+            },
+            "source": {
+              "type": 9,
+              "variant": 0,
+              "entity_type": "Projectile"
+            },
+            "damage_flags": 0,
+            "hp_before": 5.0,
+            "room_id": 100,
+            "player_velocity": {
+              "y": -2.0853372362239e-09,
+              "x": -1.6998770446808e-10
+            },
+            "player_index": 0,
+            "hp_after": 4,
+            "invincibility_frames": 1803
+          },
+          "timestamp": 1803,
+          "event_id": "dem_player_damage_detailed_1803_1803"
+        },
+        {
+          "event_type": "game_exit",
+          "game_state": {
+            "level": 1,
+            "frame": 1823,
+            "seed": 3013514692,
+            "room_id": 100
+          },
+          "data": {
+            "timestamp": 1823
+          },
+          "timestamp": 1823,
+          "event_id": "dem_game_exit_1823_1823"
+        }
+      ],
+      "stats": {
+        "total_events_recorded": 16,
+        "performance": {
+          "avg_processing_time": 0.0625,
+          "processing_samples": 16
+        },
+        "current_file_index": 1,
+        "largest_event_size": 763,
+        "save_operations": 4,
+        "total_events_saved": 13,
+        "last_save_timestamp": 1800
+      },
+      "metadata": {
+        "file_id": 1,
+        "is_ml_data": true,
+        "version": "2.0",
+        "timestamp": 1823,
+        "event_count": 3
+      },
+      "processed_timestamp": "2025-03-17T16:27:41.608720"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.1,
+          "processing_samples": 10
+        },
+        "save_operations": 2,
+        "total_events_saved": 9,
+        "total_events_recorded": 10,
+        "largest_event_size": 752,
+        "current_file_index": 1,
+        "last_save_timestamp": 600
+      },
+      "metadata": {
+        "timestamp": 1200,
+        "file_id": 1,
+        "version": "2.0",
+        "is_ml_data": true,
+        "event_count": 1
+      },
+      "events": [
+        {
+          "game_state": {
+            "level": 1,
+            "frame": 1087,
+            "room_id": 71,
+            "seed": 2472164699
+          },
+          "timestamp": 1087,
+          "data": {
+            "room_type": 1,
+            "room_shape": 1
+          },
+          "event_type": "room_entered",
+          "event_id": "dem_room_entered_1087_1087"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T16:28:36.954614"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.17647058823529,
+          "processing_samples": 17
+        },
+        "save_operations": 3,
+        "total_events_saved": 10,
+        "total_events_recorded": 17,
+        "largest_event_size": 755,
+        "current_file_index": 1,
+        "last_save_timestamp": 1200
+      },
+      "metadata": {
+        "timestamp": 1692,
+        "file_id": 1,
+        "version": "2.0",
+        "is_ml_data": true,
+        "event_count": 7
+      },
+      "events": [
+        {
+          "game_state": {
+            "level": 1,
+            "frame": 1239,
+            "room_id": 70,
+            "seed": 2472164699
+          },
+          "timestamp": 1239,
+          "data": {
+            "room_type": 2,
+            "room_shape": 1
+          },
+          "event_type": "room_entered",
+          "event_id": "dem_room_entered_1239_1239"
+        },
+        {
+          "game_state": {
+            "level": 1,
+            "frame": 1297,
+            "room_id": 71,
+            "seed": 2472164699
+          },
+          "timestamp": 1297,
+          "data": {
+            "room_type": 1,
+            "room_shape": 1
+          },
+          "event_type": "room_entered",
+          "event_id": "dem_room_entered_1297_1297"
+        },
+        {
+          "game_state": {
+            "level": 1,
+            "frame": 1339,
+            "room_id": 46,
+            "seed": 2472164699
+          },
+          "timestamp": 1339,
+          "data": {
+            "room_type": 1,
+            "room_shape": 9
+          },
+          "event_type": "room_entered",
+          "event_id": "dem_room_entered_1339_1339"
+        },
+        {
+          "game_state": {
+            "level": 1,
+            "frame": 1409,
+            "room_id": 46,
+            "seed": 2472164699
+          },
+          "timestamp": 1409,
+          "data": {
+            "invincibility_frames": 1409,
+            "player_position": {
+              "y": 504.0520324707,
+              "x": 549.91375732422
+            },
+            "player_index": 0,
+            "damage_amount": 1.0,
+            "room_id": 46,
+            "damage_flags": 0,
+            "player_velocity": {
+              "y": -2.6551866531372,
+              "x": 2.1626336574554
+            },
+            "source": {
+              "variant": 0,
+              "type": 9,
+              "entity_type": "Projectile"
+            },
+            "soul_hearts_before": 0,
+            "frame_count": 1409,
+            "hp_after": 3,
+            "soul_hearts_after": 0,
+            "hp_before": 4.0
+          },
+          "event_type": "player_damage_detailed",
+          "event_id": "dem_player_damage_detailed_1409_1409"
+        },
+        {
+          "game_state": {
+            "level": 1,
+            "frame": 1543,
+            "room_id": 46,
+            "seed": 2472164699
+          },
+          "timestamp": 1543,
+          "data": {
+            "invincibility_frames": 1543,
+            "player_position": {
+              "y": 615.41412353516,
+              "x": 251.50285339355
+            },
+            "player_index": 0,
+            "damage_amount": 1.0,
+            "room_id": 46,
+            "damage_flags": 0,
+            "player_velocity": {
+              "y": 0.18301546573639,
+              "x": 2.1057045459747
+            },
+            "source": {
+              "variant": 0,
+              "type": 9,
+              "entity_type": "Projectile"
+            },
+            "soul_hearts_before": 0,
+            "frame_count": 1543,
+            "hp_after": 2,
+            "soul_hearts_after": 0,
+            "hp_before": 3.0
+          },
+          "event_type": "player_damage_detailed",
+          "event_id": "dem_player_damage_detailed_1543_1543"
+        },
+        {
+          "game_state": {
+            "level": 1,
+            "frame": 1635,
+            "room_id": 46,
+            "seed": 2472164699
+          },
+          "timestamp": 1635,
+          "data": {
+            "invincibility_frames": 1635,
+            "player_position": {
+              "y": 599.29528808594,
+              "x": 352.98016357422
+            },
+            "player_index": 0,
+            "damage_amount": 1.0,
+            "room_id": 46,
+            "damage_flags": 0,
+            "player_velocity": {
+              "y": 0.0048307874239981,
+              "x": -4.3705778121948
+            },
+            "source": {
+              "variant": 0,
+              "type": 9,
+              "entity_type": "Projectile"
+            },
+            "soul_hearts_before": 0,
+            "frame_count": 1635,
+            "hp_after": 1,
+            "soul_hearts_after": 0,
+            "hp_before": 2.0
+          },
+          "event_type": "player_damage_detailed",
+          "event_id": "dem_player_damage_detailed_1635_1635"
+        },
+        {
+          "game_state": {
+            "level": 1,
+            "frame": 1692,
+            "room_id": 46,
+            "seed": 2472164699
+          },
+          "timestamp": 1692,
+          "data": {
+            "timestamp": 1692
+          },
+          "event_type": "game_exit",
+          "event_id": "dem_game_exit_1692_1692"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T16:29:27.641107"
     }
   ],
   "metadata": {
-    "last_update": "2025-03-17T15:50:58.381132",
-    "total_events": 184,
+    "last_update": "2025-03-17T16:29:27.643103",
+    "total_events": 189,
     "version": "1.0"
   }
 }
