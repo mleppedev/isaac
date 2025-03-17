@@ -1,5 +1,5 @@
 /**
- * Data Event Manager - Javascript
+ * Data Event Manager - Javascript (versión básica sin WebSockets)
  * Maneja la interactividad de la interfaz web.
  */
 
@@ -8,32 +8,10 @@ let allEvents = [];
 let filteredEvents = [];
 let currentPage = 1;
 const perPage = 10;
-let socket = null;
+let autoRefreshInterval = null;
 
 // Cargar datos cuando se carga la página
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Documento cargado, inicializando aplicación...');
-    
-    // Restaurar posición de desplazamiento si hay una guardada
-    setTimeout(() => {
-        const savedScrollPos = sessionStorage.getItem('scrollPosition');
-        if (savedScrollPos) {
-            try {
-                const pos = JSON.parse(savedScrollPos);
-                window.scrollTo(pos.x, pos.y);
-                console.log(`Restaurada posición de desplazamiento: ${pos.x}, ${pos.y}`);
-                
-                // Limpiar después de restaurar
-                sessionStorage.removeItem('scrollPosition');
-            } catch (e) {
-                console.error('Error al restaurar posición de desplazamiento:', e);
-            }
-        }
-    }, 200); // Dar tiempo para que se carguen todos los elementos
-    
-    // Inicializar conexión WebSocket
-    initializeSocket();
-    
     // Cargar datos iniciales
     fetchEvents();
     
@@ -59,117 +37,165 @@ document.addEventListener('DOMContentLoaded', function() {
     if (urlParams.has('seed') || urlParams.has('type')) {
         setTimeout(filterData, 500); // Dar tiempo a la carga de datos
     }
+    
+    // Configurar actualización automática cada 60 segundos
+    setupAutoRefresh();
 });
 
 /**
- * Inicializa la conexión WebSocket para actualizaciones en tiempo real
+ * Configurar actualización automática
  */
-function initializeSocket() {
-    // Evitar múltiples conexiones
-    if (socket && socket.connected) {
-        console.log('Conexión WebSocket ya establecida, reutilizando');
-        return;
+function setupAutoRefresh() {
+    // Detener cualquier intervalo existente
+    if (autoRefreshInterval) {
+        clearInterval(autoRefreshInterval);
     }
     
-    try {
-        // Cargar la librería socket.io que proporciona el servidor
-        socket = io({
-            reconnectionAttempts: 3,  // Limitar intentos de reconexión
-            timeout: 10000,           // Tiempo de espera para la conexión
-            transports: ['websocket', 'polling'] // Preferir websocket
-        });
-        
-        // Configurar manejadores de eventos
-        socket.on('connect', () => {
-            console.log('Conexión WebSocket establecida');
-            updateConnectionStatus('Conectado', true);
-            
-            // No solicitar datos inmediatamente - confiar en que el servidor
-            // los enviará mediante el evento 'data_updated'
-        });
-        
-        socket.on('disconnect', () => {
-            console.log('Conexión WebSocket cerrada');
-            updateConnectionStatus('Desconectado', false);
-        });
-        
-        socket.on('data_updated', (data) => {
-            console.log('Datos actualizados recibidos:', data);
-            handleDataUpdate(data);
-        });
-        
-        socket.on('update_error', (error) => {
-            console.error('Error en actualización automática:', error);
-            showNotification('Error al actualizar los datos', 'error');
-        });
-        
-        socket.on('connect_error', (error) => {
-            console.error('Error de conexión WebSocket:', error);
-            updateConnectionStatus('Error de conexión', false);
-        });
-    } catch (error) {
-        console.error('Error al inicializar WebSocket:', error);
-    }
-}
-
-/**
- * Muestra el estado de la conexión WebSocket
- */
-function updateConnectionStatus(status, isConnected) {
-    const statusElement = document.getElementById('connection-status');
-    if (statusElement) {
-        statusElement.textContent = status;
-        statusElement.className = isConnected ? 'connected' : 'disconnected';
-    }
-}
-
-/**
- * Procesa una actualización de datos recibida por WebSocket
- */
-function handleDataUpdate(data) {
-    // Guardar la posición de desplazamiento actual
-    const scrollPos = {
-        x: window.scrollX,
-        y: window.scrollY
-    };
+    // Crear un nuevo intervalo de actualización (cada 60 segundos)
+    autoRefreshInterval = setInterval(function() {
+        console.log('Actualizando datos automáticamente...');
+        refreshData(true);
+    }, 60000); // 60 segundos
     
-    // Actualizar contadores sin recargar la página
-    if (data.update_info) {
-        document.getElementById('lastUpdated').textContent = formatDate(new Date(data.update_info.timestamp));
-        
-        if (data.stats && data.stats.total_events) {
-            document.getElementById('totalEvents').textContent = data.stats.total_events;
+    // Detener el intervalo cuando la ventana pierde el foco
+    window.addEventListener('blur', function() {
+        clearInterval(autoRefreshInterval);
+        autoRefreshInterval = null;
+    });
+    
+    // Reiniciar el intervalo cuando la ventana gana el foco
+    window.addEventListener('focus', function() {
+        if (!autoRefreshInterval) {
+            setupAutoRefresh();
         }
+    });
+}
+
+/**
+ * Actualizar datos desde el servidor manualmente
+ */
+function refreshData(isAutomatic = false) {
+    const refreshBtn = document.getElementById('refresh-btn');
+    if (refreshBtn && !isAutomatic) {
+        refreshBtn.disabled = true;
+        refreshBtn.textContent = 'Actualizando...';
     }
     
-    // Verificar si es una carga inicial o si necesitamos recargar los datos completos
-    if (data.update_info && !data.update_info.is_initial_load) {
-        // No es carga inicial, podría necesitar recarga completa
-        
-        // Si han pasado más de 10 segundos desde la última recarga completa, programar una
-        const now = new Date().getTime();
-        const lastReload = parseInt(sessionStorage.getItem('lastStatsReload') || '0');
-        
-        if (now - lastReload > 10000) { // 10 segundos
-            console.log("Programando recarga completa de estadísticas...");
-            // Guardar posición de desplazamiento antes de recargar
-            sessionStorage.setItem('scrollPosition', JSON.stringify(scrollPos));
-            sessionStorage.setItem('lastStatsReload', now.toString());
+    fetch('/api/refresh')
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Si es actualización automática, no recargar la página completa
+                if (isAutomatic) {
+                    updateUIWithFreshData();
+                } else {
+                    // Recargar la página actual en actualizaciones manuales
+                    window.location.reload();
+                }
+            } else {
+                console.error('Error al actualizar los datos:', data.error);
+                showNotification('Error al actualizar los datos: ' + data.error, 'error');
+            }
             
-            // Retrasar la recarga para permitir que el usuario termine lo que está haciendo
-            setTimeout(() => {
-                console.log("Recargando página para actualizar estadísticas completas");
+            if (refreshBtn && !isAutomatic) {
+                refreshBtn.disabled = false;
+                refreshBtn.textContent = 'Actualizar Datos';
+            }
+        })
+        .catch(error => {
+            console.error('Error al actualizar los datos:', error);
+            showNotification('Error al actualizar los datos: ' + error, 'error');
+            
+            if (refreshBtn && !isAutomatic) {
+                refreshBtn.disabled = false;
+                refreshBtn.textContent = 'Actualizar Datos';
+            }
+        });
+}
+
+/**
+ * Actualizar la interfaz con datos frescos sin recargar la página
+ */
+function updateUIWithFreshData() {
+    // Actualizar estadísticas
+    fetch('/api/stats')
+        .then(response => response.json())
+        .then(stats => {
+            // Actualizar la información de última actualización
+            const lastUpdatedElement = document.getElementById('last-updated');
+            if (lastUpdatedElement && stats.latest_update) {
+                const updateDate = stats.latest_update.split('T')[0];
+                const updateTime = stats.latest_update.split('T')[1].substr(0, 8);
+                lastUpdatedElement.textContent = `Última actualización: ${updateDate} ${updateTime}`;
+            }
+            
+            // Actualizar contador de eventos
+            const totalEventsElement = document.getElementById('total-events');
+            if (totalEventsElement) {
+                totalEventsElement.textContent = stats.total;
+            }
+            
+            // Actualizar tipos de eventos (página principal)
+            const eventTypesList = document.querySelector('.event-types ul');
+            if (eventTypesList && stats.types && stats.types.length > 0) {
+                let typeHtml = '';
+                stats.types.slice(0, 5).forEach(type => {
+                    typeHtml += `<li>${type.type}: ${type.count} (${type.percentage.toFixed(1)}%)</li>`;
+                });
+                eventTypesList.innerHTML = typeHtml;
+            }
+            
+            // Actualizar partidas recientes
+            updateRecentGames(stats);
+            
+            // Si estamos en la página de datos, actualizar los datos
+            if (document.getElementById('events-body')) {
+                fetchEvents();
+            }
+            
+            // Si estamos en la página de estadísticas, es mejor recargar
+            if (document.querySelector('.stats-grid')) {
                 window.location.reload();
-            }, 500);
-        } else {
-            console.log("Actualizando solo contadores, sin recarga completa");
-            // Restaurar posición de desplazamiento
-            window.scrollTo(scrollPos.x, scrollPos.y);
-        }
-    } else {
-        // Es carga inicial o actualización parcial, solo restaurar scroll
-        window.scrollTo(scrollPos.x, scrollPos.y);
+                return;
+            }
+            
+            // Mostrar notificación
+            showNotification('Datos actualizados automáticamente', 'success');
+        })
+        .catch(error => {
+            console.error('Error al obtener estadísticas actualizadas:', error);
+        });
+}
+
+/**
+ * Muestra una notificación en la interfaz
+ */
+function showNotification(message, type = 'info') {
+    // Verificar si ya existe un contenedor de notificaciones
+    let notificationsContainer = document.getElementById('notifications-container');
+    
+    if (!notificationsContainer) {
+        // Crear el contenedor si no existe
+        notificationsContainer = document.createElement('div');
+        notificationsContainer.id = 'notifications-container';
+        document.body.appendChild(notificationsContainer);
     }
+    
+    // Crear la notificación
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    
+    // Agregar al contenedor
+    notificationsContainer.appendChild(notification);
+    
+    // Auto-eliminar después de 5 segundos
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => {
+            notification.remove();
+        }, 500);
+    }, 5000);
 }
 
 /**
@@ -223,90 +249,6 @@ function updateRecentGames(stats) {
     
     // Actualizar el contenido
     gameList.innerHTML = gamesHtml;
-}
-
-/**
- * Muestra una notificación en la interfaz
- */
-function showNotification(message, type = 'info') {
-    // Verificar si ya existe un contenedor de notificaciones
-    let notificationsContainer = document.getElementById('notifications-container');
-    
-    if (!notificationsContainer) {
-        // Crear el contenedor si no existe
-        notificationsContainer = document.createElement('div');
-        notificationsContainer.id = 'notifications-container';
-        document.body.appendChild(notificationsContainer);
-    }
-    
-    // Crear la notificación
-    const notification = document.createElement('div');
-    notification.className = `notification ${type}`;
-    notification.textContent = message;
-    
-    // Agregar al contenedor
-    notificationsContainer.appendChild(notification);
-    
-    // Auto-eliminar después de 5 segundos
-    setTimeout(() => {
-        notification.style.opacity = '0';
-        setTimeout(() => {
-            notification.remove();
-        }, 500);
-    }, 5000);
-}
-
-/**
- * Actualizar datos desde el servidor manualmente
- */
-function refreshData() {
-    const refreshBtn = document.getElementById('refresh-btn');
-    if (refreshBtn) {
-        refreshBtn.disabled = true;
-        refreshBtn.textContent = 'Actualizando...';
-    }
-    
-    // Si el socket está disponible, enviar solicitud a través de WebSocket
-    if (socket && socket.connected) {
-        socket.emit('manual_refresh', {}, (response) => {
-            if (!response || !response.success) {
-                console.error('Error al actualizar los datos:', response ? response.error : 'Sin respuesta');
-                showNotification('Error al actualizar los datos', 'error');
-            }
-            
-            if (refreshBtn) {
-                refreshBtn.disabled = false;
-                refreshBtn.textContent = 'Actualizar Datos';
-            }
-        });
-    } else {
-        // Fallback a método HTTP tradicional
-        fetch('/api/refresh')
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Recargar la página actual
-                    window.location.reload();
-                } else {
-                    console.error('Error al actualizar los datos:', data.error);
-                    showNotification('Error al actualizar los datos: ' + data.error, 'error');
-                }
-                
-                if (refreshBtn) {
-                    refreshBtn.disabled = false;
-                    refreshBtn.textContent = 'Actualizar Datos';
-                }
-            })
-            .catch(error => {
-                console.error('Error al actualizar los datos:', error);
-                showNotification('Error al actualizar los datos: ' + error, 'error');
-                
-                if (refreshBtn) {
-                    refreshBtn.disabled = false;
-                    refreshBtn.textContent = 'Actualizar Datos';
-                }
-            });
-    }
 }
 
 /**
@@ -667,9 +609,4 @@ function closeDetails() {
     if (detailsEl) {
         detailsEl.style.display = 'none';
     }
-}
-
-// Función para formatear fecha
-function formatDate(date) {
-    return `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
 } 

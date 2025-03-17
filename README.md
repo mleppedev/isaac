@@ -1,4 +1,129 @@
-# DEM - Data Event Manager
+# Data Event Manager (DEM) para The Binding of Isaac
+
+## Visión General
+Este mod recopila datos detallados del juego para entrenar modelos de Inteligencia Artificial que puedan aprender a jugar The Binding of Isaac.
+
+### Características Avanzadas para ML/IA
+- **Recopilación de Datos por Frame**: Captura el estado completo del juego 60 veces por segundo
+- **Mapeo de Habitaciones**: Documentación detallada de la estructura de cada habitación, obstáculos y áreas transitables
+- **Seguimiento de Entidades**: Seguimiento preciso de la posición, velocidad y estado de todas las entidades
+- **Entrada del Usuario**: Captura todas las acciones del jugador para entrenar el modelo de IA
+- **Vectores de Movimiento**: Cálculos de física para determinar trayectorias y patrones de movimiento
+- **Optimización de Datos**: Eliminación de datos duplicados y compresión para reducir el tamaño del conjunto de datos
+
+## Estructura de Datos
+Los datos se recopilan en formato JSON estructurado para facilitar su procesamiento posterior. La estructura básica es:
+
+```json
+{
+  "metadata": {
+    "version": "2.0",
+    "timestamp": 12345,
+    "event_count": 300,
+    "file_id": 1,
+    "is_ml_data": true
+  },
+  "stats": {
+    "total_events_recorded": 15000,
+    "total_events_saved": 14700,
+    "largest_event_size": 1240,
+    "save_operations": 49
+  },
+  "events": [
+    {
+      "event_type": "frame_state",
+      "timestamp": 12345,
+      "event_id": "dem_frame_state_12345_1234",
+      "data": {
+        "frame_count": 12345,
+        "room_id": 123,
+        "player": {
+          "position": {"x": 320, "y": 280},
+          "velocity": {"x": 0.5, "y": 0},
+          "health": {"hearts": 6, "soul_hearts": 0},
+          "stats": {"speed": 1.0, "damage": 3.5}
+        },
+        "entities": [
+          {
+            "type": 10,
+            "position": {"x": 400, "y": 300},
+            "velocity": {"x": -0.3, "y": 0.2},
+            "is_enemy": true,
+            "hp": 15
+          }
+        ],
+        "inputs": {
+          "LEFT": 0,
+          "RIGHT": 1.0,
+          "SHOOT_UP": 1.0
+        }
+      }
+    }
+  ]
+}
+```
+
+## Tipos de Eventos
+El mod registra varios tipos de eventos, incluyendo:
+
+1. **frame_state**: Estado completo del juego capturado cada frame
+2. **room_detailed**: Información detallada sobre una habitación al entrar
+3. **player_damage_detailed**: Información sobre daño recibido con contexto completo
+4. **enemy_killed_detailed**: Datos detallados sobre la muerte de un enemigo
+5. **item_collected_detailed**: Información sobre ítems recogidos y sus efectos
+6. **input_change**: Cambios en la entrada del usuario para aprendizaje secuencial
+7. **performance_stats**: Estadísticas de rendimiento del mod para optimizaciones
+
+## Entrenamiento de IA
+El conjunto de datos generado puede utilizarse para entrenar varios tipos de modelos de IA:
+
+- **Redes neuronales convolucionales (CNN)**: Para procesamiento de patrones espaciales
+- **Redes recurrentes (LSTM/GRU)**: Para aprender secuencias de acción
+- **Aprendizaje por refuerzo**: Para optimizar estrategias de juego
+- **Modelos de atención**: Para focalizar en elementos importantes en el juego
+
+## Instalación
+1. Descarga el mod
+2. Coloca la carpeta DEM en `...\Documents\My Games\Binding of Isaac Repentance+\mods\`
+3. Activa el mod en el menú de mods del juego
+
+## Uso
+El mod funciona automáticamente en segundo plano, recopilando datos mientras juegas. Los datos se guardan periódicamente en:
+```
+[Carpeta de instalación del juego]/data/dem/save1.dat
+```
+
+## Scripts de Utilidad
+- **go.cmd**: Script de inicio rápido que controla el juego y el servidor web
+- **get_dem_data.py**: Extrae datos del juego para procesamiento
+- **server/**: Servidor web para visualizar los datos recopilados
+
+## Visualización y Análisis
+El servidor web incluido proporciona visualizaciones básicas de los datos recopilados:
+- Distribución de tipos de eventos
+- Mapas de calor de posiciones de jugador y enemigos
+- Gráficos de daño y tasa de supervivencia
+- Secuencias de entrada del usuario
+
+## Configuración
+Puedes modificar varios parámetros en `data_manager.lua`:
+- `BUFFER_SIZE`: Número de eventos antes de guardar
+- `DATA_COMPRESSION`: Activar/desactivar compresión
+- `FRAME_LIMIT`: Tiempo máximo entre guardados
+- `FILE_ROTATION`: Activar rotación de archivos
+
+## Rendimiento
+El mod está optimizado para tener un impacto mínimo en el rendimiento del juego:
+- Procesamiento asíncrono de datos
+- Eliminación inteligente de datos duplicados
+- Ajuste dinámico del tamaño del buffer basado en rendimiento
+- Monitorización de uso de memoria
+
+## Licencia
+Este proyecto está licenciado bajo MIT License.
+
+## Contacto
+Para preguntas o sugerencias, abre un issue en el repositorio.
 
 ## Descripción
 

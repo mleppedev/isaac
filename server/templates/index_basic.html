@@ -5,9 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DEM - Data Event Manager</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <!-- Socket.IO client library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.min.js"></script>
-    <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='app_basic.js') }}" defer></script>
 </head>
 <body>
     <header>
@@ -33,9 +31,8 @@
                     Nunca actualizado
                     {% endif %}
                 </span>
-                <span id="connection-status" class="connection-status disconnected">Desconectado</span>
             </div>
-            <p><small>El servidor está configurado para actualizar los datos automáticamente cada 30 segundos.</small></p>
+            <p><small>Los datos se actualizan automáticamente cada 60 segundos mientras esta pestaña esté activa.</small></p>
         </section>
 
         <section class="summary">

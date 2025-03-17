@@ -10,6 +10,14 @@
     --success-color: #4caf50;
     --warning-color: #ff9800;
     --error-color: #f44336;
+    --header-height: 64px; /* Altura del header */
+}
+
+/* Configuración para sticky footer */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 * {
@@ -23,6 +31,9 @@ body {
     line-height: 1.6;
     color: var(--text-color);
     background-color: var(--light-bg);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 a {
@@ -57,6 +68,12 @@ header {
     color: white;
     padding: 1rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    z-index: 1000;
 }
 
 header h1 {
@@ -92,17 +109,21 @@ nav a.active {
 }
 
 main {
-    max-width: 1200px;
+    width: 100%;
+    max-width: 1280px;
     margin: 0 auto;
-    padding: 2rem 1rem;
+    padding: 2rem;
+    flex: 1 0 auto;
 }
 
 footer {
+    flex-shrink: 0;
     background-color: var(--text-color);
     color: white;
     text-align: center;
     padding: 1rem;
-    margin-top: 2rem;
+    border-top: 1px solid #334;
+    margin-top: auto;
 }
 
 /* Secciones */
@@ -123,12 +144,29 @@ footer {
     align-items: center;
 }
 
-.card {
+.card, .game-card, .stat-card, .game-detail-card {
     background: var(--card-bg);
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     padding: 1.5rem;
     margin-bottom: 1.5rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.card h3, .card h4,
+.game-card h3, .game-card h4,
+.stat-card h3, .stat-card h4,
+.game-detail-card h3, .game-detail-card h4 {
+    margin-bottom: 1rem;
+    color: var(--secondary-color);
+}
+
+.game-card .btn, 
+.game-detail-card .btn {
+    margin-top: auto;
+    align-self: flex-start;
 }
 
 /* Página de Inicio */
@@ -150,20 +188,16 @@ footer {
 
 .game-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1.5rem;
 }
 
 .game-card {
-    background: var(--card-bg);
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 1.5rem;
+    /* Las propiedades comunes ahora están en .card, .game-card, .stat-card, .game-detail-card */
 }
 
 .game-card h4 {
-    margin-bottom: 1rem;
-    color: var(--secondary-color);
+    /* Propiedades de título manejadas por la regla combinada */
 }
 
 .game-card p {
@@ -171,12 +205,16 @@ footer {
 }
 
 .game-card .btn {
-    margin-top: 1rem;
+    /* Propiedades de botón manejadas por la regla combinada */
 }
 
 /* Página de Datos */
 .data-filters {
     margin-bottom: 1.5rem;
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .filter-controls {
@@ -184,26 +222,36 @@ footer {
     gap: 1rem;
     flex-wrap: wrap;
     align-items: center;
+    justify-content: space-between;
 }
 
 .filter-group {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.5rem;
 }
 
 .filter-group label {
     font-weight: bold;
+    white-space: nowrap;
 }
 
-.filter-group select {
-    padding: 6px 10px;
+.filter-group select, 
+.filter-group input {
+    padding: 8px 12px;
     border-radius: 4px;
     border: 1px solid var(--border-color);
+    min-width: 150px;
 }
 
 .data-table-container {
     overflow-x: auto;
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1rem;
 }
 
 .data-table {
@@ -231,6 +279,8 @@ footer {
     text-align: center;
     padding: 2rem;
     color: #888;
+    background-color: rgba(0, 0, 0, 0.02);
+    border-radius: 4px;
 }
 
 .pagination {
@@ -271,21 +321,17 @@ footer {
 
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 1.5rem;
 }
 
 .stat-card {
-    background: var(--card-bg);
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 1.5rem;
+    /* Las propiedades comunes ahora están en .card, .game-card, .stat-card, .game-detail-card */
     min-height: 300px;
 }
 
 .stat-card h3 {
-    margin-bottom: 1rem;
-    color: var(--secondary-color);
+    /* Propiedades de título manejadas por la regla combinada */
 }
 
 .stat-value {
@@ -343,20 +389,16 @@ footer {
 
 .games-list {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1.5rem;
 }
 
 .game-detail-card {
-    background: var(--card-bg);
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 1.5rem;
+    /* Las propiedades comunes ahora están en .card, .game-card, .stat-card, .game-detail-card */
 }
 
 .game-detail-card h4 {
-    margin-bottom: 1rem;
-    color: var(--secondary-color);
+    /* Propiedades de título manejadas por la regla combinada */
 }
 
 .game-stats {
@@ -372,16 +414,137 @@ footer {
 }
 
 @media (max-width: 768px) {
-    .stats-grid {
+    .stats-grid,
+    .game-list,
+    .games-list {
         grid-template-columns: 1fr;
     }
     
     .filter-controls {
         flex-direction: column;
         align-items: stretch;
+        gap: 0.75rem;
+    }
+    
+    .filter-group {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.3rem;
+    }
+    
+    .filter-group select,
+    .filter-group input {
+        width: 100%;
     }
     
     .stat-card {
         min-height: auto;
     }
+}
+
+@media (max-width: 576px) {
+    :root {
+        --header-height: 90px; /* Altura ajustada para móviles */
+    }
+    
+    main {
+        padding: 1rem;
+    }
+    
+    header {
+        padding: 0.75rem;
+    }
+    
+    nav ul {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 400px) {
+    :root {
+        --header-height: 110px; /* Altura ajustada para móviles pequeños */
+    }
+    
+    nav ul {
+        justify-content: center;
+    }
+}
+
+/* Estilos para mostrar el estado de la conexión WebSocket */
+.connection-status {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.8rem;
+    margin-left: 1rem;
+}
+
+.connection-status::before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 0.5rem;
+}
+
+.connection-status.connected {
+    color: #28a745;
+}
+
+.connection-status.connected::before {
+    background-color: #28a745;
+}
+
+.connection-status.disconnected {
+    color: #dc3545;
+}
+
+.connection-status.disconnected::before {
+    background-color: #dc3545;
+}
+
+/* Estilos para las notificaciones de actualización */
+#notifications-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    max-width: 350px;
+    z-index: 9999;
+}
+
+.notification {
+    background-color: #f8f9fa;
+    color: #333;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    animation: slide-in 0.5s forwards;
+    position: relative;
+    transition: opacity 0.5s;
+}
+
+.notification.success {
+    background-color: #d4edda;
+    color: #155724;
+    border-left: 4px solid #28a745;
+}
+
+.notification.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border-left: 4px solid #dc3545;
+}
+
+.notification.info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border-left: 4px solid #17a2b8;
+}
+
+@keyframes slide-in {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
 } 

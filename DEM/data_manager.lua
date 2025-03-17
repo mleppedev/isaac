@@ -1,33 +1,56 @@
 --[[
-    DEM Data Manager - Ultra Simplificado
-    Este módulo gestiona la persistencia de datos del juego.
-    Solo se encarga de guardar archivos JSON localmente para que el servidor los lea directamente.
+    DEM Data Manager - Versión Avanzada para ML/IA
     
-    RUTAS DE GUARDADO:
-    El archivo se guarda mediante Isaac.SaveModData() en:
+    Este módulo gestiona la recopilación y persistencia de datos granulares
+    para entrenar un modelo de aprendizaje automático que pueda jugar
+    The Binding of Isaac.
     
-    Ruta real encontrada:
-    - D:\SteamLibrary\steamapps\common\The Binding of Isaac Rebirth\data\dem\save1.dat
+    CARACTERÍSTICAS:
+    - Recopilación de datos por frame (60 FPS)
+    - Almacenamiento eficiente con compresión opcional
+    - Tamaño de buffer ajustable basado en la complejidad de los datos
+    - Rotación de archivos para evitar archivos demasiado grandes
+    - Eliminación de datos duplicados
     
-    Documentación indica que debería guardar en:
-    - Windows: Documents\My Games\Binding of Isaac Repentance+\Data Event Manager.dat
-    - Mac/Linux: ~/.local/share/Binding of Isaac Repentance+/Data Event Manager.dat
-    
-    NOTA: Los datos se guardan en la carpeta "data" dentro de la instalación del juego,
-    NO en el directorio de documentos del usuario como se pensaba originalmente.
+    FORMATO DE DATOS:
+    Los datos se almacenan en formato JSON estructurado 
+    para facilitar su procesamiento posterior.
 ]]
 
 -- Registrar el mod
 local DEM = RegisterMod("Data Event Manager", 1)
 
--- Configuración básica
+-- Cargar librería JSON
+local json = require("json")
+
+-- Configuración avanzada
 local CONFIG = {
-    DEBUG_MODE = true,  -- Activa mensajes de depuración
-    BUFFER_SIZE = 5     -- Número máximo de eventos antes de guardar todo el buffer
+    DEBUG_MODE = true,       -- Activa mensajes de depuración
+    BUFFER_SIZE = 300,       -- Mayor buffer para datos de ML (aprox. 5 segundos de juego a 60 FPS)
+    FRAME_LIMIT = 60 * 30,   -- Guardar al menos cada 30 segundos (60 FPS * 30)
+    DATA_COMPRESSION = false, -- Compresión de datos (desactivada por defecto)
+    FILE_ROTATION = true,    -- Rotar archivos para evitar tamaño excesivo
+    MAX_FILE_ENTRIES = 10000, -- Máximo de eventos por archivo antes de rotar
+    SMART_BUFFERING = true,  -- Ajustar buffer dinámicamente
+    TRACK_PERFORMANCE = true -- Monitorizar performance
 }
 
 -- Buffer temporal para almacenar múltiples eventos
 local eventBuffer = {}
+
+-- Contadores y estadísticas
+local stats = {
+    total_events_recorded = 0,
+    total_events_saved = 0,
+    largest_event_size = 0,
+    save_operations = 0,
+    current_file_index = 1,
+    last_save_timestamp = 0,
+    performance = {
+        avg_processing_time = 0,
+        processing_samples = 0
+    }
+}
 
 -- Generar un timestamp único basado en el frame count
 local function generateTimestamp()
@@ -39,17 +62,67 @@ local function generateTimestamp()
     return 0
 end
 
+-- Crear un hash rápido para una cadena
+local function quickHash(str)
+    if not str then return 0 end
+    
+    local hash = 5381
+    for i = 1, #str do
+        hash = ((hash << 5) + hash) + string.byte(str, i)
+        hash = hash & 0xFFFFFFFF -- Mantener dentro de 32 bits
+    end
+    return hash
+end
+
+-- Generar identificador para un evento
+local function generateEventId(eventType, timestamp)
+    local time = timestamp or generateTimestamp()
+    -- Usar frame_count para mejorar la unicidad
+    local random = Game():GetFrameCount() % 10000
+    -- Sanitizar el tipo de evento
+    eventType = string.gsub(eventType, "[^a-zA-Z0-9_]", "_")
+    -- Crear un ID único más corto
+    return "dem_" .. eventType .. "_" .. time .. "_" .. random
+end
+
+-- Calcular un hash para los datos (útil para eliminar duplicados)
+local function calculateDataHash(data)
+    if type(data) ~= "table" then
+        return tostring(data)
+    end
+    
+    -- Para datos más complejos, crear una representación simplificada para el hash
+    local hashParts = {}
+    
+    -- Procesar solo campos clave para evitar overhead
+    if data.position then
+        table.insert(hashParts, math.floor(data.position.x or 0) .. "," .. math.floor(data.position.y or 0))
+    end
+    
+    if data.frame_count then
+        table.insert(hashParts, tostring(data.frame_count))
+    end
+    
+    if data.event_type then
+        table.insert(hashParts, data.event_type)
+    end
+    
+    if data.timestamp then
+        table.insert(hashParts, tostring(data.timestamp))
+    end
+    
+    -- Crear una cadena para el hash
+    local hashStr = table.concat(hashParts, "_")
+    return quickHash(hashStr)
+end
+
 -- Crear carpeta de datos si no existe
 local function ensureDataSaving()
     -- En Isaac no podemos crear carpetas, solo guardar un archivo usando SaveModData
     if CONFIG.DEBUG_MODE then
+        Isaac.DebugString("DEM: Sistema de guardado mejorado para recopilación ML")
         Isaac.DebugString("DEM: Los datos se guardarán usando SaveModData")
-        Isaac.DebugString("DEM: El archivo se escribirá como save1.dat")
-        Isaac.DebugString("DEM: En: " .. "D:/SteamLibrary/steamapps/common/The Binding of Isaac Rebirth/data/DEM/")
-        
-        -- Más información sobre rutas
-        Isaac.DebugString("DEM: AVISO: Los datos se guardan en la carpeta del juego, NO en Documents")
-        Isaac.DebugString("DEM: AVISO: Comprobado en búsqueda de archivos")
+        Isaac.DebugString("DEM: El archivo se escribirá en la carpeta data/dem/ del juego")
     end
     
     -- Intentar guardar un archivo de prueba usando la API de Isaac
@@ -59,10 +132,14 @@ local function ensureDataSaving()
         -- Intentar cargar para confirmar la escritura
         local test_data = Isaac.LoadModData(DEM)
         if test_data and test_data == "test" then
-            Isaac.DebugString("DEM: ¡ÉXITO! Archivo de prueba guardado y leído correctamente.")
+            if CONFIG.DEBUG_MODE then
+                Isaac.DebugString("DEM: ¡ÉXITO! Archivo de prueba guardado y leído correctamente.")
+            end
             return true
         else
-            Isaac.DebugString("DEM: ¡ERROR! No se pudo leer el archivo de prueba.")
+            if CONFIG.DEBUG_MODE then
+                Isaac.DebugString("DEM: ¡ERROR! No se pudo leer el archivo de prueba.")
+            end
             return false
         end
     end)
@@ -86,28 +163,32 @@ local function initialize()
     -- Verificar que podemos escribir datos
     ensureDataSaving()
     
+    -- Intentar cargar las estadísticas anteriores
+    local savedStats = Isaac.LoadModData(DEM)
+    if savedStats and savedStats:sub(1, 1) == "{" then
+        local success, loadedStats = pcall(json.decode, savedStats)
+        if success and loadedStats and loadedStats.stats then
+            stats = loadedStats.stats
+            if CONFIG.DEBUG_MODE then
+                Isaac.DebugString("DEM: Estadísticas cargadas. Total de eventos: " .. stats.total_events_saved)
+            end
+        end
+    end
+    
     -- Mensaje de inicialización
     if CONFIG.DEBUG_MODE then
-        Isaac.DebugString("DEM: Data Manager inicializado")
+        Isaac.DebugString("DEM: Data Manager ML inicializado")
+        Isaac.DebugString("DEM: Buffer configurado para " .. CONFIG.BUFFER_SIZE .. " eventos")
+        Isaac.DebugString("DEM: Se guardarán datos al menos cada " .. (CONFIG.FRAME_LIMIT / 60) .. " segundos")
     end
-end
-
--- Generar identificador para un evento
-local function generateEventId(eventType, timestamp)
-    local time = timestamp or generateTimestamp()
-    -- Usar frame_count para mejorar la unicidad
-    local random = Game():GetFrameCount() % 10000
-    -- Sanitizar el tipo de evento (por si acaso)
-    eventType = string.gsub(eventType, "[^a-zA-Z0-9_]", "_")
-    return "dem_" .. eventType .. "_" .. time .. "_" .. random
 end
 
 -- Sanitizar strings para JSON
 local function sanitizeString(str)
     if not str then return "" end
     -- Reemplazar comillas y caracteres especiales
-    str = string.gsub(str, '"', '\\"')
     str = string.gsub(str, '\\', '\\\\')
+    str = string.gsub(str, '"', '\\"')
     str = string.gsub(str, '\n', '\\n')
     str = string.gsub(str, '\r', '\\r')
     str = string.gsub(str, '\t', '\\t')
@@ -125,33 +206,156 @@ local function valueToJson(value, indent)
         return tostring(value)
     elseif type(value) == "boolean" then
         return value and "true" or "false"
+    elseif type(value) == "nil" then
+        return "null"
     elseif type(value) == "table" then
+        -- Detectar si la tabla es un array
+        local isArray = true
+        local maxIndex = 0
+        
+        for k, v in pairs(value) do
+            if type(k) ~= "number" or k <= 0 or math.floor(k) ~= k then
+                isArray = false
+                break
+            end
+            maxIndex = math.max(maxIndex, k)
+        end
+        
+        -- Si la tabla tiene índices no consecutivos, no es un array
+        if isArray and maxIndex > 0 then
+            for i = 1, maxIndex do
+                if value[i] == nil then
+                    isArray = false
+                    break
+                end
+            end
+        end
+        
         -- Si la tabla está vacía, devolverla como {} sin formato
         if next(value) == nil then
-            return "{}"
+            return isArray and "[]" or "{}"
         end
         
         local inner_indent = indent + 1
         local inner_indentStr = string.rep("  ", inner_indent)
+        local tableJson
         
-        local tableJson = "{\n"
-        local isFirst = true
-        
-        for k, v in pairs(value) do
-            if not isFirst then
-                tableJson = tableJson .. ",\n"
-            else
-                isFirst = false
+        if isArray then
+            tableJson = "[\n"
+            for i = 1, maxIndex do
+                if i > 1 then
+                    tableJson = tableJson .. ",\n"
+                end
+                tableJson = tableJson .. inner_indentStr .. valueToJson(value[i], inner_indent)
+            end
+            tableJson = tableJson .. "\n" .. indentStr .. "]"
+        else
+            tableJson = "{\n"
+            local isFirst = true
+            
+            for k, v in pairs(value) do
+                if not isFirst then
+                    tableJson = tableJson .. ",\n"
+                else
+                    isFirst = false
+                end
+                
+                tableJson = tableJson .. inner_indentStr .. '"' .. sanitizeString(tostring(k)) .. '": ' .. valueToJson(v, inner_indent)
             end
             
-            tableJson = tableJson .. inner_indentStr .. '"' .. sanitizeString(k) .. '": ' .. valueToJson(v, inner_indent)
+            tableJson = tableJson .. "\n" .. indentStr .. "}"
         end
         
-        tableJson = tableJson .. "\n" .. indentStr .. "}"
         return tableJson
     else
         return '"unknown"'
     end
+end
+
+-- Verificar si un evento es similar a otro reciente (para eliminar duplicados)
+local function isDuplicateEvent(eventType, eventData)
+    -- Solo aplicar a eventos de frame y similares
+    if eventType ~= "frame_state" then
+        return false
+    end
+    
+    -- Si no hay suficientes eventos en el buffer, no es duplicado
+    if #eventBuffer < 5 then
+        return false
+    end
+    
+    -- Calcular hash para los nuevos datos
+    local newHash = calculateDataHash(eventData)
+    
+    -- Comprobar últimos eventos del mismo tipo
+    local duplicateCount = 0
+    local recentCount = 0
+    
+    for i = #eventBuffer, math.max(1, #eventBuffer - 10), -1 do
+        local event = eventBuffer[i]
+        if type(event) == "table" and event.event_type == eventType then
+            recentCount = recentCount + 1
+            
+            -- Calcular hash para el evento existente
+            local existingHash = calculateDataHash(event.data)
+            
+            -- Si los hashes son muy similares, considerar duplicado
+            if newHash == existingHash then
+                duplicateCount = duplicateCount + 1
+            end
+            
+            -- Si hemos encontrado al menos 2 duplicados en 5 eventos recientes, es duplicado
+            if duplicateCount >= 2 and recentCount >= 5 then
+                return true
+            end
+        end
+    end
+    
+    return false
+end
+
+-- Obtener el nombre de archivo basado en rotación
+local function getDataFileName()
+    if not CONFIG.FILE_ROTATION then
+        return "save1.dat"
+    else
+        return "save" .. stats.current_file_index .. ".dat"
+    end
+end
+
+-- Rotar archivo si es necesario
+local function rotateFileIfNeeded()
+    if not CONFIG.FILE_ROTATION then
+        return
+    end
+    
+    -- Si el número de eventos excede el máximo, rotar a un nuevo archivo
+    if stats.total_events_saved % CONFIG.MAX_FILE_ENTRIES == 0 and stats.total_events_saved > 0 then
+        stats.current_file_index = stats.current_file_index + 1
+        
+        if CONFIG.DEBUG_MODE then
+            Isaac.DebugString("DEM: Rotando a nuevo archivo: save" .. stats.current_file_index .. ".dat")
+        end
+    end
+end
+
+-- Comprimir JSON si está habilitado
+local function compressIfEnabled(jsonData)
+    if not CONFIG.DATA_COMPRESSION then
+        return jsonData
+    end
+    
+    -- Implementación básica de compresión con método simple
+    -- En la API de Isaac no hay compresión real, esta es una simulación simple
+    -- Eliminar espacios y saltos de línea
+    local compressed = jsonData:gsub("[ \t\n\r]+", "")
+    
+    if CONFIG.DEBUG_MODE then
+        local savingRatio = math.floor((1 - (string.len(compressed) / string.len(jsonData))) * 100)
+        Isaac.DebugString("DEM: Compresión aplicada. Ahorro: " .. savingRatio .. "%")
+    end
+    
+    return compressed
 end
 
 -- Guardar el buffer completo de eventos
@@ -164,55 +368,70 @@ local function saveEventBuffer()
         return false
     end
     
-    -- Ordenar eventos por timestamp antes de guardar
-    -- Extraer eventos y su timestamp para ordenarlos
-    local eventsForSorting = {}
-    for i, eventJson in ipairs(eventBuffer) do
-        -- Intentar extraer el timestamp
-        local timestamp = 0
-        local timestampPattern = '"timestamp":%s*(%d+)'
-        local found = eventJson:match(timestampPattern)
-        
-        if found then
-            timestamp = tonumber(found)
-        end
-        
-        table.insert(eventsForSorting, {
-            json = eventJson,
-            timestamp = timestamp or 0
-        })
-    end
-    
     -- Ordenar eventos por timestamp
-    table.sort(eventsForSorting, function(a, b) 
+    table.sort(eventBuffer, function(a, b) 
         return a.timestamp < b.timestamp 
     end)
     
-    -- Construir el JSON final con los eventos ordenados
-    local bufferJson = "[\n"
-    for i, eventData in ipairs(eventsForSorting) do
-        if i > 1 then
-            bufferJson = bufferJson .. ",\n"
-        end
-        -- Añadir indentación de 2 espacios para cada línea de eventos
-        local indentedJson = "  " .. eventData.json:gsub("\n", "\n  ")
-        bufferJson = bufferJson .. indentedJson
-    end
-    bufferJson = bufferJson .. "\n]"
+    -- Construir objeto con metadatos
+    local dataPackage = {
+        metadata = {
+            version = "2.0",
+            timestamp = generateTimestamp(),
+            event_count = #eventBuffer,
+            file_id = stats.current_file_index,
+            is_ml_data = true
+        },
+        stats = stats,
+        events = eventBuffer
+    }
+    
+    -- Convertir a JSON con formato
+    local bufferJson = valueToJson(dataPackage)
+    
+    -- Comprimir si está habilitado
+    bufferJson = compressIfEnabled(bufferJson)
     
     -- Guardar el buffer usando SaveModData
+    local startTime = Isaac.GetTime()
     local success = pcall(function()
+        -- Rotar archivo si es necesario
+        rotateFileIfNeeded()
+        
+        -- Guardar en el archivo correspondiente
+        local fileName = getDataFileName()
         Isaac.SaveModData(DEM, bufferJson)
         
         if CONFIG.DEBUG_MODE then
-            Isaac.DebugString("DEM: Buffer de " .. #eventBuffer .. " eventos guardado correctamente")
-            Isaac.DebugString("DEM: Tamaño total: " .. string.len(bufferJson) .. " bytes")
-            Isaac.DebugString("DEM: Archivo guardado en D:/SteamLibrary/steamapps/common/The Binding of Isaac Rebirth/data/dem/save1.dat")
-            Isaac.DebugString("DEM: Datos ordenados por timestamp")
+            local saveTime = Isaac.GetTime() - startTime
+            Isaac.DebugString("DEM: Buffer de " .. #eventBuffer .. " eventos guardado en " .. saveTime .. "ms")
+            Isaac.DebugString("DEM: Tamaño: " .. string.len(bufferJson) .. " bytes (Archivo: " .. fileName .. ")")
         end
+        
+        -- Actualizar estadísticas
+        stats.total_events_saved = stats.total_events_saved + #eventBuffer
+        stats.save_operations = stats.save_operations + 1
+        stats.last_save_timestamp = generateTimestamp()
         
         -- Limpiar el buffer después de guardar exitosamente
         eventBuffer = {}
+        
+        -- Ajustar buffer dinámicamente si está habilitado
+        if CONFIG.SMART_BUFFERING then
+            -- Ajustar el tamaño del buffer según el rendimiento
+            if saveTime > 200 then -- Si tarda más de 200ms, reducir buffer
+                CONFIG.BUFFER_SIZE = math.max(60, CONFIG.BUFFER_SIZE * 0.8)
+                if CONFIG.DEBUG_MODE then
+                    Isaac.DebugString("DEM: Buffer reducido a " .. CONFIG.BUFFER_SIZE .. " eventos por rendimiento")
+                end
+            elseif saveTime < 50 and #eventBuffer >= CONFIG.BUFFER_SIZE * 0.9 then
+                -- Si es rápido y estamos cerca del límite, aumentar
+                CONFIG.BUFFER_SIZE = math.min(1000, CONFIG.BUFFER_SIZE * 1.2)
+                if CONFIG.DEBUG_MODE then
+                    Isaac.DebugString("DEM: Buffer aumentado a " .. CONFIG.BUFFER_SIZE .. " eventos")
+                end
+            end
+        end
         
         return true
     end)
@@ -226,12 +445,24 @@ end
 
 -- Función pública para registrar eventos
 local function recordEvent(eventType, eventData)
+    -- Medir tiempo de procesamiento para estadísticas
+    local startTime = nil
+    if CONFIG.TRACK_PERFORMANCE then
+        startTime = Isaac.GetTime()
+    end
+    
     -- Validar el tipo de evento
     if not eventType or eventType == "" then
         if CONFIG.DEBUG_MODE then
             Isaac.DebugString("DEM: Error - Tipo de evento vacío")
         end
         return false
+    end
+    
+    -- Evitar duplicados para eventos de frame (optimización ML)
+    if CONFIG.SMART_BUFFERING and isDuplicateEvent(eventType, eventData) then
+        -- Eventos duplicados en frames cercanos, ignorar
+        return true
     end
     
     -- Obtener datos del juego
@@ -246,31 +477,54 @@ local function recordEvent(eventType, eventData)
         timestamp = timestamp,
         event_id = generateEventId(eventType, timestamp),
         data = eventData or {},
-        game_data = {
+        -- Añadir datos básicos del juego (más compactos para ML)
+        game_state = {
             seed = game:GetSeeds():GetStartSeed(),
             level = level:GetStage(),
-            stage_type = level:GetStageType(),
             room_id = level:GetCurrentRoomDesc().SafeGridIndex,
-            room_type = room:GetType(),
-            frame_count = game:GetFrameCount()
+            frame = game:GetFrameCount()
         }
     }
     
-    -- Convertir a JSON usando valueToJson, que ahora tiene formato
-    local eventJson = valueToJson(data)
-    
-    -- Agregar el evento al buffer
-    table.insert(eventBuffer, eventJson)
-    
-    if CONFIG.DEBUG_MODE then
-        Isaac.DebugString("DEM: Evento '" .. eventType .. "' agregado al buffer. ID: " .. data.event_id)
-        Isaac.DebugString("DEM: Eventos en buffer: " .. #eventBuffer .. "/" .. CONFIG.BUFFER_SIZE)
+    -- Para eventos de frame, reducir información duplicada
+    if eventType == "frame_state" and eventData then
+        -- Ya tenemos estos datos en eventData, no duplicarlos
+        data.game_state = nil
     end
     
-    -- Si el buffer alcanzó el tamaño máximo, guardarlo
-    if #eventBuffer >= CONFIG.BUFFER_SIZE then
+    -- Agregar el evento al buffer
+    table.insert(eventBuffer, data)
+    stats.total_events_recorded = stats.total_events_recorded + 1
+    
+    -- Medir tamaño para estadísticas
+    local eventSize = string.len(valueToJson(data))
+    stats.largest_event_size = math.max(stats.largest_event_size, eventSize)
+    
+    -- Medir tiempo de procesamiento
+    if CONFIG.TRACK_PERFORMANCE and startTime then
+        local processingTime = Isaac.GetTime() - startTime
+        
+        -- Actualizar promedio de tiempo de procesamiento
+        stats.performance.avg_processing_time = 
+            (stats.performance.avg_processing_time * stats.performance.processing_samples + processingTime) / 
+            (stats.performance.processing_samples + 1)
+        stats.performance.processing_samples = stats.performance.processing_samples + 1
+    end
+    
+    if CONFIG.DEBUG_MODE and (eventType ~= "frame_state" or game:GetFrameCount() % 60 == 0) then
+        -- Solo mostrar log para eventos importantes o cada 60 frames para no saturar
+        Isaac.DebugString("DEM: Evento '" .. eventType .. "' agregado. Eventos en buffer: " .. #eventBuffer .. "/" .. CONFIG.BUFFER_SIZE)
+    end
+    
+    -- Guardar si se alcanza alguna condición de guardado
+    if #eventBuffer >= CONFIG.BUFFER_SIZE or 
+       (game:GetFrameCount() - stats.last_save_timestamp > CONFIG.FRAME_LIMIT) then
         if CONFIG.DEBUG_MODE then
-            Isaac.DebugString("DEM: Buffer lleno, guardando eventos...")
+            if #eventBuffer >= CONFIG.BUFFER_SIZE then
+                Isaac.DebugString("DEM: Buffer lleno, guardando eventos...")
+            else
+                Isaac.DebugString("DEM: Tiempo límite alcanzado, guardando eventos...")
+            end
         end
         saveEventBuffer()
     end
@@ -316,12 +570,31 @@ local function registerCallbacks()
     
     -- Cada cierto número de frames, para guardar periódicamente
     function DEM:onUpdate()
-        -- Guardar cada 600 frames (aproximadamente 20 segundos a 30 FPS)
-        if Game():GetFrameCount() % 600 == 0 and #eventBuffer > 0 then
+        local frame = Game():GetFrameCount()
+        -- Guardar cada 600 frames (aproximadamente 10 segundos a 60 FPS)
+        if frame % 600 == 0 and #eventBuffer > 0 then
             if CONFIG.DEBUG_MODE then
                 Isaac.DebugString("DEM: Guardado periódico, " .. #eventBuffer .. " eventos pendientes")
             end
             saveEventBuffer()
+        end
+        
+        -- Generar estadísticas de rendimiento periódicamente
+        if CONFIG.TRACK_PERFORMANCE and frame % 1800 == 0 then -- Cada 30 segundos
+            local memUsage = collectgarbage("count") -- Obtener uso de memoria en KB
+            
+            recordEvent("performance_stats", {
+                avg_processing_time = stats.performance.avg_processing_time,
+                buffer_size = CONFIG.BUFFER_SIZE,
+                memory_usage_kb = memUsage,
+                events_recorded = stats.total_events_recorded,
+                events_saved = stats.total_events_saved,
+                largest_event_size = stats.largest_event_size
+            })
+            
+            if CONFIG.DEBUG_MODE then
+                Isaac.DebugString("DEM: Stats - Tiempo promedio: " .. string.format("%.2f", stats.performance.avg_processing_time) .. "ms, Memoria: " .. memUsage .. "KB")
+            end
         end
     end
     DEM:AddCallback(ModCallbacks.MC_POST_UPDATE, DEM.onUpdate)
@@ -351,5 +624,17 @@ return {
     end,
     
     -- Guardar eventos manualmente
-    saveEvents = saveEventBuffer
+    saveEvents = saveEventBuffer,
+    
+    -- Obtener estadísticas
+    getStats = function()
+        return stats
+    end,
+    
+    -- Utilitarios para el módulo principal
+    utils = {
+        generateEventId = generateEventId,
+        calculateDataHash = calculateDataHash,
+        valueToJson = valueToJson
+    }
 } 

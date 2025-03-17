@@ -89,11 +89,7122 @@
       },
       "event_id": "dem_room_entered_111_111",
       "processed_timestamp": "2025-03-16T22:58:55.645963"
+    },
+    {
+      "game_data": {
+        "level": 1,
+        "seed": 347817689,
+        "frame_count": 1800,
+        "room_type": 1,
+        "room_id": 84,
+        "stage_type": 0
+      },
+      "timestamp": 1800,
+      "event_type": "gameplay_snapshot",
+      "data": {
+        "enemies": 0,
+        "frame": 1800,
+        "room_id": 84,
+        "player_position": {
+          "x": 320.0,
+          "y": 380.0
+        }
+      },
+      "event_id": "dem_gameplay_snapshot_1800_1800",
+      "processed_timestamp": "2025-03-17T10:10:25.426431"
+    },
+    {
+      "game_data": {
+        "level": 1,
+        "seed": 347817689,
+        "frame_count": 2038,
+        "room_type": 1,
+        "room_id": 85,
+        "stage_type": 0
+      },
+      "timestamp": 2038,
+      "event_type": "room_entered",
+      "data": {
+        "room_shape": 12,
+        "room_type": 1
+      },
+      "event_id": "dem_room_entered_2038_2038",
+      "processed_timestamp": "2025-03-17T10:16:23.124451"
+    },
+    {
+      "game_data": {
+        "level": 1,
+        "seed": 347817689,
+        "frame_count": 2100,
+        "room_type": 1,
+        "room_id": 85,
+        "stage_type": 0
+      },
+      "timestamp": 2100,
+      "event_type": "gameplay_snapshot",
+      "data": {
+        "enemies": 6,
+        "frame": 2100,
+        "room_id": 85,
+        "player_position": {
+          "x": 70.035263061523,
+          "y": 408.26095581055
+        }
+      },
+      "event_id": "dem_gameplay_snapshot_2100_2100",
+      "processed_timestamp": "2025-03-17T10:16:23.124451"
+    },
+    {
+      "game_data": {
+        "level": 1,
+        "seed": 347817689,
+        "frame_count": 2400,
+        "room_type": 1,
+        "room_id": 85,
+        "stage_type": 0
+      },
+      "timestamp": 2400,
+      "event_type": "gameplay_snapshot",
+      "data": {
+        "enemies": 4,
+        "frame": 2400,
+        "room_id": 85,
+        "player_position": {
+          "x": 519.01275634766,
+          "y": 371.09149169922
+        }
+      },
+      "event_id": "dem_gameplay_snapshot_2400_2400",
+      "processed_timestamp": "2025-03-17T10:16:53.223861"
+    },
+    {
+      "game_data": {
+        "level": 1,
+        "seed": 347817689,
+        "frame_count": 2700,
+        "room_type": 1,
+        "room_id": 85,
+        "stage_type": 0
+      },
+      "timestamp": 2700,
+      "event_type": "gameplay_snapshot",
+      "data": {
+        "enemies": 1,
+        "frame": 2700,
+        "room_id": 85,
+        "player_position": {
+          "x": 476.42388916016,
+          "y": 230.02876281738
+        }
+      },
+      "event_id": "dem_gameplay_snapshot_2700_2700",
+      "processed_timestamp": "2025-03-17T10:16:53.223861"
+    },
+    {
+      "game_data": {
+        "level": 1,
+        "seed": 347817689,
+        "frame_count": 3939,
+        "room_type": 1,
+        "room_id": 85,
+        "stage_type": 0
+      },
+      "timestamp": 3939,
+      "event_type": "room_entered",
+      "data": {
+        "room_shape": 12,
+        "room_type": 1
+      },
+      "event_id": "dem_room_entered_3939_3939",
+      "processed_timestamp": "2025-03-17T10:22:24.192156"
+    },
+    {
+      "game_data": {
+        "level": 1,
+        "seed": 347817689,
+        "frame_count": 4069,
+        "room_type": 1,
+        "room_id": 111,
+        "stage_type": 0
+      },
+      "timestamp": 4069,
+      "event_type": "room_entered",
+      "data": {
+        "room_shape": 12,
+        "room_type": 1
+      },
+      "event_id": "dem_room_entered_4069_4069",
+      "processed_timestamp": "2025-03-17T10:22:24.192156"
+    },
+    {
+      "game_data": {
+        "level": 1,
+        "seed": 347817689,
+        "frame_count": 4612,
+        "room_type": 1,
+        "room_id": 85,
+        "stage_type": 0
+      },
+      "timestamp": 4612,
+      "event_type": "room_entered",
+      "data": {
+        "room_shape": 12,
+        "room_type": 1
+      },
+      "event_id": "dem_room_entered_4612_4612",
+      "processed_timestamp": "2025-03-17T10:23:24.362826"
+    },
+    {
+      "game_data": {
+        "level": 1,
+        "seed": 347817689,
+        "frame_count": 4710,
+        "room_type": 1,
+        "room_id": 84,
+        "stage_type": 0
+      },
+      "timestamp": 4710,
+      "event_type": "room_entered",
+      "data": {
+        "room_shape": 1,
+        "room_type": 1
+      },
+      "event_id": "dem_room_entered_4710_4710",
+      "processed_timestamp": "2025-03-17T10:23:24.362826"
+    },
+    {
+      "game_data": {
+        "level": 1,
+        "seed": 347817689,
+        "frame_count": 4772,
+        "room_type": 1,
+        "room_id": 69,
+        "stage_type": 0
+      },
+      "timestamp": 4772,
+      "event_type": "room_entered",
+      "data": {
+        "room_shape": 11,
+        "room_type": 1
+      },
+      "event_id": "dem_room_entered_4772_4772",
+      "processed_timestamp": "2025-03-17T10:23:24.362826"
+    },
+    {
+      "game_data": {
+        "level": 1,
+        "seed": 1747123797,
+        "frame_count": 590,
+        "room_type": 1,
+        "room_id": 84,
+        "stage_type": 0
+      },
+      "timestamp": 590,
+      "event_type": "room_entered",
+      "data": {
+        "room_shape": 1,
+        "room_type": 1
+      },
+      "event_id": "dem_room_entered_590_590",
+      "processed_timestamp": "2025-03-17T10:23:54.474557"
+    },
+    {
+      "game_data": {
+        "level": 1,
+        "seed": 1747123797,
+        "frame_count": 643,
+        "room_type": 1,
+        "room_id": 83,
+        "stage_type": 0
+      },
+      "timestamp": 643,
+      "event_type": "room_entered",
+      "data": {
+        "room_shape": 1,
+        "room_type": 1
+      },
+      "event_id": "dem_room_entered_643_643",
+      "processed_timestamp": "2025-03-17T10:24:14.882460"
+    },
+    {
+      "game_data": {
+        "level": 1,
+        "seed": 1747123797,
+        "frame_count": 1765,
+        "room_type": 1,
+        "room_id": 95,
+        "stage_type": 0
+      },
+      "timestamp": 1765,
+      "event_type": "room_entered",
+      "data": {
+        "room_shape": 1,
+        "room_type": 1
+      },
+      "event_id": "dem_room_entered_1765_1765",
+      "processed_timestamp": "2025-03-17T10:24:54.505936"
+    },
+    {
+      "game_data": {
+        "level": 1,
+        "seed": 1747123797,
+        "frame_count": 2972,
+        "room_type": 5,
+        "room_id": 108,
+        "stage_type": 0
+      },
+      "timestamp": 2972,
+      "event_type": "room_entered",
+      "data": {
+        "room_shape": 1,
+        "room_type": 5
+      },
+      "event_id": "dem_room_entered_2972_2972",
+      "processed_timestamp": "2025-03-17T10:25:24.604987"
+    },
+    {
+      "game_data": {
+        "level": 1,
+        "seed": 1747123797,
+        "frame_count": 3410,
+        "room_type": 5,
+        "room_id": 108,
+        "stage_type": 0
+      },
+      "timestamp": 3410,
+      "event_type": "item_collected",
+      "data": {
+        "item_name": "Unknown",
+        "item_id": 0
+      },
+      "event_id": "dem_item_collected_3410_3410",
+      "processed_timestamp": "2025-03-17T10:25:54.707793"
+    },
+    {
+      "game_data": {
+        "level": 2,
+        "seed": 1747123797,
+        "frame_count": 4100,
+        "room_type": 4,
+        "room_id": 82,
+        "stage_type": 0
+      },
+      "timestamp": 4100,
+      "event_type": "item_collected",
+      "data": {
+        "item_name": "#FINGER_NAME",
+        "item_id": 467
+      },
+      "event_id": "dem_item_collected_4100_4100",
+      "processed_timestamp": "2025-03-17T10:26:54.895222"
+    },
+    {
+      "game_data": {
+        "level": 2,
+        "seed": 1747123797,
+        "frame_count": 5400,
+        "room_type": 1,
+        "room_id": 43,
+        "stage_type": 0
+      },
+      "timestamp": 5400,
+      "event_type": "gameplay_snapshot",
+      "data": {
+        "enemies": 2,
+        "frame": 5400,
+        "room_id": 43,
+        "player_position": {
+          "x": 189.01365661621,
+          "y": 289.99954223633
+        }
+      },
+      "event_id": "dem_gameplay_snapshot_5400_5400",
+      "processed_timestamp": "2025-03-17T10:27:21.080336"
+    },
+    {
+      "game_data": {
+        "level": 2,
+        "seed": 1747123797,
+        "frame_count": 5719,
+        "room_type": 1,
+        "room_id": 43,
+        "stage_type": 0
+      },
+      "timestamp": 5719,
+      "event_type": "room_entered",
+      "data": {
+        "room_shape": 4,
+        "room_type": 1
+      },
+      "event_id": "dem_room_entered_5719_5719",
+      "processed_timestamp": "2025-03-17T10:27:51.179562"
+    },
+    {
+      "game_data": {
+        "level": 2,
+        "seed": 1747123797,
+        "frame_count": 5795,
+        "room_type": 1,
+        "room_id": 55,
+        "stage_type": 0
+      },
+      "timestamp": 5795,
+      "event_type": "room_entered",
+      "data": {
+        "room_shape": 1,
+        "room_type": 1
+      },
+      "event_id": "dem_room_entered_5795_5795",
+      "processed_timestamp": "2025-03-17T10:27:51.179562"
+    },
+    {
+      "game_data": {
+        "level": 2,
+        "seed": 1747123797,
+        "frame_count": 5880,
+        "room_type": 1,
+        "room_id": 55,
+        "stage_type": 0
+      },
+      "timestamp": 5880,
+      "event_type": "player_damage",
+      "data": {
+        "soul_hearts_after": 6,
+        "damage_flags": 0,
+        "player_index": 0,
+        "damage_amount": 1.0,
+        "source_type": 868,
+        "hp_after": 6
+      },
+      "event_id": "dem_player_damage_5880_5880",
+      "processed_timestamp": "2025-03-17T10:27:51.179562"
+    },
+    {
+      "game_data": {
+        "level": 2,
+        "seed": 1747123797,
+        "frame_count": 5955,
+        "room_type": 1,
+        "room_id": 55,
+        "stage_type": 0
+      },
+      "timestamp": 5955,
+      "event_type": "player_damage",
+      "data": {
+        "soul_hearts_after": 5,
+        "damage_flags": 0,
+        "player_index": 0,
+        "damage_amount": 2.0,
+        "source_type": 9,
+        "hp_after": 6
+      },
+      "event_id": "dem_player_damage_5955_5955",
+      "processed_timestamp": "2025-03-17T10:27:51.179562"
+    },
+    {
+      "game_data": {
+        "level": 2,
+        "seed": 1747123797,
+        "frame_count": 6895,
+        "room_type": 5,
+        "room_id": 68,
+        "stage_type": 0
+      },
+      "timestamp": 6895,
+      "event_type": "item_collected",
+      "data": {
+        "item_name": "Unknown",
+        "item_id": 0
+      },
+      "event_id": "dem_item_collected_6895_6895",
+      "processed_timestamp": "2025-03-17T10:28:21.276446"
+    },
+    {
+      "game_data": {
+        "level": 2,
+        "seed": 1747123797,
+        "frame_count": 6896,
+        "room_type": 5,
+        "room_id": 68,
+        "stage_type": 0
+      },
+      "timestamp": 6896,
+      "event_type": "item_collected",
+      "data": {
+        "item_name": "Unknown",
+        "item_id": 0
+      },
+      "event_id": "dem_item_collected_6896_6896",
+      "processed_timestamp": "2025-03-17T10:28:21.276446"
+    },
+    {
+      "game_data": {
+        "level": 2,
+        "seed": 1747123797,
+        "frame_count": 6897,
+        "room_type": 5,
+        "room_id": 68,
+        "stage_type": 0
+      },
+      "timestamp": 6897,
+      "event_type": "item_collected",
+      "data": {
+        "item_name": "Unknown",
+        "item_id": 0
+      },
+      "event_id": "dem_item_collected_6897_6897",
+      "processed_timestamp": "2025-03-17T10:28:21.276446"
+    },
+    {
+      "game_data": {
+        "level": 2,
+        "seed": 1747123797,
+        "frame_count": 6898,
+        "room_type": 5,
+        "room_id": 68,
+        "stage_type": 0
+      },
+      "timestamp": 6898,
+      "event_type": "item_collected",
+      "data": {
+        "item_name": "Unknown",
+        "item_id": 0
+      },
+      "event_id": "dem_item_collected_6898_6898",
+      "processed_timestamp": "2025-03-17T10:28:21.276446"
+    },
+    {
+      "game_data": {
+        "level": 2,
+        "seed": 1747123797,
+        "frame_count": 6900,
+        "room_type": 5,
+        "room_id": 68,
+        "stage_type": 0
+      },
+      "timestamp": 6900,
+      "event_type": "gameplay_snapshot",
+      "data": {
+        "enemies": 0,
+        "frame": 6900,
+        "room_id": 68,
+        "player_position": {
+          "x": 313.64108276367,
+          "y": 384.85137939453
+        }
+      },
+      "event_id": "dem_gameplay_snapshot_6900_6900",
+      "processed_timestamp": "2025-03-17T10:28:21.276446"
+    },
+    {
+      "game_data": {
+        "level": 3,
+        "seed": 1747123797,
+        "frame_count": 7236,
+        "room_type": 1,
+        "room_id": 58,
+        "stage_type": 0
+      },
+      "timestamp": 7236,
+      "event_type": "player_damage",
+      "data": {
+        "soul_hearts_after": 0,
+        "damage_flags": 0,
+        "player_index": 0,
+        "damage_amount": 1.0,
+        "source_type": 881,
+        "hp_after": 4
+      },
+      "event_id": "dem_player_damage_7236_7236",
+      "processed_timestamp": "2025-03-17T10:28:51.376719"
+    },
+    {
+      "game_data": {
+        "level": 3,
+        "seed": 1747123797,
+        "frame_count": 7467,
+        "room_type": 2,
+        "room_id": 57,
+        "stage_type": 0
+      },
+      "timestamp": 7467,
+      "event_type": "room_entered",
+      "data": {
+        "room_shape": 1,
+        "room_type": 2
+      },
+      "event_id": "dem_room_entered_7467_7467",
+      "processed_timestamp": "2025-03-17T10:28:51.376719"
+    },
+    {
+      "game_data": {
+        "level": 3,
+        "seed": 1747123797,
+        "frame_count": 7497,
+        "room_type": 1,
+        "room_id": 58,
+        "stage_type": 0
+      },
+      "timestamp": 7497,
+      "event_type": "room_entered",
+      "data": {
+        "room_shape": 1,
+        "room_type": 1
+      },
+      "event_id": "dem_room_entered_7497_7497",
+      "processed_timestamp": "2025-03-17T10:28:51.376719"
+    },
+    {
+      "game_data": {
+        "level": 3,
+        "seed": 1747123797,
+        "frame_count": 7500,
+        "room_type": 1,
+        "room_id": 58,
+        "stage_type": 0
+      },
+      "timestamp": 7500,
+      "event_type": "gameplay_snapshot",
+      "data": {
+        "enemies": 0,
+        "frame": 7500,
+        "room_id": 58,
+        "player_position": {
+          "x": 93.387130737305,
+          "y": 280.0
+        }
+      },
+      "event_id": "dem_gameplay_snapshot_7500_7500",
+      "processed_timestamp": "2025-03-17T10:28:51.376719"
+    },
+    {
+      "game_data": {
+        "level": 3,
+        "seed": 1747123797,
+        "frame_count": 7565,
+        "room_type": 1,
+        "room_id": 59,
+        "stage_type": 0
+      },
+      "timestamp": 7565,
+      "event_type": "room_entered",
+      "data": {
+        "room_shape": 1,
+        "room_type": 1
+      },
+      "event_id": "dem_room_entered_7565_7565",
+      "processed_timestamp": "2025-03-17T10:28:51.376719"
+    },
+    {
+      "game_data": {
+        "level": 1,
+        "seed": 3613952099,
+        "frame_count": 13,
+        "room_type": 1,
+        "room_id": 84,
+        "stage_type": 0
+      },
+      "timestamp": 13,
+      "event_type": "game_exit",
+      "data": {
+        "timestamp": 13
+      },
+      "event_id": "dem_game_exit_13_13",
+      "processed_timestamp": "2025-03-17T10:29:21.468801"
+    },
+    {
+      "event_id": "dem_test_event_0_0",
+      "data": {
+        "test_number": 3,
+        "message": "Evento de prueba 3 generado al iniciar"
+      },
+      "game_data": {
+        "stage_type": 0,
+        "room_id": 84,
+        "frame_count": 0,
+        "room_type": 1,
+        "level": 1,
+        "seed": 2839558344
+      },
+      "event_type": "test_event",
+      "timestamp": 0,
+      "processed_timestamp": "2025-03-17T10:47:46.511705"
+    },
+    {
+      "event_id": "dem_room_entered_43_43",
+      "data": {
+        "room_type": 1,
+        "room_shape": 1
+      },
+      "game_data": {
+        "stage_type": 0,
+        "room_id": 83,
+        "frame_count": 43,
+        "room_type": 1,
+        "level": 1,
+        "seed": 2839558344
+      },
+      "event_type": "room_entered",
+      "timestamp": 43,
+      "processed_timestamp": "2025-03-17T10:52:41.022984"
+    },
+    {
+      "event_id": "dem_game_exit_291_291",
+      "data": {
+        "timestamp": 291
+      },
+      "game_data": {
+        "stage_type": 0,
+        "room_id": 83,
+        "frame_count": 291,
+        "room_type": 1,
+        "level": 1,
+        "seed": 2839558344
+      },
+      "event_type": "game_exit",
+      "timestamp": 291,
+      "processed_timestamp": "2025-03-17T10:52:41.022984"
+    },
+    {
+      "events": [
+        {
+          "event_id": "dem_room_entered_959_959",
+          "timestamp": 959,
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "game_state": {
+            "seed": 2942901911,
+            "room_id": 71,
+            "frame": 959,
+            "level": 1
+          }
+        }
+      ],
+      "stats": {
+        "performance": {
+          "processing_samples": 14,
+          "avg_processing_time": 0.071428571428571
+        },
+        "total_events_saved": 13,
+        "last_save_timestamp": 600,
+        "save_operations": 2,
+        "largest_event_size": 753,
+        "current_file_index": 1,
+        "total_events_recorded": 14
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "event_count": 1,
+        "is_ml_data": true,
+        "timestamp": 1200
+      },
+      "processed_timestamp": "2025-03-17T11:21:31.425934"
+    },
+    {
+      "events": [
+        {
+          "event_id": "dem_room_entered_1314_1314",
+          "timestamp": 1314,
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 8,
+            "room_type": 1
+          },
+          "game_state": {
+            "seed": 2942901911,
+            "room_id": 45,
+            "frame": 1314,
+            "level": 1
+          }
+        },
+        {
+          "event_id": "dem_player_damage_detailed_1670_1670",
+          "timestamp": 1670,
+          "event_type": "player_damage_detailed",
+          "data": {
+            "damage_amount": 1.0,
+            "frame_count": 1670,
+            "invincibility_frames": 1670,
+            "soul_hearts_after": 0,
+            "source": {
+              "type": 10,
+              "entity_type": "Unknown",
+              "variant": 0
+            },
+            "hp_after": 3,
+            "player_position": {
+              "x": 905.76629638672,
+              "y": 223.3077545166
+            },
+            "room_id": 45,
+            "player_velocity": {
+              "x": -4.0316641047866e-07,
+              "y": -0.00058504129992798
+            },
+            "player_index": 0,
+            "damage_flags": 0,
+            "soul_hearts_before": 0,
+            "hp_before": 4.0
+          },
+          "game_state": {
+            "seed": 2942901911,
+            "room_id": 45,
+            "frame": 1670,
+            "level": 1
+          }
+        },
+        {
+          "event_id": "dem_player_damage_detailed_1700_1700",
+          "timestamp": 1700,
+          "event_type": "player_damage_detailed",
+          "data": {
+            "damage_amount": 1.0,
+            "frame_count": 1700,
+            "invincibility_frames": 1700,
+            "soul_hearts_after": 0,
+            "source": {
+              "type": 10,
+              "entity_type": "Unknown",
+              "variant": 0
+            },
+            "hp_after": 2,
+            "player_position": {
+              "x": 895.65197753906,
+              "y": 150.56953430176
+            },
+            "room_id": 45,
+            "player_velocity": {
+              "x": -0.036129258573055,
+              "y": 0.031698696315289
+            },
+            "player_index": 0,
+            "damage_flags": 0,
+            "soul_hearts_before": 0,
+            "hp_before": 3.0
+          },
+          "game_state": {
+            "seed": 2942901911,
+            "room_id": 45,
+            "frame": 1700,
+            "level": 1
+          }
+        },
+        {
+          "event_id": "dem_player_damage_detailed_1730_1730",
+          "timestamp": 1730,
+          "event_type": "player_damage_detailed",
+          "data": {
+            "damage_amount": 1.0,
+            "frame_count": 1730,
+            "invincibility_frames": 1730,
+            "soul_hearts_after": 0,
+            "source": {
+              "type": 10,
+              "entity_type": "Unknown",
+              "variant": 0
+            },
+            "hp_after": 1,
+            "player_position": {
+              "x": 892.90405273438,
+              "y": 150.62338256836
+            },
+            "room_id": 45,
+            "player_velocity": {
+              "x": -0.00071935058804229,
+              "y": 0.00035482694511302
+            },
+            "player_index": 0,
+            "damage_flags": 0,
+            "soul_hearts_before": 0,
+            "hp_before": 2.0
+          },
+          "game_state": {
+            "seed": 2942901911,
+            "room_id": 45,
+            "frame": 1730,
+            "level": 1
+          }
+        },
+        {
+          "event_id": "dem_game_exit_1738_1738",
+          "timestamp": 1738,
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 1738
+          },
+          "game_state": {
+            "seed": 2942901911,
+            "room_id": 45,
+            "frame": 1738,
+            "level": 1
+          }
+        }
+      ],
+      "stats": {
+        "performance": {
+          "processing_samples": 19,
+          "avg_processing_time": 0.10526315789474
+        },
+        "total_events_saved": 14,
+        "last_save_timestamp": 1200,
+        "save_operations": 3,
+        "largest_event_size": 758,
+        "current_file_index": 1,
+        "total_events_recorded": 19
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "event_count": 5,
+        "is_ml_data": true,
+        "timestamp": 1738
+      },
+      "processed_timestamp": "2025-03-17T11:22:31.514502"
+    },
+    {
+      "events": [
+        {
+          "event_id": "dem_room_entered_1314_1314",
+          "timestamp": 1314,
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 8,
+            "room_type": 1
+          },
+          "game_state": {
+            "seed": 2942901911,
+            "room_id": 45,
+            "frame": 1314,
+            "level": 1
+          }
+        },
+        {
+          "event_id": "dem_player_damage_detailed_1670_1670",
+          "timestamp": 1670,
+          "event_type": "player_damage_detailed",
+          "data": {
+            "damage_amount": 1.0,
+            "frame_count": 1670,
+            "invincibility_frames": 1670,
+            "soul_hearts_after": 0,
+            "source": {
+              "type": 10,
+              "entity_type": "Unknown",
+              "variant": 0
+            },
+            "hp_after": 3,
+            "player_position": {
+              "x": 905.76629638672,
+              "y": 223.3077545166
+            },
+            "room_id": 45,
+            "player_velocity": {
+              "x": -4.0316641047866e-07,
+              "y": -0.00058504129992798
+            },
+            "player_index": 0,
+            "damage_flags": 0,
+            "soul_hearts_before": 0,
+            "hp_before": 4.0
+          },
+          "game_state": {
+            "seed": 2942901911,
+            "room_id": 45,
+            "frame": 1670,
+            "level": 1
+          }
+        },
+        {
+          "event_id": "dem_player_damage_detailed_1700_1700",
+          "timestamp": 1700,
+          "event_type": "player_damage_detailed",
+          "data": {
+            "damage_amount": 1.0,
+            "frame_count": 1700,
+            "invincibility_frames": 1700,
+            "soul_hearts_after": 0,
+            "source": {
+              "type": 10,
+              "entity_type": "Unknown",
+              "variant": 0
+            },
+            "hp_after": 2,
+            "player_position": {
+              "x": 895.65197753906,
+              "y": 150.56953430176
+            },
+            "room_id": 45,
+            "player_velocity": {
+              "x": -0.036129258573055,
+              "y": 0.031698696315289
+            },
+            "player_index": 0,
+            "damage_flags": 0,
+            "soul_hearts_before": 0,
+            "hp_before": 3.0
+          },
+          "game_state": {
+            "seed": 2942901911,
+            "room_id": 45,
+            "frame": 1700,
+            "level": 1
+          }
+        },
+        {
+          "event_id": "dem_player_damage_detailed_1730_1730",
+          "timestamp": 1730,
+          "event_type": "player_damage_detailed",
+          "data": {
+            "damage_amount": 1.0,
+            "frame_count": 1730,
+            "invincibility_frames": 1730,
+            "soul_hearts_after": 0,
+            "source": {
+              "type": 10,
+              "entity_type": "Unknown",
+              "variant": 0
+            },
+            "hp_after": 1,
+            "player_position": {
+              "x": 892.90405273438,
+              "y": 150.62338256836
+            },
+            "room_id": 45,
+            "player_velocity": {
+              "x": -0.00071935058804229,
+              "y": 0.00035482694511302
+            },
+            "player_index": 0,
+            "damage_flags": 0,
+            "soul_hearts_before": 0,
+            "hp_before": 2.0
+          },
+          "game_state": {
+            "seed": 2942901911,
+            "room_id": 45,
+            "frame": 1730,
+            "level": 1
+          }
+        },
+        {
+          "event_id": "dem_game_exit_1738_1738",
+          "timestamp": 1738,
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 1738
+          },
+          "game_state": {
+            "seed": 2942901911,
+            "room_id": 45,
+            "frame": 1738,
+            "level": 1
+          }
+        }
+      ],
+      "stats": {
+        "performance": {
+          "processing_samples": 19,
+          "avg_processing_time": 0.10526315789474
+        },
+        "total_events_saved": 14,
+        "last_save_timestamp": 1200,
+        "save_operations": 3,
+        "largest_event_size": 758,
+        "current_file_index": 1,
+        "total_events_recorded": 19
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "event_count": 5,
+        "is_ml_data": true,
+        "timestamp": 1738
+      },
+      "processed_timestamp": "2025-03-17T11:23:31.611207"
+    },
+    {
+      "events": [
+        {
+          "event_id": "dem_room_entered_1314_1314",
+          "timestamp": 1314,
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 8,
+            "room_type": 1
+          },
+          "game_state": {
+            "seed": 2942901911,
+            "room_id": 45,
+            "frame": 1314,
+            "level": 1
+          }
+        },
+        {
+          "event_id": "dem_player_damage_detailed_1670_1670",
+          "timestamp": 1670,
+          "event_type": "player_damage_detailed",
+          "data": {
+            "damage_amount": 1.0,
+            "frame_count": 1670,
+            "invincibility_frames": 1670,
+            "soul_hearts_after": 0,
+            "source": {
+              "type": 10,
+              "entity_type": "Unknown",
+              "variant": 0
+            },
+            "hp_after": 3,
+            "player_position": {
+              "x": 905.76629638672,
+              "y": 223.3077545166
+            },
+            "room_id": 45,
+            "player_velocity": {
+              "x": -4.0316641047866e-07,
+              "y": -0.00058504129992798
+            },
+            "player_index": 0,
+            "damage_flags": 0,
+            "soul_hearts_before": 0,
+            "hp_before": 4.0
+          },
+          "game_state": {
+            "seed": 2942901911,
+            "room_id": 45,
+            "frame": 1670,
+            "level": 1
+          }
+        },
+        {
+          "event_id": "dem_player_damage_detailed_1700_1700",
+          "timestamp": 1700,
+          "event_type": "player_damage_detailed",
+          "data": {
+            "damage_amount": 1.0,
+            "frame_count": 1700,
+            "invincibility_frames": 1700,
+            "soul_hearts_after": 0,
+            "source": {
+              "type": 10,
+              "entity_type": "Unknown",
+              "variant": 0
+            },
+            "hp_after": 2,
+            "player_position": {
+              "x": 895.65197753906,
+              "y": 150.56953430176
+            },
+            "room_id": 45,
+            "player_velocity": {
+              "x": -0.036129258573055,
+              "y": 0.031698696315289
+            },
+            "player_index": 0,
+            "damage_flags": 0,
+            "soul_hearts_before": 0,
+            "hp_before": 3.0
+          },
+          "game_state": {
+            "seed": 2942901911,
+            "room_id": 45,
+            "frame": 1700,
+            "level": 1
+          }
+        },
+        {
+          "event_id": "dem_player_damage_detailed_1730_1730",
+          "timestamp": 1730,
+          "event_type": "player_damage_detailed",
+          "data": {
+            "damage_amount": 1.0,
+            "frame_count": 1730,
+            "invincibility_frames": 1730,
+            "soul_hearts_after": 0,
+            "source": {
+              "type": 10,
+              "entity_type": "Unknown",
+              "variant": 0
+            },
+            "hp_after": 1,
+            "player_position": {
+              "x": 892.90405273438,
+              "y": 150.62338256836
+            },
+            "room_id": 45,
+            "player_velocity": {
+              "x": -0.00071935058804229,
+              "y": 0.00035482694511302
+            },
+            "player_index": 0,
+            "damage_flags": 0,
+            "soul_hearts_before": 0,
+            "hp_before": 2.0
+          },
+          "game_state": {
+            "seed": 2942901911,
+            "room_id": 45,
+            "frame": 1730,
+            "level": 1
+          }
+        },
+        {
+          "event_id": "dem_game_exit_1738_1738",
+          "timestamp": 1738,
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 1738
+          },
+          "game_state": {
+            "seed": 2942901911,
+            "room_id": 45,
+            "frame": 1738,
+            "level": 1
+          }
+        }
+      ],
+      "stats": {
+        "performance": {
+          "processing_samples": 19,
+          "avg_processing_time": 0.10526315789474
+        },
+        "total_events_saved": 14,
+        "last_save_timestamp": 1200,
+        "save_operations": 3,
+        "largest_event_size": 758,
+        "current_file_index": 1,
+        "total_events_recorded": 19
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "event_count": 5,
+        "is_ml_data": true,
+        "timestamp": 1738
+      },
+      "processed_timestamp": "2025-03-17T11:24:31.709538"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T12:39:34.552162"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T12:40:34.739969"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T12:41:34.862239"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T12:42:35.055332"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T12:43:35.147224"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T12:44:35.236714"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T12:45:35.337403"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T12:46:35.428684"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T12:47:35.525672"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T12:48:35.618585"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T12:49:35.712971"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T12:50:35.811878"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T12:51:35.897429"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T12:52:36.017526"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T12:53:36.122227"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T12:54:36.232674"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T12:55:36.356455"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T12:56:36.460610"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T12:57:36.566720"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T12:58:36.670425"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T12:59:36.768649"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:00:36.875458"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:01:37.033333"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:02:37.184316"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:03:37.290435"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:04:37.399158"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:05:37.506756"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:06:37.607304"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:07:37.709691"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:08:37.814059"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:09:37.915561"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:10:38.033114"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:11:38.153408"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:12:38.267617"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:13:38.372238"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:14:38.470935"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:15:38.567882"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:16:38.665677"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:17:38.755305"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:18:38.851932"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:19:38.942393"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:20:39.040008"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:21:39.138812"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:22:39.242762"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:23:39.342654"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:24:39.440125"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:25:39.536868"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:26:39.641509"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:27:39.736223"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:28:39.844160"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:29:39.950467"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:30:40.048449"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:31:40.143145"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:32:40.234560"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:33:40.342921"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:34:40.435696"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:35:40.535409"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:36:40.637496"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:37:40.739712"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:38:40.845918"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:39:40.955316"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:40:41.059739"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:41:41.166823"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:42:41.271374"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:43:41.377859"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:44:41.481796"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:45:41.584604"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:46:41.687767"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:47:41.786941"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:48:41.888098"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:49:41.996478"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:50:42.099363"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:51:42.195171"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:52:42.295758"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:53:42.388756"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:54:42.496901"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:55:42.600401"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:56:42.710629"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:57:42.821562"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:58:42.939278"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T13:59:43.041778"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:00:43.146833"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:01:43.252091"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:02:43.353953"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:03:43.458909"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:04:43.561081"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:05:43.666541"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:06:43.777865"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:07:43.874943"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:08:43.993800"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:09:44.106035"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:10:44.206783"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:11:44.315102"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:12:44.418136"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:13:44.543552"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:14:44.660133"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:15:44.770946"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:16:44.878163"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:17:44.991585"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:18:45.093478"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:19:45.195836"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:20:45.297146"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:21:45.413848"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:22:45.523090"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:23:45.638919"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:24:45.754186"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:25:45.866462"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:26:45.979746"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:27:46.089755"
+    },
+    {
+      "stats": {
+        "performance": {
+          "avg_processing_time": 0.035714285714286,
+          "processing_samples": 28
+        },
+        "last_save_timestamp": 2400,
+        "current_file_index": 1,
+        "total_events_saved": 26,
+        "largest_event_size": 761,
+        "save_operations": 5,
+        "total_events_recorded": 28
+      },
+      "metadata": {
+        "version": "2.0",
+        "file_id": 1,
+        "timestamp": 3170,
+        "event_count": 2,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "timestamp": 3066,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3066,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "room_entered",
+          "data": {
+            "room_shape": 1,
+            "room_type": 1
+          },
+          "event_id": "dem_room_entered_3066_3066"
+        },
+        {
+          "timestamp": 3170,
+          "game_state": {
+            "room_id": 84,
+            "frame": 3170,
+            "seed": 3870072810,
+            "level": 2
+          },
+          "event_type": "game_exit",
+          "data": {
+            "timestamp": 3170
+          },
+          "event_id": "dem_game_exit_3170_3170"
+        }
+      ],
+      "processed_timestamp": "2025-03-17T14:28:46.198174"
+    },
+    {
+      "metadata": {
+        "version": "2.0",
+        "event_count": 3,
+        "file_id": 1,
+        "timestamp": 0,
+        "is_ml_data": true
+      },
+      "events": [
+        {
+          "data": {
+            "room_type": 1,
+            "room_shape": 1
+          },
+          "event_id": "dem_room_entered_0_0",
+          "event_type": "room_entered",
+          "timestamp": 0,
+          "game_state": {
+            "room_id": 84,
+            "level": 1,
+            "frame": 0,
+            "seed": 143091855
+          }
+        },
+        {
+          "data": {
+            "player_type": 0,
+            "hard_mode": false,
+            "continued": false
+          },
+          "event_id": "dem_game_start_0_0",
+          "event_type": "game_start",
+          "timestamp": 0,
+          "game_state": {
+            "room_id": 84,
+            "level": 1,
+            "frame": 0,
+            "seed": 143091855
+          }
+        },
+        {
+          "data": {
+            "version": "2.0",
+            "continued": false,
+            "data_types": [
+              "player_state",
+              "entity_tracking",
+              "room_mapping",
+              "input_tracking",
+              "physics_calculation"
+            ],
+            "processing_frequency": 1,
+            "player_type": 0,
+            "hard_mode": false,
+            "ml_enabled": true,
+            "timestamp": 0,
+            "raw_seed": 143091855,
+            "seed": "A7YB Q6ZA"
+          },
+          "event_id": "dem_game_start_ml_0_0",
+          "event_type": "game_start_ml",
+          "timestamp": 0,
+          "game_state": {
+            "room_id": 84,
+            "level": 1,
+            "frame": 0,
+            "seed": 143091855
+          }
+        }
+      ],
+      "stats": {
+        "save_operations": 0,
+        "performance": {
+          "avg_processing_time": 0.0,
+          "processing_samples": 3
+        },
+        "last_save_timestamp": 0,
+        "current_file_index": 1,
+        "total_events_recorded": 3,
+        "total_events_saved": 0,
+        "largest_event_size": 571
+      },
+      "processed_timestamp": "2025-03-17T15:12:14.906511"
     }
   ],
   "metadata": {
-    "last_update": "2025-03-16T22:58:55.646975",
-    "total_events": 5,
+    "last_update": "2025-03-17T15:12:14.909012",
+    "total_events": 155,
     "version": "1.0"
   }
 }
