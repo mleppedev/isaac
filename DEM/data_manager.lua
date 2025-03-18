@@ -605,7 +605,7 @@ initialize()
 registerCallbacks()
 
 -- Exponer la API
-return {
+DataManager = {
     -- Registrar evento manualmente
     recordEvent = recordEvent,
     
@@ -709,12 +709,18 @@ return {
             
             return false
         end
-    }
+    },
+    
+    -- Referencia al mod para acceso a SaveModData
+    MOD_REF = nil,
+    
+    -- Versión del DataManager
+    VERSION = "2.0"
 }
 
 -- Función para registrar un evento de control de IA
-function DataManager.recordControlEvent(action, result)
-    DataManager.recordEvent("ai_control", {
+DataManager.recordControlEvent = function(action, result)
+    recordEvent("ai_control", {
         action = action,
         result = result,
         timestamp = Game():GetFrameCount()
@@ -722,7 +728,7 @@ function DataManager.recordControlEvent(action, result)
 end
 
 -- Función para procesar comandos recibidos desde el servidor web
-function DataManager.processCommandsFromServer()
+DataManager.processCommandsFromServer = function()
     -- Necesitamos acceder al mod global o pasar la referencia
     local mod = DataManager.MOD_REF
     
@@ -773,49 +779,10 @@ function DataManager.processCommandsFromServer()
     end
 end
 
--- Añadir función de procesamiento de comandos al update
-local originalUpdateFunction = DataManager.update
+-- Configurar la función de actualización
 DataManager.update = function()
-    -- Llamar a la función original
-    originalUpdateFunction()
-    
     -- Procesar comandos desde el servidor
     DataManager.processCommandsFromServer()
-end
-
-local DataManager = {
-    -- Configuración
-    config = {
-        saveInterval = 60 * 5, -- Cada 5 segundos (60 fps * 5)
-        maxEventsPerSave = 300, -- Número máximo de eventos por archivo
-        compressionEnabled = true, -- Comprimir datos
-        detailedDebug = false, -- Debug detallado
-        dedicatedFiles = true -- Usar archivos dedicados para ML
-    },
-    
-    -- Estado interno
-    internal = {
-        eventBuffer = {},
-        totalEventsRecorded = 0,
-        totalEventsSaved = 0,
-        largestEventSize = 0,
-        lastSaveTime = 0,
-        fileIdCounter = 1,
-        saveOperations = 0,
-        modInitialized = false
-    },
-    
-    -- Referencia al mod para acceso a SaveModData
-    MOD_REF = nil,
-    
-    -- Versión del DataManager
-    VERSION = "2.0"
-}
-
--- Función para establecer la referencia al mod
-function DataManager.setModReference(mod)
-    DataManager.MOD_REF = mod
-    return DataManager
 end
 
 return DataManager 

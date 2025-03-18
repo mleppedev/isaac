@@ -123,8 +123,8 @@ function DEM:mapCurrentRoom()
     
     -- Detectar el tipo de habitación y características especiales
     layout.roomType = room:GetType()
-    layout.difficulty = room:GetRoomConfigDifficulty()
-    layout.roomVariant = room:GetAltRockIdx() -- Da un valor que representa la variante de la habitación
+    layout.difficulty = 0 -- Usar un valor por defecto
+    layout.roomVariant = 0 -- Usar un valor por defecto
     layout.isFirstVisit = not room:IsFirstVisit()
     
     return layout
@@ -133,6 +133,9 @@ end
 -- Capturar datos detallados del jugador
 function DEM:capturePlayerState(player)
     if not player then return {} end
+    
+    -- Verificar que el jugador sea válido y responda a los métodos de salud
+    local canGetHealth = pcall(function() return player:GetHearts() end)
     
     local playerData = {
         position = {
@@ -144,13 +147,13 @@ function DEM:capturePlayerState(player)
             y = player.Velocity.Y
         },
         health = {
-            hearts = player:GetHearts(),
-            max_hearts = player:GetMaxHearts(),
-            soul_hearts = player:GetSoulHearts(),
-            black_hearts = player:GetBlackHearts(),
-            bone_hearts = player:GetBoneHearts(),
-            eternal_hearts = player:GetEternalHearts(),
-            golden_hearts = player:GetGoldenHearts()
+            hearts = canGetHealth and player:GetHearts() or 0,
+            max_hearts = canGetHealth and player:GetMaxHearts() or 0,
+            soul_hearts = canGetHealth and player:GetSoulHearts() or 0,
+            black_hearts = canGetHealth and player:GetBlackHearts() or 0,
+            bone_hearts = canGetHealth and player:GetBoneHearts() or 0,
+            eternal_hearts = canGetHealth and player:GetEternalHearts() or 0,
+            golden_hearts = canGetHealth and player:GetGoldenHearts() or 0
         },
         stats = {
             speed = player.MoveSpeed,
@@ -353,7 +356,8 @@ function DEM:captureInputs()
         is_virtual_input = true
     else
         -- Comprobar todas las acciones de botón
-        for i = 0, ButtonAction.NUM_BUTTON_ACTIONS - 1 do
+        -- Usar un valor fijo en lugar de ButtonAction.NUM_BUTTON_ACTIONS
+        for i = 0, 19 do -- 20 acciones posibles debería ser suficiente
             local action = i -- ButtonAction value
             local value = Input.GetActionValue(action, 0) -- Controlador 0 (principal)
             
@@ -545,6 +549,9 @@ function DEM:onPlayerDamage(entity, amount, flags, source)
     if entity and entity:ToPlayer() then
         local player = entity:ToPlayer()
         
+        -- Verificar que el jugador pueda responder a los métodos de salud
+        local canGetHealth = pcall(function() return player:GetHearts() end)
+        
         -- Obtener información sobre la fuente de daño
         local sourceInfo = {
             type = source and source.Type or -1,
@@ -573,10 +580,10 @@ function DEM:onPlayerDamage(entity, amount, flags, source)
             damage_amount = amount,
             damage_flags = flags,
             source = sourceInfo,
-            hp_before = player:GetHearts() + amount,
-            hp_after = player:GetHearts(),
-            soul_hearts_before = player:GetSoulHearts(),
-            soul_hearts_after = player:GetSoulHearts(),
+            hp_before = canGetHealth and (player:GetHearts() + amount) or 0,
+            hp_after = canGetHealth and player:GetHearts() or 0,
+            soul_hearts_before = canGetHealth and player:GetSoulHearts() or 0,
+            soul_hearts_after = canGetHealth and player:GetSoulHearts() or 0,
             player_position = {
                 x = player.Position.X,
                 y = player.Position.Y

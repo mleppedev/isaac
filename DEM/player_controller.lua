@@ -253,17 +253,17 @@ function PlayerController:onRender()
     
     -- Mostrar valores de entrada virtuales
     local y_pos = 50
-    Isaac.RenderText(text, 50, y_pos, 1, 1, 1, 1)
+    Isaac.RenderText(text, 70, y_pos, 1, 1, 1, 1)
     y_pos = y_pos + 15
     
     -- Mostrar estados de teclas
     for section, inputs in pairs(self.virtual_inputs) do
-        Isaac.RenderText(section .. ":", 50, y_pos, 1, 1, 1, 1)
+        Isaac.RenderText(section .. ":", 70, y_pos, 1, 1, 1, 1)
         y_pos = y_pos + 12
         
         for dir, value in pairs(inputs) do
             local color = value > 0 and "1,0,0" or "0.5,0.5,0.5"
-            Isaac.RenderText("  " .. dir .. ": " .. value, 50, y_pos, 1, 1, 1, 1)
+            Isaac.RenderText("  " .. dir .. ": " .. value, 70, y_pos, 1, 1, 1, 1)
             y_pos = y_pos + 10
         end
         y_pos = y_pos + 5
