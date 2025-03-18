@@ -29,7 +29,7 @@ local game = Game()
 -- Variables para el seguimiento detallado
 local currentRoomLayout = {}
 local lastFrameProcessed = 0
-local processingFrequency = 1  -- Cada cuántos frames capturar datos (1 = cada frame)
+local processingFrequency = 1  -- Cada cuántos frames capturar datos (1 = cada frame, aumentar solo si hay problemas de rendimiento)
 local lastInputState = {}
 local roomsExplored = {}
 local entityTracking = {}
@@ -42,6 +42,7 @@ local playerVelocity = Vector(0, 0)
 Isaac.DebugString("DEM: -------------------------------")
 Isaac.DebugString("DEM: Mod mejorado para ML/IA inicializado")
 Isaac.DebugString("DEM: Recopilando datos granulares para entrenamiento")
+Isaac.DebugString("DEM: Configurado para capturar en cada frame")
 Isaac.DebugString("DEM: -------------------------------")
 
 -- Inicializar el controlador del jugador
@@ -427,45 +428,39 @@ function DEM:calculatePlayerVelocity(player)
     return playerVelocity
 end
 
--- Actualización por frame para capturar datos continuos
+-- Actualización principal de datos (llamada cada frame)
 function DEM:onUpdate()
-    -- Solo procesar cada ciertos frames para no sobrecargarse
-    if not dataCollectionEnabled then return end
-    
-    local currentFrame = game:GetFrameCount()
-    if currentFrame - lastFrameProcessed < processingFrequency then
-        return
-    end
-    
-    lastFrameProcessed = currentFrame
-    gameTicks = gameTicks + 1
-    
-    local player = Isaac.GetPlayer(0)
-    if not player then return end
-    
-    -- Capturar estado completo por frame
-    local frameData = {
-        frame_count = currentFrame,
-        game_tick = gameTicks,
-        room_id = game:GetLevel():GetCurrentRoomDesc().SafeGridIndex,
-        player = self:capturePlayerState(player),
-        entities = self:captureEntities(),
-        inputs = self:captureInputs(),
-        calculated_velocity = {
-            x = playerVelocity.X,
-            y = playerVelocity.Y
-        }
-    }
-    
-    -- Calcular la velocidad del jugador
-    self:calculatePlayerVelocity(player)
-    
-    -- Registrar el estado de juego cada frame
-    DataManager.recordEvent("frame_state", frameData)
-    
-    -- Guardar datos cada 60 frames (aproximadamente 2 segundos)
-    if currentFrame % 60 == 0 then
-        DataManager.saveEvents()
+    -- No procesar si el juego está pausado o si la recolección está desactivada
+    if not game:IsPaused() and dataCollectionEnabled then
+        local currentFrame = game:GetFrameCount()
+        
+        -- Procesamiento en cada frame (sin saltar frames)
+        -- Capturar el estado del juego en este momento
+        local player = Isaac.GetPlayer(0)
+        if player then
+            -- Capturar el estado detallado actual
+            local frameData = {
+                frame_count = currentFrame,
+                tick = gameTicks,
+                time = game.TimeCounter,
+                player = self:capturePlayerState(player),
+                entities = self:captureEntities(),
+                room = {
+                    id = game:GetLevel():GetCurrentRoomDesc().SafeGridIndex,
+                    type = game:GetRoom():GetType(),
+                    clear = game:GetRoom():IsClear()
+                }
+            }
+            
+            -- Registrar el evento de estado del frame
+            DataManager.recordEvent("frame_state", frameData)
+            
+            -- Actualizar el último frame procesado
+            lastFrameProcessed = currentFrame
+            
+            -- Incrementar el contador de ticks del juego
+            gameTicks = gameTicks + 1
+        end
     end
 end
 

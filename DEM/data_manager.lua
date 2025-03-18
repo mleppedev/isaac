@@ -26,13 +26,14 @@ local json = require("json")
 -- Configuración avanzada
 local CONFIG = {
     DEBUG_MODE = true,       -- Activa mensajes de depuración
-    BUFFER_SIZE = 300,       -- Mayor buffer para datos de ML (aprox. 5 segundos de juego a 60 FPS)
-    FRAME_LIMIT = 60 * 30,   -- Guardar al menos cada 30 segundos (60 FPS * 30)
+    BUFFER_SIZE = 60,        -- Buffer para datos de 1 segundo de juego a 60 FPS
+    FRAME_LIMIT = 60,        -- Guardar cada segundo (60 FPS)
     DATA_COMPRESSION = false, -- Compresión de datos (desactivada por defecto)
     FILE_ROTATION = true,    -- Rotar archivos para evitar tamaño excesivo
     MAX_FILE_ENTRIES = 10000, -- Máximo de eventos por archivo antes de rotar
-    SMART_BUFFERING = true,  -- Ajustar buffer dinámicamente
-    TRACK_PERFORMANCE = true -- Monitorizar performance
+    SMART_BUFFERING = false, -- Desactivamos el ajuste dinámico para consistencia
+    TRACK_PERFORMANCE = true, -- Monitorizar performance
+    SAVE_EVERY_FRAME = false -- Si true, intenta guardar en cada frame (usar con precaución)
 }
 
 -- Buffer temporal para almacenar múltiples eventos
@@ -114,6 +115,15 @@ local function calculateDataHash(data)
     -- Crear una cadena para el hash
     local hashStr = table.concat(hashParts, "_")
     return quickHash(hashStr)
+end
+
+-- Estimar el tamaño de un evento para estadísticas
+local function estimateEventSize(event)
+    if not event then return 0 end
+    
+    -- Forma simple: convertir a JSON y contar caracteres
+    local jsonStr = valueToJson(event)
+    return string.len(jsonStr)
 end
 
 -- Crear carpeta de datos si no existe
@@ -443,6 +453,21 @@ local function saveEventBuffer()
     return success
 end
 
+-- Función para forzar el guardado si es necesario
+local function checkForForcedSave(frameCount)
+    -- Si está configurado para guardar cada frame
+    if CONFIG.SAVE_EVERY_FRAME then
+        return true
+    end
+    
+    -- Guardar al menos cada FRAME_LIMIT frames
+    if frameCount % CONFIG.FRAME_LIMIT == 0 then
+        return true
+    end
+    
+    return false
+end
+
 -- Función pública para registrar eventos
 local function recordEvent(eventType, eventData)
     -- Medir tiempo de procesamiento para estadísticas
@@ -451,85 +476,54 @@ local function recordEvent(eventType, eventData)
         startTime = Isaac.GetTime()
     end
     
-    -- Validar el tipo de evento
-    if not eventType or eventType == "" then
-        if CONFIG.DEBUG_MODE then
-            Isaac.DebugString("DEM: Error - Tipo de evento vacío")
-        end
-        return false
-    end
-    
-    -- Evitar duplicados para eventos de frame (optimización ML)
-    if CONFIG.SMART_BUFFERING and isDuplicateEvent(eventType, eventData) then
-        -- Eventos duplicados en frames cercanos, ignorar
-        return true
-    end
-    
-    -- Obtener datos del juego
-    local timestamp = generateTimestamp()
-    local game = Game()
-    local level = game:GetLevel()
-    local room = game:GetRoom()
-    
-    -- Crear estructura del evento
-    local data = {
-        event_type = eventType,
-        timestamp = timestamp,
-        event_id = generateEventId(eventType, timestamp),
-        data = eventData or {},
-        -- Añadir datos básicos del juego (más compactos para ML)
-        game_state = {
-            seed = game:GetSeeds():GetStartSeed(),
-            level = level:GetStage(),
-            room_id = level:GetCurrentRoomDesc().SafeGridIndex,
-            frame = game:GetFrameCount()
-        }
+    -- Crear un evento completo con metadatos
+    local event = {
+        id = generateEventId(eventType),
+        type = eventType,
+        timestamp = generateTimestamp(),
+        data = eventData or {}
     }
     
-    -- Para eventos de frame, reducir información duplicada
-    if eventType == "frame_state" and eventData then
-        -- Ya tenemos estos datos en eventData, no duplicarlos
-        data.game_state = nil
-    end
+    -- Calcular hash de datos para prevenir duplicados
+    event.data_hash = calculateDataHash(event.data)
     
-    -- Agregar el evento al buffer
-    table.insert(eventBuffer, data)
+    -- Añadir al buffer
+    table.insert(eventBuffer, event)
     stats.total_events_recorded = stats.total_events_recorded + 1
     
-    -- Medir tamaño para estadísticas
-    local eventSize = string.len(valueToJson(data))
+    -- Guardar estadísticas de tamaño
+    local eventSize = estimateEventSize(event)
     stats.largest_event_size = math.max(stats.largest_event_size, eventSize)
     
-    -- Medir tiempo de procesamiento
+    -- Comprobar si debemos guardar automáticamente
+    local shouldSave = false
+    
+    -- Si el buffer excede el tamaño configurado
+    if #eventBuffer >= CONFIG.BUFFER_SIZE then
+        shouldSave = true
+    end
+    
+    -- O si es tiempo de guardar basado en frames
+    local frameCount = Game():GetFrameCount()
+    if checkForForcedSave(frameCount) then
+        shouldSave = true
+    end
+    
+    -- Guardar si es necesario
+    if shouldSave then
+        saveEventBuffer()
+    end
+    
+    -- Actualizar estadísticas de rendimiento
     if CONFIG.TRACK_PERFORMANCE and startTime then
         local processingTime = Isaac.GetTime() - startTime
-        
-        -- Actualizar promedio de tiempo de procesamiento
         stats.performance.avg_processing_time = 
-            (stats.performance.avg_processing_time * stats.performance.processing_samples + processingTime) / 
+            (stats.performance.avg_processing_time * stats.performance.processing_samples + processingTime) /
             (stats.performance.processing_samples + 1)
         stats.performance.processing_samples = stats.performance.processing_samples + 1
     end
     
-    if CONFIG.DEBUG_MODE and (eventType ~= "frame_state" or game:GetFrameCount() % 60 == 0) then
-        -- Solo mostrar log para eventos importantes o cada 60 frames para no saturar
-        Isaac.DebugString("DEM: Evento '" .. eventType .. "' agregado. Eventos en buffer: " .. #eventBuffer .. "/" .. CONFIG.BUFFER_SIZE)
-    end
-    
-    -- Guardar si se alcanza alguna condición de guardado
-    if #eventBuffer >= CONFIG.BUFFER_SIZE or 
-       (game:GetFrameCount() - stats.last_save_timestamp > CONFIG.FRAME_LIMIT) then
-        if CONFIG.DEBUG_MODE then
-            if #eventBuffer >= CONFIG.BUFFER_SIZE then
-                Isaac.DebugString("DEM: Buffer lleno, guardando eventos...")
-            else
-                Isaac.DebugString("DEM: Tiempo límite alcanzado, guardando eventos...")
-            end
-        end
-        saveEventBuffer()
-    end
-    
-    return true
+    return event.id
 end
 
 -- Registrar callbacks para eventos automáticos
@@ -715,74 +709,74 @@ DataManager = {
     MOD_REF = nil,
     
     -- Versión del DataManager
-    VERSION = "2.0"
-}
+    VERSION = "2.0",
 
--- Función para registrar un evento de control de IA
-DataManager.recordControlEvent = function(action, result)
-    recordEvent("ai_control", {
-        action = action,
-        result = result,
-        timestamp = Game():GetFrameCount()
-    })
-end
-
--- Función para procesar comandos recibidos desde el servidor web
-DataManager.processCommandsFromServer = function()
-    -- Necesitamos acceder al mod global o pasar la referencia
-    local mod = DataManager.MOD_REF
-    
-    -- Si no tenemos referencia al mod, no podemos continuar
-    if not mod then
-        Isaac.DebugString("DataManager: No hay referencia al mod para procesar comandos")
-        return
-    end
-    
-    -- Verificar si el archivo existe
-    if not Isaac.HasModData(mod) then
-        return
-    end
-    
-    -- Cargar los comandos
-    local cmdData = Isaac.LoadModData(mod)
-    if not cmdData or cmdData == "" then
-        return
-    end
-    
-    -- Parsear los comandos (formato JSON)
-    local success, commands = pcall(json.decode, cmdData)
-    if not success or not commands then
-        Isaac.DebugString("DataManager: Error al decodificar comandos: " .. tostring(commands))
-        return
-    end
-    
-    -- Procesar cada comando
-    local results = {}
-    for i, cmd in ipairs(commands) do
-        local result = DataManager.control.processCommand(cmd)
-        table.insert(results, {
-            id = cmd.id or i,
-            success = result
+    -- Función para registrar un evento de control de IA
+    recordControlEvent = function(action, result)
+        recordEvent("ai_control", {
+            action = action,
+            result = result,
+            timestamp = Game():GetFrameCount()
         })
-        
-        -- Registrar el evento de control
-        DataManager.recordControlEvent(cmd, result)
-    end
-    
-    -- Limpiar el archivo de comandos (escribir resultado)
-    local resultJson = json.encode(results)
-    Isaac.SaveModData(mod, resultJson)
-    
-    -- Registrar la recepción de comandos
-    if #commands > 0 then
-        Isaac.DebugString("DataManager: Procesados " .. #commands .. " comandos desde el servidor")
-    end
-end
+    end,
 
--- Configurar la función de actualización
-DataManager.update = function()
-    -- Procesar comandos desde el servidor
-    DataManager.processCommandsFromServer()
-end
+    -- Función para procesar comandos recibidos desde el servidor web
+    processCommandsFromServer = function()
+        -- Necesitamos acceder al mod global o pasar la referencia
+        local mod = DataManager.MOD_REF
+        
+        -- Si no tenemos referencia al mod, no podemos continuar
+        if not mod then
+            Isaac.DebugString("DataManager: No hay referencia al mod para procesar comandos")
+            return
+        end
+        
+        -- Verificar si el archivo existe
+        if not Isaac.HasModData(mod) then
+            return
+        end
+        
+        -- Cargar los comandos
+        local cmdData = Isaac.LoadModData(mod)
+        if not cmdData or cmdData == "" then
+            return
+        end
+        
+        -- Parsear los comandos (formato JSON)
+        local success, commands = pcall(json.decode, cmdData)
+        if not success or not commands then
+            Isaac.DebugString("DataManager: Error al decodificar comandos: " .. tostring(commands))
+            return
+        end
+        
+        -- Procesar cada comando
+        local results = {}
+        for i, cmd in ipairs(commands) do
+            local result = DataManager.control.processCommand(cmd)
+            table.insert(results, {
+                id = cmd.id or i,
+                success = result
+            })
+            
+            -- Registrar el evento de control
+            DataManager.recordControlEvent(cmd, result)
+        end
+        
+        -- Limpiar el archivo de comandos (escribir resultado)
+        local resultJson = json.encode(results)
+        Isaac.SaveModData(mod, resultJson)
+        
+        -- Registrar la recepción de comandos
+        if #commands > 0 then
+            Isaac.DebugString("DataManager: Procesados " .. #commands .. " comandos desde el servidor")
+        end
+    end,
+
+    -- Configurar la función de actualización
+    update = function()
+        -- Procesar comandos desde el servidor
+        DataManager.processCommandsFromServer()
+    end
+}
 
 return DataManager 

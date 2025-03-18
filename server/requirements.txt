@@ -5,4 +5,9 @@ pandas>=2.1.0
 matplotlib>=3.8.0
 numpy>=2.0.0
 scikit-learn>=1.4.0
-flask-socketio==5.3.6 
+flask-socketio==5.3.6
+opencv-python>=4.8.0
+pillow>=10.0.0
+pywin32>=306
+torch>=2.0.0
+torchvision>=0.15.0 

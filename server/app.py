@@ -1290,6 +1290,117 @@ def api_metadata():
         "system_info": system_info
     })
 
+# Ruta para gestionar el sistema de visión por computadora
+@app.route('/api/vision', methods=['GET', 'POST'])
+def vision_system():
+    """Gestiona el sistema de visión por computadora para RL"""
+    if request.method == 'POST':
+        action = request.json.get('action')
+        
+        # Iniciar el sistema de visión
+        if action == 'start':
+            try:
+                # Importar el módulo solo cuando se solicita para no cargar dependencias innecesarias
+                from vision_module.main import IsaacVisionSystem
+                
+                # Obtener configuración
+                config = request.json.get('config', {})
+                
+                # Crear sistema si no existe
+                if not hasattr(app, 'vision_system') or app.vision_system is None:
+                    app.vision_system = IsaacVisionSystem(config)
+                
+                # Iniciar el sistema
+                success = app.vision_system.start()
+                
+                return jsonify({
+                    'status': 'success' if success else 'error',
+                    'message': 'Sistema de visión iniciado' if success else 'Error al iniciar el sistema de visión'
+                })
+            except Exception as e:
+                app.logger.error(f"Error al iniciar sistema de visión: {e}")
+                return jsonify({
+                    'status': 'error',
+                    'message': f'Error: {str(e)}'
+                }), 500
+        
+        # Detener el sistema de visión
+        elif action == 'stop':
+            if hasattr(app, 'vision_system') and app.vision_system:
+                try:
+                    app.vision_system.stop()
+                    app.vision_system = None
+                    return jsonify({
+                        'status': 'success',
+                        'message': 'Sistema de visión detenido'
+                    })
+                except Exception as e:
+                    app.logger.error(f"Error al detener sistema de visión: {e}")
+                    return jsonify({
+                        'status': 'error',
+                        'message': f'Error: {str(e)}'
+                    }), 500
+            else:
+                return jsonify({
+                    'status': 'warning',
+                    'message': 'El sistema de visión no está en ejecución'
+                })
+        
+        # Guardar un template para entrenamiento
+        elif action == 'save_template':
+            if not hasattr(app, 'vision_system') or not app.vision_system:
+                return jsonify({
+                    'status': 'error',
+                    'message': 'El sistema de visión no está en ejecución'
+                }), 400
+            
+            template_type = request.json.get('template_type')
+            name = request.json.get('name')
+            rect = request.json.get('rect')
+            
+            if not template_type or not name:
+                return jsonify({
+                    'status': 'error',
+                    'message': 'Tipo de template y nombre son requeridos'
+                }), 400
+            
+            # Obtener el frame actual
+            frame = app.vision_system.capture.get_frame()
+            
+            # Guardar template
+            filepath = app.vision_system.save_templates(frame, template_type, name, rect)
+            
+            if filepath:
+                return jsonify({
+                    'status': 'success',
+                    'message': f'Template guardado: {filepath}',
+                    'filepath': filepath
+                })
+            else:
+                return jsonify({
+                    'status': 'error',
+                    'message': 'Error al guardar template'
+                }), 500
+        
+        else:
+            return jsonify({
+                'status': 'error',
+                'message': f'Acción desconocida: {action}'
+            }), 400
+    
+    # GET - Obtener estado del sistema de visión
+    else:
+        if hasattr(app, 'vision_system') and app.vision_system:
+            return jsonify({
+                'status': 'running' if app.vision_system.running else 'stopped',
+                'config': app.vision_system.config,
+                'has_detection': app.vision_system.last_detection is not None
+            })
+        else:
+            return jsonify({
+                'status': 'not_initialized'
+            })
+
 if __name__ == "__main__":
     # Crear directorios si no existen
     os.makedirs(STATIC_FOLDER, exist_ok=True)

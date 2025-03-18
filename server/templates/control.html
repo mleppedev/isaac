@@ -324,6 +324,76 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Sección para control del sistema de visión por computadora -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5><i class="bi bi-camera-video me-2"></i>Sistema de Visión por Computadora</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-3">
+                            <div class="col-md-8">
+                                <p>Este sistema utiliza visión por computadora para detectar elementos del juego y un agente de reinforcement learning para tomar decisiones inteligentes.</p>
+                                <div id="vision-status" class="alert alert-secondary">
+                                    <span id="vision-status-text">El sistema no está inicializado</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <button id="btn-start-vision" class="btn btn-primary mb-2 w-100">
+                                    <i class="bi bi-play-fill me-1"></i>Iniciar Sistema
+                                </button>
+                                <button id="btn-stop-vision" class="btn btn-danger mb-2 w-100" disabled>
+                                    <i class="bi bi-stop-fill me-1"></i>Detener Sistema
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="row" id="vision-controls" style="display: none;">
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-header">Configuración</div>
+                                    <div class="card-body">
+                                        <div class="mb-3">
+                                            <label class="form-label">Tasa de exploración</label>
+                                            <input type="range" class="form-range" id="exploration-rate" min="0" max="1" step="0.1" value="0.2">
+                                            <div class="d-flex justify-content-between">
+                                                <small>0 (Explotación)</small>
+                                                <small id="exploration-value">0.2</small>
+                                                <small>1 (Exploración)</small>
+                                            </div>
+                                        </div>
+                                        <div class="form-check form-switch mb-3">
+                                            <input class="form-check-input" type="checkbox" id="visualization" checked>
+                                            <label class="form-check-label" for="visualization">Mostrar visualización</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card mb-3">
+                                    <div class="card-header">Entrenamiento</div>
+                                    <div class="card-body">
+                                        <p>Captura templates para entrenar el sistema de detección:</p>
+                                        <div class="mb-3">
+                                            <select class="form-select mb-2" id="template-type">
+                                                <option value="player">Jugador</option>
+                                                <option value="enemy">Enemigo</option>
+                                                <option value="item">Item</option>
+                                                <option value="door">Puerta</option>
+                                            </select>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="template-name" placeholder="Nombre">
+                                                <button class="btn btn-outline-primary" id="btn-capture-template">
+                                                    <i class="bi bi-camera me-1"></i>Capturar
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -798,6 +868,180 @@
             
             // Estado inicial
             updateConnectionStatus('waiting', 'Esperando interacción con el juego...');
+        });
+        
+        // Variables globales para el estado de los controles
+        var controlData = {
+            movement: {
+                up: false,
+                down: false,
+                left: false,
+                right: false
+            },
+            shooting: {
+                up: false,
+                down: false,
+                left: false,
+                right: false
+            },
+            actions: {
+                bomb: false,
+                item: false
+            },
+            persistent: false,
+            aiControl: false,
+            lastCommand: null
+        };
+        
+        // JavaScript para la sección de visión por computadora
+        // Estado del sistema de visión
+        let visionSystemRunning = false;
+        
+        // Actualizar interfaz según el estado del sistema
+        function updateVisionUI(status) {
+            visionSystemRunning = status === 'running';
+            
+            $('#btn-start-vision').prop('disabled', visionSystemRunning);
+            $('#btn-stop-vision').prop('disabled', !visionSystemRunning);
+            
+            if (visionSystemRunning) {
+                $('#vision-status').removeClass('alert-secondary alert-danger').addClass('alert-success');
+                $('#vision-status-text').text('Sistema de visión en ejecución');
+                $('#vision-controls').show();
+            } else if (status === 'error') {
+                $('#vision-status').removeClass('alert-secondary alert-success').addClass('alert-danger');
+                $('#vision-status-text').text('Error en el sistema de visión');
+                $('#vision-controls').hide();
+            } else {
+                $('#vision-status').removeClass('alert-success alert-danger').addClass('alert-secondary');
+                $('#vision-status-text').text('Sistema de visión detenido');
+                $('#vision-controls').hide();
+            }
+        }
+        
+        // Verificar el estado inicial del sistema
+        function checkVisionStatus() {
+            fetch('/api/vision')
+                .then(response => response.json())
+                .then(data => {
+                    updateVisionUI(data.status);
+                })
+                .catch(error => {
+                    console.error('Error al verificar estado del sistema de visión:', error);
+                    updateVisionUI('error');
+                });
+        }
+        
+        // Iniciar el sistema de visión
+        $('#btn-start-vision').click(function() {
+            // Configuración del sistema
+            const config = {
+                'visualize': $('#visualization').is(':checked'),
+                'agent': {
+                    'exploration_rate': parseFloat($('#exploration-rate').val())
+                }
+            };
+            
+            // Enviar solicitud para iniciar
+            fetch('/api/vision', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    action: 'start',
+                    config: config
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    updateVisionUI('running');
+                    showNotification('success', 'Sistema de visión iniciado');
+                } else {
+                    updateVisionUI('error');
+                    showNotification('error', data.message || 'Error al iniciar el sistema');
+                }
+            })
+            .catch(error => {
+                console.error('Error al iniciar sistema de visión:', error);
+                updateVisionUI('error');
+                showNotification('error', 'Error de conexión');
+            });
+        });
+        
+        // Detener el sistema de visión
+        $('#btn-stop-vision').click(function() {
+            fetch('/api/vision', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    action: 'stop'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                updateVisionUI('stopped');
+                showNotification('info', 'Sistema de visión detenido');
+            })
+            .catch(error => {
+                console.error('Error al detener sistema de visión:', error);
+                showNotification('error', 'Error de conexión');
+            });
+        });
+        
+        // Capturar template para entrenamiento
+        $('#btn-capture-template').click(function() {
+            const templateType = $('#template-type').val();
+            const templateName = $('#template-name').val();
+            
+            if (!templateName) {
+                showNotification('warning', 'Ingrese un nombre para el template');
+                return;
+            }
+            
+            fetch('/api/vision', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    action: 'save_template',
+                    template_type: templateType,
+                    name: templateName
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    showNotification('success', 'Template guardado correctamente');
+                    $('#template-name').val('');  // Limpiar el campo
+                } else {
+                    showNotification('error', data.message || 'Error al guardar template');
+                }
+            })
+            .catch(error => {
+                console.error('Error al guardar template:', error);
+                showNotification('error', 'Error de conexión');
+            });
+        });
+        
+        // Actualizar valor del slider de exploración
+        $('#exploration-rate').on('input', function() {
+            $('#exploration-value').text($(this).val());
+        });
+        
+        // Cuando el documento esté listo
+        $(document).ready(function() {
+            // Código existente
+            updateButtonStates();
+            getPersistentModeState();
+            getAIControlState();
+            
+            // Verificar estado del sistema de visión
+            checkVisionStatus();
         });
     </script>
     

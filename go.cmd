@@ -32,21 +32,49 @@ cls
 echo === Herramienta de Despliegue del Mod DEM ===
 echo.
 echo Elija una opción:
-echo 1. Copiar archivos del mod al directorio del juego
-echo 2. Iniciar el servidor
-echo 3. Lanzar el juego
-echo 4. Hacer todo (copiar, iniciar servidor, lanzar juego)
-echo 5. Salir
+echo 1. Elegir versión del mod
+echo 2. Copiar archivos del mod al directorio del juego
+echo 3. Iniciar el servidor
+echo 4. Lanzar el juego
+echo 5. Hacer todo (copiar, iniciar servidor, lanzar juego)
+echo 6. Salir
 echo.
-set /p choice="Ingrese su elección (1-5): "
+set /p choice="Ingrese su elección (1-6): "
 
-if "%choice%"=="1" goto copy_mod
-if "%choice%"=="2" goto start_server
-if "%choice%"=="3" goto launch_game
-if "%choice%"=="4" goto do_all
-if "%choice%"=="5" goto end
+if "%choice%"=="1" goto choose_mod
+if "%choice%"=="2" goto copy_mod
+if "%choice%"=="3" goto start_server
+if "%choice%"=="4" goto launch_game
+if "%choice%"=="5" goto do_all
+if "%choice%"=="6" goto end
 echo Opción inválida. Por favor intente de nuevo.
 timeout /t 2 >nul
+goto menu
+
+:choose_mod
+cls
+echo === Seleccionar Versión del Mod ===
+echo.
+echo Versiones disponibles:
+echo 1. DEM (Estándar - Recolector de datos)
+echo 2. DEM_CV (Visión por computadora - Control de IA)
+echo.
+set /p mod_choice="Elija la versión (1-2): "
+
+if "%mod_choice%"=="1" (
+    set "MOD_NAME=DEM"
+    set "MOD_SOURCE=.\DEM"
+    set "MOD_DEST=%GAME_PATH%\mods\DEM"
+    echo Versión DEM seleccionada.
+) else if "%mod_choice%"=="2" (
+    set "MOD_NAME=DEM_CV"
+    set "MOD_SOURCE=.\DEM_CV"
+    set "MOD_DEST=%GAME_PATH%\mods\DEM_CV"
+    echo Versión DEM_CV seleccionada.
+) else (
+    echo Opción inválida.
+)
+pause
 goto menu
 
 :copy_mod
