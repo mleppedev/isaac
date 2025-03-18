@@ -212,6 +212,31 @@
                     </div>
                 </div>
             </div>
+            
+            <!-- Visualización del sistema de visión por computadora -->
+            <div class="card mt-4" id="vision-visualization" style="display: none;">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5><i class="bi bi-camera me-2"></i>Visualización en tiempo real</h5>
+                    <div>
+                        <span class="badge bg-primary" id="detection-fps">0 FPS</span>
+                        <button class="btn btn-sm btn-outline-secondary ms-2" id="btn-fullscreen">
+                            <i class="bi bi-fullscreen"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-body text-center">
+                    <div class="vision-container mb-3" style="position: relative;">
+                        <img id="vision-feed" src="/static/img/waiting.png" alt="Visualización de IA" class="img-fluid"
+                            style="max-height: 480px; border: 1px solid #ccc; background-color: #f8f9fa;">
+                        <div id="vision-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none;">
+                            <!-- Las anotaciones se añadirán aquí dinámicamente -->
+                        </div>
+                    </div>
+                    <div class="detection-stats small bg-light p-2 rounded text-start overflow-auto" style="max-height: 120px;">
+                        <div id="detection-log">Esperando datos del sistema de visión...</div>
+                    </div>
+                </div>
+            </div>
         </div>
         
         <div class="col-md-4">
@@ -402,35 +427,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Añadir después del panel de control de visión por computadora -->
-            <div class="row mt-3" id="vision-visualization" style="display: none;">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-between align-items-center">
-                            <h5><i class="bi bi-camera me-2"></i>Visualización en tiempo real</h5>
-                            <div>
-                                <span class="badge bg-primary" id="detection-fps">0 FPS</span>
-                                <button class="btn btn-sm btn-outline-secondary ms-2" id="btn-fullscreen">
-                                    <i class="bi bi-fullscreen"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-body text-center">
-                            <div class="vision-container mb-3" style="position: relative;">
-                                <img id="vision-feed" src="/static/img/waiting.png" alt="Visualización de IA" class="img-fluid"
-                                    style="max-height: 480px; border: 1px solid #ccc; background-color: #f8f9fa;">
-                                <div id="vision-overlay" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; pointer-events: none;">
-                                    <!-- Las anotaciones se añadirán aquí dinámicamente -->
-                                </div>
-                            </div>
-                            <div class="detection-stats small bg-light p-2 rounded text-start overflow-auto" style="max-height: 120px;">
-                                <div id="detection-log">Esperando datos del sistema de visión...</div>
                             </div>
                         </div>
                     </div>
