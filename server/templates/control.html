@@ -15,6 +15,17 @@
             margin: 5px;
         }
         
+        .control-btn.active {
+            background-color: #198754 !important;
+            border-color: #198754 !important;
+            color: white !important;
+        }
+        
+        .control-btn.shooting.active {
+            background-color: #dc3545 !important;
+            border-color: #dc3545 !important;
+        }
+        
         .control-pad {
             display: flex;
             flex-direction: column;
@@ -59,6 +70,13 @@
         .ai-status.inactive {
             background-color: #ff3333;
         }
+        
+        .persistent-mode-info {
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
@@ -68,6 +86,12 @@
     <div class="container mt-4">
         <h1 class="mb-4">Control del Personaje</h1>
         
+        <!-- Indicador de estado de conexión -->
+        <div id="connection-status" class="alert alert-secondary mb-4">
+            <h5><i class="bi bi-question-circle me-2"></i>Estado de conexión con el juego</h5>
+            <p class="mb-0">Esperando interacción con el juego...</p>
+        </div>
+        
         <div class="row">
             <div class="col-md-8">
                 <!-- Panel de estado -->
@@ -76,6 +100,38 @@
                         <h5><i class="bi bi-info-circle me-2"></i>Estado</h5>
                     </div>
                     <div class="card-body">
+                        <div class="alert alert-info mb-3">
+                            <h6><i class="bi bi-lightbulb me-2"></i>Uso del Generador Aleatorio</h6>
+                            <p class="mb-0 small">Al activar el generador aleatorio en el panel derecho, comenzará a enviar comandos aleatorios al juego de forma constante. Esto es útil cuando el juego se pausa al perder el foco. 
+                            <strong>Instrucciones de uso:</strong></p>
+                            <ol class="mb-0 small mt-1">
+                                <li>Activa la IA con el botón "Activar IA" (o se activará automáticamente)</li>
+                                <li>Activa el modo "Generador Aleatorio" en el panel derecho</li>
+                                <li>Regresa al juego y observa cómo el personaje se mueve automáticamente</li>
+                                <li>Para detener el comportamiento, vuelve a esta página y desactiva el generador</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="alert alert-warning mb-3">
+                            <h6><i class="bi bi-exclamation-triangle me-2"></i>¡Importante!</h6>
+                            <p class="mb-0 small">Para que el control funcione, es necesario que:</p>
+                            <ol class="mb-0 small mt-1">
+                                <li>El juego <strong>The Binding of Isaac</strong> esté abierto</li>
+                                <li>El mod <strong>Data Event Manager (DEM)</strong> esté activado</li>
+                                <li>Si aparecen errores de "No such file or directory", verifica que estés jugando con el mod activo</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="persistent-mode-info">
+                            <p class="mb-0"><strong>Modo persistente:</strong> 
+                                <span class="form-check form-switch d-inline-block ms-2">
+                                    <input class="form-check-input" type="checkbox" id="persistent-mode-toggle">
+                                    <label class="form-check-label" for="persistent-mode-toggle">Activar</label>
+                                </span>
+                            </p>
+                            <small class="text-muted">En modo persistente, las teclas mantienen su estado hasta que hagas clic nuevamente o uses "Limpiar entradas"</small>
+                        </div>
+                        
                         <div class="row">
                             <div class="col-md-6">
                                 <p>
@@ -85,6 +141,7 @@
                                     </span>
                                 </p>
                                 <p><strong>Última acción:</strong> <span id="last-action">Ninguna</span></p>
+                                <p><strong>Controles activos:</strong> <span id="active-controls">Ninguno</span></p>
                             </div>
                             <div class="col-md-6 text-end">
                                 <button id="toggle-ai-btn" class="btn btn-warning">
@@ -138,23 +195,23 @@
                                 <h5 class="text-center mb-3">Disparo</h5>
                                 <div class="control-pad">
                                     <div class="control-row">
-                                        <button class="btn btn-danger control-btn" data-action="shooting" data-direction="up">
+                                        <button class="btn btn-danger control-btn shooting" data-action="shooting" data-direction="up">
                                             <i class="bi bi-arrow-up"></i>
                                         </button>
                                     </div>
                                     <div class="control-row">
-                                        <button class="btn btn-danger control-btn" data-action="shooting" data-direction="left">
+                                        <button class="btn btn-danger control-btn shooting" data-action="shooting" data-direction="left">
                                             <i class="bi bi-arrow-left"></i>
                                         </button>
                                         <button class="btn btn-outline-secondary control-btn invisible">
                                             <i class="bi bi-dot"></i>
                                         </button>
-                                        <button class="btn btn-danger control-btn" data-action="shooting" data-direction="right">
+                                        <button class="btn btn-danger control-btn shooting" data-action="shooting" data-direction="right">
                                             <i class="bi bi-arrow-right"></i>
                                         </button>
                                     </div>
                                     <div class="control-row">
-                                        <button class="btn btn-danger control-btn" data-action="shooting" data-direction="down">
+                                        <button class="btn btn-danger control-btn shooting" data-action="shooting" data-direction="down">
                                             <i class="bi bi-arrow-down"></i>
                                         </button>
                                     </div>
@@ -207,6 +264,66 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Generador de inputs aleatorios -->
+                <div class="card mt-4">
+                    <div class="card-header bg-success text-white">
+                        <h5><i class="bi bi-shuffle me-2"></i>Generador Aleatorio</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" id="random-input-toggle">
+                            <label class="form-check-label" for="random-input-toggle">
+                                <strong>Activar Inputs Aleatorios</strong>
+                            </label>
+                        </div>
+                        
+                        <div id="random-input-settings">
+                            <div class="mb-3">
+                                <label for="random-input-interval" class="form-label">Intervalo (ms):</label>
+                                <input type="range" class="form-range" id="random-input-interval" 
+                                       min="100" max="2000" step="100" value="500">
+                                <div class="d-flex justify-content-between">
+                                    <small>Rápido (100ms)</small>
+                                    <small id="interval-value">500ms</small>
+                                    <small>Lento (2000ms)</small>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Tipos de inputs:</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="random-movement" checked>
+                                    <label class="form-check-label" for="random-movement">Movimiento</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="random-shooting" checked>
+                                    <label class="form-check-label" for="random-shooting">Disparo</label>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label class="form-label">Comportamiento:</label>
+                                <select class="form-select form-select-sm" id="random-behavior">
+                                    <option value="completely-random">Completamente aleatorio</option>
+                                    <option value="smart-random" selected>Semi-inteligente</option>
+                                    <option value="aggressive">Agresivo</option>
+                                    <option value="defensive">Defensivo</option>
+                                </select>
+                                <small class="text-muted d-block mt-1">
+                                    Semi-inteligente: Dispara en la dirección opuesta al movimiento
+                                </small>
+                            </div>
+                            
+                            <div class="mt-3">
+                                <span class="badge rounded-pill bg-success" id="random-status">
+                                    Inactivo
+                                </span>
+                                <small class="text-muted ms-2" id="random-count">0 comandos enviados</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -222,8 +339,186 @@
             const lastAction = document.getElementById('last-action');
             const loadSequenceBtn = document.getElementById('load-sequence-btn');
             const sequenceFile = document.getElementById('sequence-file');
+            const persistentModeToggle = document.getElementById('persistent-mode-toggle');
+            const activeControls = document.getElementById('active-controls');
+            
+            // Elementos para generación aleatoria
+            const randomInputToggle = document.getElementById('random-input-toggle');
+            const randomInputInterval = document.getElementById('random-input-interval');
+            const intervalValue = document.getElementById('interval-value');
+            const randomMovement = document.getElementById('random-movement');
+            const randomShooting = document.getElementById('random-shooting');
+            const randomBehavior = document.getElementById('random-behavior');
+            const randomStatus = document.getElementById('random-status');
+            const randomCount = document.getElementById('random-count');
             
             let aiActive = false;
+            let persistentMode = false;
+            let activeButtons = [];
+            
+            // Variables para generación aleatoria
+            let randomInputActive = false;
+            let randomIntervalId = null;
+            let commandCount = 0;
+            let lastRandomCommand = null;
+            let lastMovementDirection = null;
+            
+            // Actualizar valor del intervalo
+            randomInputInterval.addEventListener('input', function() {
+                intervalValue.textContent = this.value + 'ms';
+                
+                // Si estamos generando, reiniciar con el nuevo intervalo
+                if (randomInputActive) {
+                    stopRandomInputs();
+                    startRandomInputs();
+                }
+            });
+            
+            // Alternar generación aleatoria
+            randomInputToggle.addEventListener('change', function() {
+                randomInputActive = this.checked;
+                
+                if (randomInputActive) {
+                    // Asegurarse de que IA está activada
+                    if (!aiActive) {
+                        toggleAiBtn.click();
+                    }
+                    
+                    startRandomInputs();
+                    randomStatus.textContent = 'Activo';
+                    randomStatus.classList.remove('bg-success');
+                    randomStatus.classList.add('bg-danger');
+                    logToConsole('Generador de inputs aleatorios activado');
+                } else {
+                    stopRandomInputs();
+                    randomStatus.textContent = 'Inactivo';
+                    randomStatus.classList.remove('bg-danger');
+                    randomStatus.classList.add('bg-success');
+                    logToConsole('Generador de inputs aleatorios desactivado');
+                    
+                    // Limpiar entradas
+                    sendCommand({ type: 'clear' });
+                }
+            });
+            
+            // Iniciar generación aleatoria
+            function startRandomInputs() {
+                if (randomIntervalId) return;
+                
+                randomIntervalId = setInterval(() => {
+                    generateRandomInput();
+                }, parseInt(randomInputInterval.value));
+            }
+            
+            // Detener generación aleatoria
+            function stopRandomInputs() {
+                if (randomIntervalId) {
+                    clearInterval(randomIntervalId);
+                    randomIntervalId = null;
+                }
+            }
+            
+            // Generar un input aleatorio
+            function generateRandomInput() {
+                const directions = ['up', 'down', 'left', 'right'];
+                let command = { type: '', direction: '', value: 1.0 };
+                
+                // Determinar si generamos movimiento, disparo o ambos
+                const generateMovement = randomMovement.checked;
+                const generateShooting = randomShooting.checked;
+                
+                if (!generateMovement && !generateShooting) return;
+                
+                // Elegir aleatoriamente qué generar si ambos están habilitados
+                let inputType = '';
+                if (generateMovement && generateShooting) {
+                    inputType = Math.random() < 0.5 ? 'movement' : 'shooting';
+                } else if (generateMovement) {
+                    inputType = 'movement';
+                } else {
+                    inputType = 'shooting';
+                }
+                
+                command.type = inputType;
+                
+                // Elegir dirección según comportamiento seleccionado
+                const behavior = randomBehavior.value;
+                
+                if (behavior === 'completely-random') {
+                    // Dirección completamente aleatoria
+                    command.direction = directions[Math.floor(Math.random() * directions.length)];
+                } 
+                else if (behavior === 'smart-random') {
+                    if (inputType === 'movement') {
+                        // Dirección aleatoria para movimiento
+                        command.direction = directions[Math.floor(Math.random() * directions.length)];
+                        lastMovementDirection = command.direction;
+                    } else {
+                        // Dirección "inteligente" para disparo (opuesta al movimiento)
+                        if (lastMovementDirection) {
+                            if (lastMovementDirection === 'up') command.direction = 'down';
+                            else if (lastMovementDirection === 'down') command.direction = 'up';
+                            else if (lastMovementDirection === 'left') command.direction = 'right';
+                            else if (lastMovementDirection === 'right') command.direction = 'left';
+                        } else {
+                            command.direction = directions[Math.floor(Math.random() * directions.length)];
+                        }
+                    }
+                }
+                else if (behavior === 'aggressive') {
+                    // Para modo agresivo, disparar más que moverse
+                    if (inputType === 'movement') {
+                        command.direction = directions[Math.floor(Math.random() * directions.length)];
+                        lastMovementDirection = command.direction;
+                    } else {
+                        // Más probablemente disparando hacia la derecha e izquierda
+                        const shootDirections = ['left', 'right', 'up', 'down', 'left', 'right'];
+                        command.direction = shootDirections[Math.floor(Math.random() * shootDirections.length)];
+                    }
+                }
+                else if (behavior === 'defensive') {
+                    // Para modo defensivo, moverse más que disparar
+                    if (inputType === 'movement') {
+                        // Más movimiento vertical
+                        const moveDirections = ['up', 'down', 'left', 'right', 'up', 'down'];
+                        command.direction = moveDirections[Math.floor(Math.random() * moveDirections.length)];
+                        lastMovementDirection = command.direction;
+                    } else {
+                        command.direction = directions[Math.floor(Math.random() * directions.length)];
+                    }
+                }
+                
+                // Cancelar comando anterior si era del mismo tipo
+                if (lastRandomCommand && lastRandomCommand.type === command.type) {
+                    clearInputsByType(command.type);
+                }
+                
+                // Guardar último comando
+                lastRandomCommand = command;
+                
+                // Enviar comando
+                sendCommand(command);
+                commandCount++;
+                randomCount.textContent = `${commandCount} comandos enviados`;
+            }
+            
+            // Limpiar entradas por tipo
+            function clearInputsByType(type) {
+                sendCommand({ type: 'clear' });
+            }
+            
+            // Función para actualizar el indicador de controles activos
+            function updateActiveControlsText() {
+                if (activeButtons.length === 0) {
+                    activeControls.textContent = "Ninguno";
+                } else {
+                    activeControls.textContent = activeButtons.map(btn => {
+                        const action = btn.getAttribute('data-action');
+                        const direction = btn.getAttribute('data-direction');
+                        return `${action} ${direction}`;
+                    }).join(', ');
+                }
+            }
             
             // Función para añadir mensaje a la consola
             function logToConsole(message, isError = false) {
@@ -255,19 +550,74 @@
                 }
             }
             
+            // Toggle para modo persistente
+            persistentModeToggle.addEventListener('change', function() {
+                persistentMode = this.checked;
+                logToConsole(`Modo persistente: ${persistentMode ? 'Activado' : 'Desactivado'}`);
+                
+                // Si se desactiva el modo persistente, limpiar todos los botones activos
+                if (!persistentMode) {
+                    activeButtons.forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    activeButtons = [];
+                    updateActiveControlsText();
+                    sendCommand({ type: 'clear' });
+                }
+            });
+            
             // Configurar botones de control
             document.querySelectorAll('[data-action]').forEach(button => {
                 button.addEventListener('click', function() {
                     const action = this.getAttribute('data-action');
                     const direction = this.getAttribute('data-direction');
                     
-                    logToConsole(`Enviando comando: ${action} ${direction}`);
-                    
-                    sendCommand({
-                        type: action,
-                        direction: direction,
-                        value: 1.0
-                    });
+                    if (persistentMode) {
+                        // En modo persistente, alternar estado del botón
+                        if (this.classList.contains('active')) {
+                            // Desactivar - quitar de activos y enviar comando de limpieza
+                            this.classList.remove('active');
+                            activeButtons = activeButtons.filter(btn => btn !== this);
+                            updateActiveControlsText();
+                            
+                            // Solo enviar clear si no quedan botones activos
+                            if (activeButtons.length === 0) {
+                                sendCommand({ type: 'clear' });
+                                logToConsole('Deteniendo todas las acciones');
+                            } else {
+                                // Reenviar comandos para los botones que aún están activos
+                                activeButtons.forEach(btn => {
+                                    const btnAction = btn.getAttribute('data-action');
+                                    const btnDirection = btn.getAttribute('data-direction');
+                                    sendCommand({
+                                        type: btnAction,
+                                        direction: btnDirection,
+                                        value: 1.0
+                                    });
+                                });
+                            }
+                        } else {
+                            // Activar - añadir a activos y enviar comando
+                            this.classList.add('active');
+                            activeButtons.push(this);
+                            updateActiveControlsText();
+                            
+                            logToConsole(`Modo persistente: ${action} ${direction}`);
+                            sendCommand({
+                                type: action,
+                                direction: direction,
+                                value: 1.0
+                            });
+                        }
+                    } else {
+                        // Modo normal - enviar comando una vez
+                        logToConsole(`Enviando comando: ${action} ${direction}`);
+                        sendCommand({
+                            type: action,
+                            direction: direction,
+                            value: 1.0
+                        });
+                    }
                 });
             });
             
@@ -293,6 +643,13 @@
             clearInputsBtn.addEventListener('click', function() {
                 sendCommand({ type: 'clear' });
                 logToConsole('Limpiando todas las entradas');
+                
+                // Limpiar botones activos en modo persistente
+                activeButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                activeButtons = [];
+                updateActiveControlsText();
             });
             
             // Botón para limpiar consola
@@ -377,7 +734,74 @@
             
             // Mensaje inicial
             logToConsole('Panel de control inicializado');
+            
+            // Función para actualizar el estado de conexión con el juego
+            function updateConnectionStatus(status, message, isError = false) {
+                const connectionStatus = document.getElementById('connection-status');
+                
+                // Limpiar clases previas
+                connectionStatus.classList.remove('alert-success', 'alert-danger', 'alert-secondary', 'alert-warning');
+                
+                let icon = '';
+                if (status === 'connected') {
+                    connectionStatus.classList.add('alert-success');
+                    icon = '<i class="bi bi-check-circle-fill me-2"></i>';
+                } else if (status === 'disconnected') {
+                    connectionStatus.classList.add('alert-danger');
+                    icon = '<i class="bi bi-x-circle-fill me-2"></i>';
+                } else if (status === 'waiting') {
+                    connectionStatus.classList.add('alert-secondary');
+                    icon = '<i class="bi bi-question-circle me-2"></i>';
+                } else if (status === 'warning') {
+                    connectionStatus.classList.add('alert-warning');
+                    icon = '<i class="bi bi-exclamation-triangle-fill me-2"></i>';
+                }
+                
+                connectionStatus.innerHTML = `
+                    <h5>${icon}Estado de conexión con el juego</h5>
+                    <p class="mb-0">${message}</p>
+                `;
+                
+                if (isError) {
+                    logToConsole(`Error de conexión: ${message}`, true);
+                }
+            }
+            
+            // Interceptar respuestas de la API para actualizar el estado de conexión
+            const originalFetch = window.fetch;
+            window.fetch = function(input, init) {
+                const promise = originalFetch.apply(this, arguments);
+                
+                // Solo interceptar llamadas a la API de control
+                if (input.toString().includes('/api/control')) {
+                    promise.then(response => {
+                        response.clone().json().then(data => {
+                            if (data.success) {
+                                updateConnectionStatus('connected', 'Conectado correctamente al juego');
+                            } else {
+                                if (data.description) {
+                                    updateConnectionStatus('disconnected', data.description, true);
+                                } else {
+                                    updateConnectionStatus('disconnected', 'Error en la comunicación con el juego', true);
+                                }
+                            }
+                        }).catch(err => {
+                            updateConnectionStatus('warning', 'Respuesta inválida del servidor', true);
+                        });
+                    }).catch(err => {
+                        updateConnectionStatus('disconnected', 'No se pudo conectar con el servidor', true);
+                    });
+                }
+                
+                return promise;
+            };
+            
+            // Estado inicial
+            updateConnectionStatus('waiting', 'Esperando interacción con el juego...');
         });
     </script>
+    
+    <!-- Incluir el pie de página -->
+    {% include 'footer.html' %}
 </body>
 </html> 

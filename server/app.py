@@ -691,15 +691,35 @@ def api_control():
         from control_player import send_command
         result = send_command(command, wait_for_result=False)
         
+        # Verificar si hubo errores
+        if result and isinstance(result, dict) and 'error' in result:
+            return jsonify({
+                'success': False,
+                'error': result['error'],
+                'description': 'Asegúrate de que el juego esté abierto y el mod DEM esté activado'
+            }), 500
+            
         return jsonify({
             'success': True,
             'command': command,
             'response': result
         })
     except Exception as e:
+        error_msg = str(e)
+        description = 'Error general en la comunicación'
+        
+        # Comprobar tipos específicos de errores
+        if 'No such file or directory' in error_msg:
+            description = 'El archivo de comunicación no existe. Asegúrate de que el juego esté abierto y el mod DEM esté activado.'
+        elif 'Permission denied' in error_msg:
+            description = 'Permiso denegado al acceder al archivo. Verifica los permisos o cierra y reabre el juego.'
+        elif 'device or resource busy' in error_msg.lower():
+            description = 'El archivo está siendo utilizado por otro proceso. Espera unos momentos y vuelve a intentarlo.'
+            
         return jsonify({
             'success': False,
-            'error': str(e)
+            'error': error_msg,
+            'description': description
         }), 500
 
 # API para enviar secuencias de comandos
@@ -718,15 +738,35 @@ def api_control_sequence():
         from control_player import send_command
         result = send_command(commands, wait_for_result=False)
         
+        # Verificar si hubo errores
+        if result and isinstance(result, dict) and 'error' in result:
+            return jsonify({
+                'success': False,
+                'error': result['error'],
+                'description': 'Asegúrate de que el juego esté abierto y el mod DEM esté activado'
+            }), 500
+        
         return jsonify({
             'success': True,
-            'commands_count': len(commands),
+            'count': len(commands),
             'response': result
         })
     except Exception as e:
+        error_msg = str(e)
+        description = 'Error general en la comunicación'
+        
+        # Comprobar tipos específicos de errores
+        if 'No such file or directory' in error_msg:
+            description = 'El archivo de comunicación no existe. Asegúrate de que el juego esté abierto y el mod DEM esté activado.'
+        elif 'Permission denied' in error_msg:
+            description = 'Permiso denegado al acceder al archivo. Verifica los permisos o cierra y reabre el juego.'
+        elif 'device or resource busy' in error_msg.lower():
+            description = 'El archivo está siendo utilizado por otro proceso. Espera unos momentos y vuelve a intentarlo.'
+            
         return jsonify({
             'success': False,
-            'error': str(e)
+            'error': error_msg,
+            'description': description
         }), 500
 
 # Funciones para manejar la configuración

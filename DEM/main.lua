@@ -670,6 +670,27 @@ function DEM:onGameStart(continued)
     self:onNewRoom()
 end
 
+-- Función para prevenir que el juego se pause cuando pierde el foco
+function DEM:preventAutoPause()
+    local game = Game()
+    
+    -- En cada frame, forzar el estado no-pausado si está configurado así
+    if controller and controller.config.enabled and controller.config.ai_control then
+        -- Solo tratar de despausar si el juego está pausado y no estamos en el menú de pausa
+        if game:IsPaused() then
+            -- Verificar si la pausa es automática (al perder foco) o manual (usuario pulsó ESC)
+            -- Si el HUD está visible, generalmente indica una pausa automática
+            if game:GetHUD():IsVisible() then
+                -- Forzar despausa solo cuando el controlador de IA está activo y parece una pausa automática
+                game:GetHUD():SetVisible(true)
+                game:GetLevel():GetStage()  -- Forzar actualización
+                game:SetStateFlag(GameStateFlag.STATE_GAME_PAUSED, false)
+                Isaac.DebugString("DEM: Previniendo pausa automática")
+            end
+        end
+    end
+end
+
 -- Registrar callbacks adicionales (no registrados en data_manager)
 DEM:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, DEM.onPickupCollected)
 DEM:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, DEM.onPlayerDamage, EntityType.ENTITY_PLAYER)
@@ -677,6 +698,7 @@ DEM:AddCallback(ModCallbacks.MC_POST_NPC_DEATH, DEM.onNPCDeath)
 DEM:AddCallback(ModCallbacks.MC_POST_RENDER, DEM.onUpdate)
 DEM:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, DEM.onGameStart)
 DEM:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, DEM.onNewRoom)
+DEM:AddCallback(ModCallbacks.MC_POST_UPDATE, DEM.preventAutoPause)
 
 -- Mensaje de inicio
 Isaac.DebugString("DEM: Mod para Machine Learning inicializado")

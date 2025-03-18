@@ -90,11 +90,25 @@ def send_command(commands, game_path=None, mod_name=None, wait_for_result=False,
     # Obtener ruta del archivo de datos
     mod_data_path = get_mod_data_path(game_path, mod_name)
     
-    # Escribir comandos
-    with open(mod_data_path, "w") as f:
-        json.dump(commands, f)
+    # Crear el directorio si no existe
+    mod_data_dir = os.path.dirname(mod_data_path)
+    if not os.path.exists(mod_data_dir):
+        try:
+            os.makedirs(mod_data_dir, exist_ok=True)
+            print(f"Directorio creado: {mod_data_dir}")
+        except Exception as e:
+            print(f"Error al crear directorio: {str(e)}")
+            return {"success": False, "error": f"Error al crear directorio: {str(e)}"}
     
-    print(f"Comandos enviados a {mod_data_path}")
+    # Escribir comandos
+    try:
+        with open(mod_data_path, "w") as f:
+            json.dump(commands, f)
+        
+        print(f"Comandos enviados a {mod_data_path}")
+    except Exception as e:
+        print(f"Error al escribir el archivo: {str(e)}")
+        return {"success": False, "error": str(e)}
     
     # Esperar respuesta si es necesario
     if wait_for_result:
@@ -135,7 +149,7 @@ def send_command(commands, game_path=None, mod_name=None, wait_for_result=False,
         print("No se recibió respuesta en el tiempo establecido")
         return None
     
-    return None
+    return {"success": True}
 
 def parse_args():
     """Procesa los argumentos de línea de comandos."""

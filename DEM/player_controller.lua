@@ -29,6 +29,12 @@ PlayerController.config = {
         down = Keyboard.KEY_DOWN,
         left = Keyboard.KEY_LEFT,
         right = Keyboard.KEY_RIGHT
+    },
+    ai_control_keys = {
+        toggle_ai = Keyboard.KEY_F1,        -- Alternar modo IA con F1
+        clear_inputs = Keyboard.KEY_F2,     -- Limpiar todas las entradas con F2
+        sequence_circle = Keyboard.KEY_F3,  -- Ejecutar secuencia "círculo" con F3
+        sequence_right_up = Keyboard.KEY_F4 -- Ejecutar secuencia "mover derecha + disparar arriba" con F4
     }
 }
 
@@ -155,6 +161,12 @@ function PlayerController:onInputAction(entity, input_hook, button_action)
         return nil
     end
     
+    -- Verificar si el juego está pausado
+    if Game():IsPaused() and button_action ~= ButtonAction.ACTION_PAUSE then
+        -- No interceptamos nada mientras el juego está pausado excepto el botón de pausa
+        return nil
+    end
+    
     -- Verificar si esta acción es una que queremos controlar
     local action_path = self.action_mapping[button_action]
     if not action_path then
@@ -186,6 +198,27 @@ function PlayerController:onUpdate()
     -- Verificar tecla de activación/desactivación (Tab por defecto)
     if Input.IsButtonTriggered(Keyboard.KEY_TAB, 0) then
         self:toggleAI()
+    end
+    
+    -- Teclas para control de IA
+    if Input.IsButtonTriggered(self.config.ai_control_keys.toggle_ai, 0) then
+        self:toggleAI()
+        Isaac.DebugString("PlayerController: Modo IA " .. (self.config.ai_control and "activado" or "desactivado") .. " con tecla F1")
+    end
+    
+    if Input.IsButtonTriggered(self.config.ai_control_keys.clear_inputs, 0) then
+        self:clearInputs()
+        Isaac.DebugString("PlayerController: Entradas limpiadas con tecla F2")
+    end
+    
+    if Input.IsButtonTriggered(self.config.ai_control_keys.sequence_circle, 0) then
+        self:executeSequence("circle")
+        Isaac.DebugString("PlayerController: Ejecutando secuencia 'círculo' con tecla F3")
+    end
+    
+    if Input.IsButtonTriggered(self.config.ai_control_keys.sequence_right_up, 0) then
+        self:executeSequence("right_up")
+        Isaac.DebugString("PlayerController: Ejecutando secuencia 'derecha+arriba' con tecla F4")
     end
     
     -- Si no está en modo IA, verificar entradas WASD y flechas
@@ -272,6 +305,21 @@ function PlayerController:clearInputs()
         for direction, _ in pairs(directions) do
             self.virtual_inputs[action_type][direction] = 0
         end
+    end
+end
+
+-- Añadir función para ejecutar secuencias predefinidas
+function PlayerController:executeSequence(sequenceName)
+    if sequenceName == "circle" then
+        -- Secuencia circular: derecha, arriba, izquierda, abajo
+        self:move("right", 1.0)
+        self:move("up", 1.0)
+        self:move("left", 1.0)
+        self:move("down", 1.0)
+    elseif sequenceName == "right_up" then
+        -- Mover derecha y disparar arriba
+        self:move("right", 1.0)
+        self:shoot("up", 1.0)
     end
 end
 
