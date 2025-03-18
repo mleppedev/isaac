@@ -73,7 +73,19 @@
                             <a class="nav-link {% if active_page == 'analytics' %}active{% endif %}" href="/analytics">Análisis</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% if active_page == 'config' %}active{% endif %}" href="/config">Configuración</a>
+                            <a class="nav-link {% if active_page == 'stats' %}active{% endif %}" href="/stats">
+                                <i class="bi bi-graph-up me-1"></i>Estadísticas
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if active_page == 'control' %}active{% endif %}" href="/control">
+                                <i class="bi bi-controller me-1"></i>Control
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if active_page == 'config' %}active{% endif %}" href="/config">
+                                <i class="bi bi-gear me-1"></i>Configuración
+                            </a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="apiDropdown" role="button" data-bs-toggle="dropdown">

@@ -15,9 +15,13 @@
 -- Cargar el administrador de datos
 local DataManager = require("data_manager")
 local json = require("json")
+local PlayerController = require("player_controller")
 
 -- Registrar el mod
 local DEM = RegisterMod("Data Event Manager", 1)
+
+-- Pasar referencia del mod al DataManager para poder procesar comandos del servidor
+DataManager.MOD_REF = DEM
 
 -- Obtener referencia al Game()
 local game = Game()
@@ -39,6 +43,14 @@ Isaac.DebugString("DEM: -------------------------------")
 Isaac.DebugString("DEM: Mod mejorado para ML/IA inicializado")
 Isaac.DebugString("DEM: Recopilando datos granulares para entrenamiento")
 Isaac.DebugString("DEM: -------------------------------")
+
+-- Inicializar el controlador del jugador
+local controller = PlayerController:init(DEM)
+-- Activar el controlador por defecto (podrá ser controlado con tecla Tab)
+controller:toggle()
+-- Registrar el controlador en el DataManager para permitir control desde el servidor web
+DataManager.control.setController(controller)
+Isaac.DebugString("DEM: Controlador de jugador inicializado (Tab para cambiar modo)")
 
 -- Función para capturar el mapa de la habitación actual
 function DEM:mapCurrentRoom()
@@ -323,46 +335,66 @@ end
 -- Capturar las entradas del jugador
 function DEM:captureInputs()
     local inputs = {}
+    local is_virtual_input = false
     
-    -- Comprobar todas las acciones de botón
-    for i = 0, ButtonAction.NUM_BUTTON_ACTIONS - 1 do
-        local action = i -- ButtonAction value
-        local value = Input.GetActionValue(action, 0) -- Controlador 0 (principal)
-        
-        if value > 0 then
-            local actionName = "UNKNOWN_ACTION_" .. action
+    -- Si el controlador está activo y en modo IA
+    if controller.config.enabled and controller.config.ai_control then
+        -- Usar entradas virtuales en lugar de entradas reales
+        inputs = {
+            LEFT = controller.virtual_inputs.movement.left,
+            RIGHT = controller.virtual_inputs.movement.right,
+            UP = controller.virtual_inputs.movement.up,
+            DOWN = controller.virtual_inputs.movement.down,
+            SHOOT_LEFT = controller.virtual_inputs.shooting.left,
+            SHOOT_RIGHT = controller.virtual_inputs.shooting.right,
+            SHOOT_UP = controller.virtual_inputs.shooting.up,
+            SHOOT_DOWN = controller.virtual_inputs.shooting.down
+        }
+        is_virtual_input = true
+    else
+        -- Comprobar todas las acciones de botón
+        for i = 0, ButtonAction.NUM_BUTTON_ACTIONS - 1 do
+            local action = i -- ButtonAction value
+            local value = Input.GetActionValue(action, 0) -- Controlador 0 (principal)
             
-            -- Mapear acciones a nombres legibles
-            if action == ButtonAction.ACTION_LEFT then actionName = "LEFT"
-            elseif action == ButtonAction.ACTION_RIGHT then actionName = "RIGHT"
-            elseif action == ButtonAction.ACTION_UP then actionName = "UP"
-            elseif action == ButtonAction.ACTION_DOWN then actionName = "DOWN"
-            elseif action == ButtonAction.ACTION_SHOOTLEFT then actionName = "SHOOT_LEFT"
-            elseif action == ButtonAction.ACTION_SHOOTRIGHT then actionName = "SHOOT_RIGHT"
-            elseif action == ButtonAction.ACTION_SHOOTUP then actionName = "SHOOT_UP"
-            elseif action == ButtonAction.ACTION_SHOOTDOWN then actionName = "SHOOT_DOWN"
-            elseif action == ButtonAction.ACTION_BOMB then actionName = "BOMB"
-            elseif action == ButtonAction.ACTION_ITEM then actionName = "ITEM"
-            elseif action == ButtonAction.ACTION_PILLCARD then actionName = "PILL_CARD"
-            elseif action == ButtonAction.ACTION_DROP then actionName = "DROP"
-            elseif action == ButtonAction.ACTION_MAP then actionName = "MAP"
-            elseif action == ButtonAction.ACTION_PAUSE then actionName = "PAUSE"
-            elseif action == ButtonAction.ACTION_MENUCONFIRM then actionName = "MENU_CONFIRM"
-            elseif action == ButtonAction.ACTION_MENUBACK then actionName = "MENU_BACK"
-            end
-            
-            inputs[actionName] = value
-            
-            -- Detectar cambios en el estado de entrada
-            if not lastInputState[actionName] or lastInputState[actionName] ~= value then
-                -- Registrar el evento de cambio de entrada
-                if value > 0 then
-                    DataManager.recordEvent("input_change", {
-                        action = actionName,
-                        value = value,
-                        pressed = true
-                    })
+            if value > 0 then
+                local actionName = "UNKNOWN_ACTION_" .. action
+                
+                -- Mapear acciones a nombres legibles
+                if action == ButtonAction.ACTION_LEFT then actionName = "LEFT"
+                elseif action == ButtonAction.ACTION_RIGHT then actionName = "RIGHT"
+                elseif action == ButtonAction.ACTION_UP then actionName = "UP"
+                elseif action == ButtonAction.ACTION_DOWN then actionName = "DOWN"
+                elseif action == ButtonAction.ACTION_SHOOTLEFT then actionName = "SHOOT_LEFT"
+                elseif action == ButtonAction.ACTION_SHOOTRIGHT then actionName = "SHOOT_RIGHT"
+                elseif action == ButtonAction.ACTION_SHOOTUP then actionName = "SHOOT_UP"
+                elseif action == ButtonAction.ACTION_SHOOTDOWN then actionName = "SHOOT_DOWN"
+                elseif action == ButtonAction.ACTION_BOMB then actionName = "BOMB"
+                elseif action == ButtonAction.ACTION_ITEM then actionName = "ITEM"
+                elseif action == ButtonAction.ACTION_PILLCARD then actionName = "PILL_CARD"
+                elseif action == ButtonAction.ACTION_DROP then actionName = "DROP"
+                elseif action == ButtonAction.ACTION_MAP then actionName = "MAP"
+                elseif action == ButtonAction.ACTION_PAUSE then actionName = "PAUSE"
+                elseif action == ButtonAction.ACTION_MENUCONFIRM then actionName = "MENU_CONFIRM"
+                elseif action == ButtonAction.ACTION_MENUBACK then actionName = "MENU_BACK"
                 end
+                
+                inputs[actionName] = value
+            end
+        end
+    end
+    
+    -- Detectar cambios en el estado de entrada para todos los casos
+    for actionName, value in pairs(inputs) do
+        if not lastInputState[actionName] or lastInputState[actionName] ~= value then
+            -- Registrar el evento de cambio de entrada
+            if value > 0 then
+                DataManager.recordEvent("input_change", {
+                    action = actionName,
+                    value = value,
+                    pressed = true,
+                    is_virtual = is_virtual_input
+                })
             end
         end
     end

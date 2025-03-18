@@ -1,0 +1,34 @@
+[
+    {
+        "id": "cmd1",
+        "type": "movement",
+        "direction": "right",
+        "value": 1.0
+    },
+    {
+        "id": "cmd2",
+        "type": "shooting",
+        "direction": "up",
+        "value": 1.0
+    },
+    {
+        "id": "cmd3",
+        "type": "clear"
+    },
+    {
+        "id": "cmd4",
+        "type": "movement",
+        "direction": "down",
+        "value": 1.0
+    },
+    {
+        "id": "cmd5",
+        "type": "shooting",
+        "direction": "left",
+        "value": 1.0
+    },
+    {
+        "id": "cmd6",
+        "type": "clear"
+    }
+] 

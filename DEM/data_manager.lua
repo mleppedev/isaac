@@ -636,5 +636,186 @@ return {
         generateEventId = generateEventId,
         calculateDataHash = calculateDataHash,
         valueToJson = valueToJson
+    },
+    
+    -- Añadir interfaz para controlar al personaje programáticamente
+    control = {
+        controller = nil, -- Referencia al controlador del jugador
+        
+        -- Establecer la referencia al controlador
+        setController = function(controller_ref)
+            DataManager.control.controller = controller_ref
+            Isaac.DebugString("DataManager: Controlador de jugador registrado")
+        end,
+        
+        -- Procesar comandos recibidos desde el servidor web
+        processCommand = function(command)
+            if not DataManager.control.controller then
+                Isaac.DebugString("Error: No hay controlador de jugador registrado")
+                return false
+            end
+            
+            local controller = DataManager.control.controller
+            
+            -- Verificar que el controlador está activo y en modo IA
+            if not controller.config.enabled or not controller.config.ai_control then
+                controller.config.enabled = true
+                controller.config.ai_control = true
+                Isaac.DebugString("DataManager: Activando modo IA para procesar comando")
+            end
+            
+            -- Procesar el comando
+            if command.type == "movement" then
+                -- Movimiento: {type: "movement", direction: "up/down/left/right", value: 0-1}
+                if command.direction and command.value ~= nil then
+                    return controller:move(command.direction, command.value)
+                end
+            elseif command.type == "shooting" then
+                -- Disparo: {type: "shooting", direction: "up/down/left/right", value: 0-1}
+                if command.direction and command.value ~= nil then
+                    return controller:shoot(command.direction, command.value)
+                end
+            elseif command.type == "toggle_ai" then
+                -- Alternar modo IA: {type: "toggle_ai"}
+                return controller:toggleAI()
+            elseif command.type == "clear" then
+                -- Limpiar todas las entradas: {type: "clear"}
+                controller:clearInputs()
+                return true
+            end
+            
+            return false
+        end,
+        
+        -- Realizar una acción compleja (secuencia de movimientos)
+        executeAction = function(actionName, params)
+            if not DataManager.control.controller then
+                return false
+            end
+            
+            local controller = DataManager.control.controller
+            
+            -- Acciones predefinidas
+            if actionName == "move_to_item" then
+                -- TODO: Implementar lógica para moverse hacia un objeto cercano
+                return true
+            elseif actionName == "avoid_enemy" then
+                -- TODO: Implementar lógica para evitar enemigo cercano
+                return true
+            elseif actionName == "clear_room" then
+                -- TODO: Implementar lógica para limpiar la habitación
+                return true
+            end
+            
+            return false
+        end
     }
-} 
+}
+
+-- Función para registrar un evento de control de IA
+function DataManager.recordControlEvent(action, result)
+    DataManager.recordEvent("ai_control", {
+        action = action,
+        result = result,
+        timestamp = Game():GetFrameCount()
+    })
+end
+
+-- Función para procesar comandos recibidos desde el servidor web
+function DataManager.processCommandsFromServer()
+    -- Necesitamos acceder al mod global o pasar la referencia
+    local mod = DataManager.MOD_REF
+    
+    -- Si no tenemos referencia al mod, no podemos continuar
+    if not mod then
+        Isaac.DebugString("DataManager: No hay referencia al mod para procesar comandos")
+        return
+    end
+    
+    -- Verificar si el archivo existe
+    if not Isaac.HasModData(mod) then
+        return
+    end
+    
+    -- Cargar los comandos
+    local cmdData = Isaac.LoadModData(mod)
+    if not cmdData or cmdData == "" then
+        return
+    end
+    
+    -- Parsear los comandos (formato JSON)
+    local success, commands = pcall(json.decode, cmdData)
+    if not success or not commands then
+        Isaac.DebugString("DataManager: Error al decodificar comandos: " .. tostring(commands))
+        return
+    end
+    
+    -- Procesar cada comando
+    local results = {}
+    for i, cmd in ipairs(commands) do
+        local result = DataManager.control.processCommand(cmd)
+        table.insert(results, {
+            id = cmd.id or i,
+            success = result
+        })
+        
+        -- Registrar el evento de control
+        DataManager.recordControlEvent(cmd, result)
+    end
+    
+    -- Limpiar el archivo de comandos (escribir resultado)
+    local resultJson = json.encode(results)
+    Isaac.SaveModData(mod, resultJson)
+    
+    -- Registrar la recepción de comandos
+    if #commands > 0 then
+        Isaac.DebugString("DataManager: Procesados " .. #commands .. " comandos desde el servidor")
+    end
+end
+
+-- Añadir función de procesamiento de comandos al update
+local originalUpdateFunction = DataManager.update
+DataManager.update = function()
+    -- Llamar a la función original
+    originalUpdateFunction()
+    
+    -- Procesar comandos desde el servidor
+    DataManager.processCommandsFromServer()
+end
+
+local DataManager = {
+    -- Configuración
+    config = {
+        saveInterval = 60 * 5, -- Cada 5 segundos (60 fps * 5)
+        maxEventsPerSave = 300, -- Número máximo de eventos por archivo
+        compressionEnabled = true, -- Comprimir datos
+        detailedDebug = false, -- Debug detallado
+        dedicatedFiles = true -- Usar archivos dedicados para ML
+    },
+    
+    -- Estado interno
+    internal = {
+        eventBuffer = {},
+        totalEventsRecorded = 0,
+        totalEventsSaved = 0,
+        largestEventSize = 0,
+        lastSaveTime = 0,
+        fileIdCounter = 1,
+        saveOperations = 0,
+        modInitialized = false
+    },
+    
+    -- Referencia al mod para acceso a SaveModData
+    MOD_REF = nil,
+    
+    -- Versión del DataManager
+    VERSION = "2.0"
+}
+
+-- Función para establecer la referencia al mod
+function DataManager.setModReference(mod)
+    DataManager.MOD_REF = mod
+    return DataManager
+end
+
+return DataManager 

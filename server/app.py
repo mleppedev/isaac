@@ -670,6 +670,65 @@ def stats():
     stats = get_event_stats(database)
     return render_template('stats.html', stats=stats, page_title="Estadísticas", active_page="stats")
 
+# Ruta para la página de control del personaje
+@app.route('/control')
+def player_control():
+    return render_template('control.html')
+
+# API para enviar comandos de control
+@app.route('/api/control', methods=['POST'])
+def api_control():
+    try:
+        command = request.json
+        
+        if not command or not isinstance(command, dict) or 'type' not in command:
+            return jsonify({
+                'success': False,
+                'error': 'Comando inválido'
+            }), 400
+        
+        # Usar el script de control para enviar el comando
+        from control_player import send_command
+        result = send_command(command, wait_for_result=False)
+        
+        return jsonify({
+            'success': True,
+            'command': command,
+            'response': result
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+# API para enviar secuencias de comandos
+@app.route('/api/control/sequence', methods=['POST'])
+def api_control_sequence():
+    try:
+        commands = request.json
+        
+        if not commands or not isinstance(commands, list):
+            return jsonify({
+                'success': False,
+                'error': 'Secuencia inválida'
+            }), 400
+        
+        # Usar el script de control para enviar la secuencia
+        from control_player import send_command
+        result = send_command(commands, wait_for_result=False)
+        
+        return jsonify({
+            'success': True,
+            'commands_count': len(commands),
+            'response': result
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
 # Funciones para manejar la configuración
 def load_configuration():
     """Carga la configuración desde el archivo"""
