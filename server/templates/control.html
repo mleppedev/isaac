@@ -1207,18 +1207,32 @@
         
         // Añadir información de enemigos
         const enemyCount = data.enemies ? data.enemies.length : 0;
-        html += `<span class="text-danger">Enemigos: ${enemyCount}</span>`;
+        html += `<span class="text-danger">Enemigos: ${enemyCount}`;
+        if (enemyCount > 0) {
+            html += ` (`;
+            html += data.enemies.map(enemy => enemy.type).join(', ');
+            html += `)`;
+        }
+        html += `</span>`;
         
         // Añadir información de ítems
         const itemCount = data.items ? data.items.length : 0;
         if (itemCount > 0) {
-            html += ` | <span class="text-primary">Items: ${itemCount}</span>`;
+            html += ` | <span class="text-primary">Items: ${itemCount}`;
+            html += ` (`;
+            html += data.items.map(item => item.type).join(', ');
+            html += `)`;
+            html += `</span>`;
         }
         
         // Añadir información de puertas
         const doorCount = data.doors ? data.doors.length : 0;
         if (doorCount > 0) {
-            html += ` | <span class="text-warning">Puertas: ${doorCount}</span>`;
+            html += ` | <span class="text-warning">Puertas: ${doorCount}`;
+            html += ` (`;
+            html += data.doors.map(door => `${door.direction}${door.open ? ' (abierta)' : ''}`).join(', ');
+            html += `)`;
+            html += `</span>`;
         }
         
         // Añadir tiempo de procesamiento
@@ -1227,6 +1241,112 @@
         }
         
         log.html(html);
+        
+        // Actualizar el overlay con las detecciones
+        updateOverlay(data);
+    }
+    
+    // Actualizar el overlay con las detecciones
+    function updateOverlay(data) {
+        const overlay = $('#vision-overlay');
+        overlay.empty();
+        
+        // Obtener dimensiones de la imagen
+        const img = document.getElementById('vision-feed');
+        const width = img.clientWidth;
+        const height = img.clientHeight;
+        
+        // Si no hay dimensiones válidas, salir
+        if (!width || !height) return;
+        
+        // Factor de escala para las coordenadas (asumiendo que los datos vienen en coordenadas 800x600)
+        const scaleX = width / 800;
+        const scaleY = height / 600;
+        
+        // Añadir jugador
+        if (data.player) {
+            const playerX = data.player.x * scaleX;
+            const playerY = data.player.y * scaleY;
+            
+            // Círculo y etiqueta para el jugador
+            const playerElement = $(`<div class="detection-box player" 
+                style="position: absolute; left: ${playerX - 25}px; top: ${playerY - 25}px; 
+                width: 50px; height: 50px; border: 3px solid lime; border-radius: 50%; 
+                pointer-events: none; z-index: 100;">
+                <div style="position: absolute; bottom: -25px; width: 100%; text-align: center; 
+                color: lime; font-weight: bold; text-shadow: 0 0 3px black;">
+                ${Math.round(data.player.confidence * 100)}%
+                </div>
+            </div>`);
+            
+            overlay.append(playerElement);
+        }
+        
+        // Añadir enemigos
+        if (data.enemies && data.enemies.length) {
+            data.enemies.forEach(enemy => {
+                const enemyX = enemy.x * scaleX;
+                const enemyY = enemy.y * scaleY;
+                
+                // Rectángulo y etiqueta para el enemigo
+                const enemyElement = $(`<div class="detection-box enemy" 
+                    style="position: absolute; left: ${enemyX - 20}px; top: ${enemyY - 20}px; 
+                    width: 40px; height: 40px; border: 2px solid red; border-radius: 50%; 
+                    pointer-events: none; z-index: 50;">
+                    <div style="position: absolute; bottom: -25px; width: 100%; text-align: center; 
+                    color: red; font-weight: bold; text-shadow: 0 0 3px black; font-size: 0.8em;">
+                    ${enemy.type} (${Math.round(enemy.confidence * 100)}%)
+                    </div>
+                </div>`);
+                
+                overlay.append(enemyElement);
+            });
+        }
+        
+        // Añadir items
+        if (data.items && data.items.length) {
+            data.items.forEach(item => {
+                const itemX = item.x * scaleX;
+                const itemY = item.y * scaleY;
+                
+                // Rectángulo y etiqueta para el item
+                const itemElement = $(`<div class="detection-box item" 
+                    style="position: absolute; left: ${itemX - 15}px; top: ${itemY - 15}px; 
+                    width: 30px; height: 30px; border: 2px solid cyan; border-radius: 4px; 
+                    pointer-events: none; z-index: 40;">
+                    <div style="position: absolute; bottom: -20px; width: 100%; text-align: center; 
+                    color: cyan; font-weight: bold; text-shadow: 0 0 3px black; font-size: 0.8em;">
+                    ${item.type}
+                    </div>
+                </div>`);
+                
+                overlay.append(itemElement);
+            });
+        }
+        
+        // Añadir puertas
+        if (data.doors && data.doors.length) {
+            data.doors.forEach(door => {
+                const doorX = door.x * scaleX;
+                const doorY = door.y * scaleY;
+                
+                // Color según si está abierta o cerrada
+                const doorColor = door.open ? "orange" : "yellow";
+                
+                // Rectángulo y etiqueta para la puerta
+                const doorElement = $(`<div class="detection-box door" 
+                    style="position: absolute; left: ${doorX - 25}px; top: ${doorY - 25}px; 
+                    width: 50px; height: 50px; border: 3px solid ${doorColor}; 
+                    pointer-events: none; z-index: 30;">
+                    <div style="position: absolute; bottom: -20px; width: 100%; text-align: center; 
+                    color: ${doorColor}; font-weight: bold; text-shadow: 0 0 3px black; font-size: 0.8em;">
+                    ${door.direction}
+                    </div>
+                </div>`);
+                
+                overlay.append(doorElement);
+            });
+        }
     }
     
     // Botón para verificar dependencias

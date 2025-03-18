@@ -23,6 +23,7 @@ import shutil
 import game_manager  # Importar el módulo para gestionar acciones del juego
 import subprocess
 import sys
+import math
 
 # Cargar configuración desde config.json
 CONFIG_FILE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'config.json')
@@ -1382,61 +1383,170 @@ def vision_system():
 @app.route('/api/vision/frame')
 def vision_frame():
     """
-    Devuelve el frame actual del sistema de visión o una imagen de placeholder
+    Devuelve el frame actual del sistema de visión o una imagen simulada
     """
     try:
-        # Devolver una imagen estática por ahora
+        # Crear una imagen simulada con matplotlib
+        plt.figure(figsize=(8, 6))
+        
+        # Fondo negro
+        plt.fill([0, 8, 8, 0], [0, 0, 6, 6], 'k')
+        
+        # Dibujar al jugador (círculo verde)
+        player_x = 4 + 0.5 * np.sin(time.time())
+        player_y = 3 + 0.3 * np.cos(time.time() * 1.5)
+        plt.plot(player_x, player_y, 'o', markersize=15, color='lime')
+        
+        # Dibujar enemigos (círculos rojos)
+        enemy_positions = [
+            (2 + 0.7 * np.sin(time.time() * 0.7), 2 + 0.7 * np.cos(time.time() * 0.5)),
+            (6 + 0.5 * np.sin(time.time() * 0.5), 4 + 0.6 * np.cos(time.time() * 0.7))
+        ]
+        for x, y in enemy_positions:
+            plt.plot(x, y, 'o', markersize=12, color='red')
+        
+        # Dibujar items (círculos azules)
+        item_position = (3.5 + 0.3 * np.sin(time.time() * 0.3), 5 + 0.2 * np.cos(time.time() * 0.3))
+        plt.plot(item_position[0], item_position[1], 'o', markersize=8, color='cyan')
+        
+        # Dibujar puertas (rectángulos amarillos)
+        door_x, door_y = 8, 3
+        plt.fill([door_x-0.5, door_x, door_x, door_x-0.5], 
+                 [door_y-0.5, door_y-0.5, door_y+0.5, door_y+0.5], 'yellow')
+        
+        # Configurar la visualización
+        plt.xlim(0, 8)
+        plt.ylim(0, 6)
+        plt.axis('off')
+        
+        # Guardar la imagen
+        img_path = os.path.join(app.static_folder, 'img', 'vision_simulation.png')
+        os.makedirs(os.path.dirname(img_path), exist_ok=True)
+        plt.savefig(img_path, bbox_inches='tight', pad_inches=0.1, dpi=100)
+        plt.close()
+            
+        return send_from_directory(os.path.dirname(img_path), os.path.basename(img_path))
+    except Exception as e:
+        logger.error(f"Error al generar frame de visión simulado: {str(e)}")
+        
+        # Si hay un error, devolver una imagen de placeholder
         placeholder_path = os.path.join(app.static_folder, 'img', 'waiting.png')
         
         # Si no existe la carpeta o la imagen, crear una imagen simple
         if not os.path.exists(placeholder_path):
-            # Asegurarse de que existe el directorio
-            os.makedirs(os.path.join(app.static_folder, 'img'), exist_ok=True)
+            os.makedirs(os.path.dirname(placeholder_path), exist_ok=True)
             
             # Crear una imagen simple usando matplotlib
             plt.figure(figsize=(8, 6))
-            plt.text(0.5, 0.5, 'Sistema de visión no disponible', 
-                     horizontalalignment='center', verticalalignment='center', fontsize=18)
+            plt.text(0.5, 0.5, 'Error en el sistema de visión', 
+                     horizontalalignment='center', verticalalignment='center', fontsize=18, color='red')
             plt.axis('off')
             plt.savefig(placeholder_path, bbox_inches='tight', pad_inches=0.1)
             plt.close()
             
         return send_from_directory(os.path.dirname(placeholder_path), os.path.basename(placeholder_path))
-    except Exception as e:
-        logger.error(f"Error al servir frame de visión: {str(e)}")
-        return jsonify({
-            'status': 'error',
-            'message': str(e)
-        }), 500
 
 @app.route('/api/vision/detection')
 def vision_detection():
     """
-    Devuelve los datos de detección del último frame procesado
+    Devuelve los datos de detección del último frame procesado (simulados)
     """
     try:
+        # Simular variabilidad en los datos según el tiempo
+        current_time = time.time()
+        
+        # Posición del jugador con variación
+        player_x = 400 + 50 * math.sin(current_time)
+        player_y = 300 + 30 * math.cos(current_time * 1.5)
+        
+        # Número variable de enemigos (entre 1 y 4)
+        num_enemies = max(1, min(4, int(2 + math.sin(current_time * 0.3) * 2)))
+        
+        # Tipos de enemigos
+        enemy_types = ['fly', 'spider', 'gaper', 'fatty', 'maw']
+        
+        # Generar enemigos
+        enemies = []
+        for i in range(num_enemies):
+            angle = (current_time * 0.2 + i * math.pi * 2 / num_enemies) % (math.pi * 2)
+            distance = 200 + 50 * math.sin(current_time * 0.5 + i)
+            x = player_x + distance * math.cos(angle)
+            y = player_y + distance * math.sin(angle)
+            
+            # Asegurar que están dentro de los límites razonables
+            x = max(50, min(750, x))
+            y = max(50, min(550, y))
+            
+            enemies.append({
+                'x': int(x),
+                'y': int(y),
+                'type': enemy_types[i % len(enemy_types)],
+                'confidence': 0.7 + 0.25 * math.sin(current_time + i)
+            })
+        
+        # Número variable de items (entre 0 y 3)
+        num_items = max(0, min(3, int(1.5 + math.sin(current_time * 0.7) * 1.5)))
+        
+        # Tipos de items
+        item_types = ['heart', 'coin', 'key', 'bomb', 'pill']
+        
+        # Generar items
+        items = []
+        for i in range(num_items):
+            angle = (current_time * 0.1 + i * math.pi * 2 / max(1, num_items)) % (math.pi * 2)
+            distance = 150 + 30 * math.cos(current_time * 0.3 + i)
+            x = player_x + distance * math.cos(angle)
+            y = player_y + distance * math.sin(angle)
+            
+            # Asegurar que están dentro de los límites razonables
+            x = max(50, min(750, x))
+            y = max(50, min(550, y))
+            
+            items.append({
+                'x': int(x),
+                'y': int(y),
+                'type': item_types[(i + int(current_time)) % len(item_types)],
+                'confidence': 0.8 + 0.15 * math.sin(current_time * 1.2 + i)
+            })
+        
+        # Posibles puertas
+        door_positions = [
+            {'x': 400, 'y': 50, 'direction': 'north'},
+            {'x': 400, 'y': 550, 'direction': 'south'},
+            {'x': 50, 'y': 300, 'direction': 'west'},
+            {'x': 750, 'y': 300, 'direction': 'east'}
+        ]
+        
+        # Número variable de puertas (entre 1 y 4)
+        num_doors = max(1, min(4, int(2.5 + math.sin(current_time * 0.1) * 1.5)))
+        
+        # Seleccionar puertas aleatorias
+        doors = []
+        for i in range(num_doors):
+            idx = (i + int(current_time / 10)) % len(door_positions)
+            door = door_positions[idx].copy()
+            door['confidence'] = 0.9 + 0.09 * math.sin(current_time * 0.2 + i)
+            door['open'] = (math.sin(current_time * 0.5 + i) > 0)
+            doors.append(door)
+        
         # Datos de detección simulados
         detection_data = {
-            'frame_id': int(time.time() * 10) % 1000,  # Simular un ID de frame
+            'frame_id': int(current_time * 10) % 1000,
             'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')[:-3],
             'player': {
-                'x': 400,
-                'y': 300,
-                'confidence': 0.95
+                'x': int(player_x),
+                'y': int(player_y),
+                'confidence': 0.9 + 0.09 * math.sin(current_time)
             },
-            'enemies': [
-                {'x': 200, 'y': 200, 'type': 'fly', 'confidence': 0.85},
-                {'x': 600, 'y': 400, 'type': 'spider', 'confidence': 0.75}
-            ],
-            'items': [
-                {'x': 300, 'y': 450, 'type': 'heart', 'confidence': 0.9}
-            ],
-            'processing_time': 0.05  # Tiempo en segundos
+            'enemies': enemies,
+            'items': items,
+            'doors': doors,
+            'processing_time': 0.03 + 0.02 * math.sin(current_time * 2)
         }
         
         return jsonify(detection_data)
     except Exception as e:
-        logger.error(f"Error al servir datos de detección: {str(e)}")
+        logger.error(f"Error al generar datos de detección simulados: {str(e)}")
         return jsonify({
             'status': 'error',
             'message': str(e)
