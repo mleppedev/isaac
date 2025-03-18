@@ -11,6 +11,7 @@ from pathlib import Path
 import socket
 import random
 from threading import Thread, Event
+import cv2
 
 # Configurar logging
 logging.basicConfig(
@@ -575,8 +576,12 @@ class RLAgent:
 # Función para test
 def test_agent():
     """Función de prueba para el agente"""
-    from .detector import GameDetector
-    from .capture import GameCapture
+    try:
+        from detector import GameDetector, draw_detection_results
+        from capture import GameCapture
+    except ImportError:
+        from vision_module.detector import GameDetector, draw_detection_results
+        from vision_module.capture import GameCapture
     
     cap = GameCapture()
     detector = GameDetector()
@@ -613,7 +618,6 @@ def test_agent():
                 
                 # Visualizar frame
                 if detection_results:
-                    from .detector import draw_detection_results
                     annotated_frame = draw_detection_results(frame, detection_results)
                     cv2.imshow('Agente RL', annotated_frame)
                 else:

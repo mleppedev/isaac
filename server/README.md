@@ -1,16 +1,25 @@
 # Servidor para DEM
 
-Este es un servidor simple desarrollado en Flask para recibir y almacenar los datos enviados por el mod DEM para The Binding of Isaac.
+Este es un servidor desarrollado en Flask para interactuar con el mod DEM para The Binding of Isaac. Proporciona funcionalidades para:
+- Recibir y almacenar datos enviados por el mod
+- Controlar el juego mediante comandos
+- Analizar el juego usando visión por computadora y reinforcement learning
 
 ## Requisitos
 
 - Python 3.8 o superior
 - pip (gestor de paquetes de Python)
-- Flask
-- pandas
-- matplotlib
-- numpy
-- scikit-learn
+- Dependencias principales:
+  - Flask
+  - pandas
+  - matplotlib
+  - numpy
+  - scikit-learn
+- Para el módulo de visión por computadora:
+  - OpenCV
+  - PyTorch
+  - PyWin32
+  - Pillow
 
 ## Instalación
 
@@ -31,45 +40,81 @@ Este es un servidor simple desarrollado en Flask para recibir y almacenar los da
    cp .env.example .env
    ```
 
+## Modos de Funcionamiento
+
+El servidor puede funcionar con dos versiones del mod:
+
+### 1. DEM (Recolección de datos)
+- Recopila datos granulares del juego para entrenamiento
+- Registra posiciones, estados, eventos y acciones del usuario
+- Genera datasets estructurados para análisis y machine learning
+
+### 2. DEM_CV (Control por visión por computadora)
+- Utiliza visión por computadora para detectar elementos del juego
+- Implementa un agente de reinforcement learning para tomar decisiones
+- Envía comandos al juego basados en lo que "ve" en pantalla
+
 ## Uso
 
-1. Inicia el servidor:
+1. Selecciona la versión del mod a utilizar mediante el script `go.cmd`:
+   ```
+   go.cmd
+   ```
+   Y selecciona la opción 1 para elegir entre DEM o DEM_CV.
+
+2. Inicia el servidor:
    ```
    python app.py
    ```
-2. El servidor estará disponible en `http://localhost:8000`
+3. El servidor estará disponible en `http://localhost:5000`
 
 ## Endpoints API
 
 - `GET /api/health` - Comprueba si el servidor está funcionando
 - `POST /api/data` - Recibe datos del mod
+- `POST /api/control` - Envía comandos de control al juego
+- `GET /api/vision` - Obtiene el estado del sistema de visión por computadora
+- `POST /api/vision` - Controla el sistema de visión por computadora
 
-## Interfaz Web de Visualización
+## Interfaz Web
 
-El servidor incluye una interfaz web para visualizar los datos extraídos y procesados:
+El servidor incluye una interfaz web para:
 
-1. **Página principal**: http://localhost:8000/
+1. **Página principal**: http://localhost:5000/
    - Muestra información general sobre el servidor
-   - Proporciona enlaces a todas las secciones de visualización
 
-2. **Datos extraídos**: http://localhost:8000/view/raw
-   - Muestra todos los datos extraídos del juego en formato de tarjetas
-   - Organiza la información de manera clara y legible
+2. **Control del Personaje**: http://localhost:5000/control
+   - Panel de control para enviar comandos al juego
+   - Control del personaje mediante botones interactivos
+   - Sistema de visión por computadora con:
+     - Botones para iniciar/detener el sistema
+     - Ajustes de tasa de exploración
+     - Captura de templates para entrenamiento
 
-3. **Datos procesados**: http://localhost:8000/view/processed
-   - Muestra una tabla con los datos procesados
-   - Incluye visualizaciones gráficas como:
-     - Gráfico de salud a lo largo del tiempo
-     - Distribución de enemigos por habitación
-   - Permite procesar los datos directamente desde la interfaz
+3. **Datos extraídos**: http://localhost:5000/view/raw
+   - Muestra los datos extraídos del juego en formato de tarjetas
 
-4. **Estadísticas**: http://localhost:8000/view/stats
-   - Muestra estadísticas generales sobre los datos
-   - Incluye métricas como número de registros, habitaciones únicas, salud promedio, etc.
+4. **Datos procesados**: http://localhost:5000/view/processed
+   - Visualizaciones y procesamiento de datos recopilados
 
-5. **Procesamiento de datos**: http://localhost:8000/process/data
-   - Procesa los datos recibidos y genera archivos CSV y estadísticas
-   - Redirige automáticamente a la página de visualización de datos procesados
+## Sistema de Visión por Computadora
+
+El módulo de visión por computadora (`vision_module`) está diseñado para:
+
+1. **Capturar la pantalla del juego** en tiempo real
+2. **Detectar elementos** como jugador, enemigos, items y puertas
+3. **Tomar decisiones inteligentes** mediante un agente de RL
+4. **Enviar comandos al mod DEM_CV** para controlar el juego
+
+Para usar este sistema:
+1. Asegúrate de tener instalado el mod DEM_CV (usando `go.cmd`)
+2. Ve a la interfaz web en http://localhost:5000/control
+3. En la sección "Sistema de Visión por Computadora", haz clic en "Iniciar Sistema"
+4. El sistema comenzará a analizar la pantalla y controlar el juego
+
+Para entrenar el sistema mejorando la detección:
+1. Usa la función "Capturar" para guardar templates de los diferentes elementos del juego
+2. Estos templates se utilizarán para mejorar la precisión de la detección
 
 ## Estructura de datos
 
@@ -90,21 +135,22 @@ El servidor espera recibir datos en formato JSON. Un ejemplo de la estructura es
 
 ## Almacenamiento
 
-- **Datos recibidos**: Se almacenan en la carpeta `received_data` en archivos JSON individuales con nombres basados en timestamps.
-- **Datos procesados**: Se almacenan en la carpeta `processed_data` en formato CSV y pickle.
-- **Estadísticas**: Se guardan en `processed_data/statistics.json`.
-
-## Configuración del mod
-
-Para que el mod envíe datos a este servidor, configura el archivo `config.lua` del mod con:
-
-```lua
-Config.SERVER_URL = "http://localhost:8000/api/data"
-```
+- **Datos recibidos**: Se almacenan en la carpeta `received_data` en archivos JSON.
+- **Datos procesados**: Se almacenan en la carpeta `processed_data`.
+- **Templates**: Los templates del sistema de visión se guardan en `vision_module/templates`.
 
 ## Solución de problemas
 
-- Si el servidor no inicia, verifica que el puerto 8000 no esté en uso
+### Generales
+- Si el servidor no inicia, verifica que el puerto no esté en uso
 - Revisa los logs en `server.log` para más información sobre errores
-- Asegúrate de que el firewall permita conexiones al puerto configurado
-- Si aparece el error "No module named 'pandas'" u otro similar, ejecuta `pip install -r requirements.txt` para instalar las dependencias faltantes 
+- Para instalar dependencias faltantes: `pip install -r requirements.txt`
+
+### Sistema de Visión
+- Si el botón "Iniciar Sistema" no responde, verifica las dependencias con:
+  ```
+  pip install opencv-python pywin32 torch torchvision
+  ```
+- Si hay errores de importación, verifica la estructura de carpetas (el módulo `vision_module` debe estar en la raíz del proyecto)
+- Para problemas con la captura de pantalla, asegúrate que el juego esté visible
+- Inicia el sistema directamente con `python -m vision_module.main` para ver errores detallados 

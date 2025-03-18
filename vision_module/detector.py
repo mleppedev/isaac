@@ -432,7 +432,10 @@ def draw_detection_results(frame, detection_results):
 # Función para prueba
 def test_detector():
     """Función de prueba para el detector"""
-    from .capture import GameCapture
+    try:
+        from capture import GameCapture
+    except ImportError:
+        from vision_module.capture import GameCapture
     
     cap = GameCapture()
     detector = GameDetector()

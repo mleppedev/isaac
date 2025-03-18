@@ -13,16 +13,28 @@ import cv2
 import numpy as np
 from pathlib import Path
 
+# Ajustar rutas para importaciones
+current_dir = os.path.dirname(os.path.abspath(__file__))
+if current_dir not in sys.path:
+    sys.path.append(current_dir)
+
 # Importar componentes del módulo
-from .capture import GameCapture
-from .detector import GameDetector, draw_detection_results
-from .agent import RLAgent
+try:
+    from capture import GameCapture
+    from detector import GameDetector, draw_detection_results
+    from agent import RLAgent
+except ImportError:
+    # Intentar importar con nombre de paquete completo
+    from vision_module.capture import GameCapture
+    from vision_module.detector import GameDetector, draw_detection_results
+    from vision_module.agent import RLAgent
 
 # Configurar logging
+log_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'isaac_vision_system.log')
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    filename='isaac_vision_system.log'
+    filename=log_file
 )
 logger = logging.getLogger("IsaacVision")
 

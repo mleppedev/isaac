@@ -1301,6 +1301,15 @@ def vision_system():
         if action == 'start':
             try:
                 # Importar el módulo solo cuando se solicita para no cargar dependencias innecesarias
+                import sys
+                import os
+                
+                # Agregar el directorio raíz al path de Python para encontrar el módulo vision_module
+                root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+                if root_dir not in sys.path:
+                    sys.path.append(root_dir)
+                
+                # Importar después de configurar el path
                 from vision_module.main import IsaacVisionSystem
                 
                 # Obtener configuración
@@ -1318,10 +1327,12 @@ def vision_system():
                     'message': 'Sistema de visión iniciado' if success else 'Error al iniciar el sistema de visión'
                 })
             except Exception as e:
-                app.logger.error(f"Error al iniciar sistema de visión: {e}")
+                import traceback
+                error_details = traceback.format_exc()
+                app.logger.error(f"Error al iniciar sistema de visión: {e}\n{error_details}")
                 return jsonify({
                     'status': 'error',
-                    'message': f'Error: {str(e)}'
+                    'message': f'Error: {str(e)}. Consulta el log del servidor para más detalles.'
                 }), 500
         
         # Detener el sistema de visión
