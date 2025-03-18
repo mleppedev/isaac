@@ -513,7 +513,7 @@ footer {
 /* Estilos para las notificaciones de actualización */
 #notifications-container {
     position: fixed;
-    top: 20px;
+    bottom: 20px;
     right: 20px;
     max-width: 350px;
     z-index: 9999;
