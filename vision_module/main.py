@@ -63,6 +63,15 @@ class IsaacVisionSystem:
         self.detection_frequency = self.config.get('detection_frequency', 0.1)  # segundos
         self.last_detection = None
         self.last_detection_time = 0
+        self.frame_counter = 0  # Contador de frames procesados
+        
+        # Ruta para guardar frames para la interfaz web
+        self.web_output_dir = self.config.get('web_output_dir', './server/static/vision_output')
+        os.makedirs(self.web_output_dir, exist_ok=True)
+        
+        # Archivo para el último frame y datos de detección
+        self.web_frame_path = os.path.join(self.web_output_dir, 'current_frame.jpg')
+        self.web_data_path = os.path.join(self.web_output_dir, 'detection_data.json')
         
         # Crear directorio de templates si no existe
         templates_dir = Path("./vision_module/templates")
@@ -82,6 +91,7 @@ class IsaacVisionSystem:
             'visualize': True,   # Mostrar visualización
             'training_mode': False,  # Modo entrenamiento vs. inferencia
             'detection_frequency': 0.1,  # Segundos entre detecciones
+            'web_output_dir': './server/static/vision_output',  # Directorio para salida web
             'agent': {
                 'exploration_rate': 0.2,  # Tasa de exploración del agente
                 'model_path': None  # Ruta al modelo pre-entrenado
@@ -137,10 +147,19 @@ class IsaacVisionSystem:
             detection_results = self.detector.analyze_frame(frame)
             
             if detection_results:
+                # Incrementar contador de frames
+                self.frame_counter += 1
+                
+                # Añadir ID de frame a los resultados
+                detection_results['frame_id'] = self.frame_counter
+                
                 # Actualizar última detección
                 self.last_detection = detection_results
                 self.detector.last_detection = detection_results
                 self.last_detection_time = current_time
+                
+                # Guardar frame y datos para la interfaz web
+                self._save_web_output(frame, detection_results)
                 
                 # Visualizar resultados si está habilitado
                 if self.visualize:
@@ -152,6 +171,9 @@ class IsaacVisionSystem:
                 if self.visualize:
                     cv2.imshow('Isaac Vision System', frame)
                     cv2.waitKey(1)
+                
+                # Guardar frame sin anotaciones para la interfaz web
+                self._save_web_output(frame, None)
             
             return detection_results
         
@@ -165,7 +187,43 @@ class IsaacVisionSystem:
                 cv2.imshow('Isaac Vision System', frame)
             cv2.waitKey(1)
         
+        # Guardar frame para la interfaz web incluso si no es momento de detección
+        self._save_web_output(frame, self.last_detection)
+        
         return None
+    
+    def _save_web_output(self, frame, detection_results):
+        """
+        Guarda frame y datos de detección para la interfaz web
+        
+        Args:
+            frame: Frame capturado
+            detection_results: Resultados de la detección (puede ser None)
+        """
+        try:
+            # Guardar frame (con anotaciones si hay resultados)
+            if detection_results:
+                annotated_frame = draw_detection_results(frame, detection_results)
+                cv2.imwrite(self.web_frame_path, annotated_frame)
+                
+                # Guardar datos de detección como JSON
+                web_data = {
+                    'frame_id': detection_results.get('frame_id', 0),
+                    'timestamp': time.strftime("%H:%M:%S"),
+                    'player': detection_results.get('player'),
+                    'enemies': detection_results.get('enemies', []),
+                    'items': detection_results.get('items', []),
+                    'doors': detection_results.get('doors', []),
+                    'processing_time': detection_results.get('processing_time', 0)
+                }
+                
+                with open(self.web_data_path, 'w') as f:
+                    json.dump(web_data, f)
+            else:
+                # Guardar frame sin anotaciones
+                cv2.imwrite(self.web_frame_path, frame)
+        except Exception as e:
+            logger.error(f"Error al guardar salida web: {e}")
     
     def main_loop(self):
         """Bucle principal del sistema de visión"""
@@ -196,6 +254,9 @@ class IsaacVisionSystem:
             return False
         
         try:
+            # Crear directorio de salida web si no existe
+            os.makedirs(self.web_output_dir, exist_ok=True)
+            
             # Iniciar captura
             self.capture.start()
             
@@ -281,6 +342,25 @@ class IsaacVisionSystem:
         except Exception as e:
             logger.error(f"Error al guardar template: {e}")
             return None
+    
+    def get_latest_detection(self):
+        """
+        Obtiene la última detección para la API
+        
+        Returns:
+            Datos de la última detección
+        """
+        if self.last_detection:
+            return {
+                'frame_id': self.frame_counter,
+                'timestamp': time.strftime("%H:%M:%S"),
+                'player': self.last_detection.get('player'),
+                'enemies': self.last_detection.get('enemies', []),
+                'items': self.last_detection.get('items', []),
+                'doors': self.last_detection.get('doors', []),
+                'processing_time': self.last_detection.get('processing_time', 0)
+            }
+        return None
 
 def parse_arguments():
     """Parsea argumentos de línea de comandos"""

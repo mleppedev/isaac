@@ -115,10 +115,10 @@ function DEM:mapCurrentRoom()
                     y = door.Position.Y
                 },
                 exists = true
-            })
+                })
+            end
         end
-    end
-    
+        
     -- Mapear obstáculos (grid entities)
     for i = 0, room:GetGridSize() do
         local gridEntity = room:GetGridEntity(i)
@@ -453,7 +453,7 @@ end
 function DEM:onRender()
     -- Si el modo debug está activado, mostrar información sobre el último comando
     if DEBUG_MODE and lastActionReceived then
-        local game = Game()
+    local game = Game()
         local currentFrame = game:GetFrameCount()
         
         -- Solo mostrar por un tiempo limitado
